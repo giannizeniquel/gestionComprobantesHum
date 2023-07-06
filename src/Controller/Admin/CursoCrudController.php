@@ -7,6 +7,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 
 class CursoCrudController extends AbstractCrudController
+
 {
     public static function getEntityFqcn(): string
     {
