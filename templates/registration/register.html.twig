@@ -1,21 +1,22 @@
-{% extends 'base.html.twig' %}
+{% extends '@!EasyAdmin/layout.html.twig' %}
 
-{% block title %}Register{% endblock %}
+{% block title %}Registro de usuario{% endblock %}
 
 {% block body %}
     {% for flash_error in app.flashes('verify_email_error') %}
         <div class="alert alert-danger" role="alert">{{ flash_error }}</div>
     {% endfor %}
+    <div class="container">
+        <div class="row col-4 mx-auto">
+            <div class="bg-light mt-5 p-4 shadow p-3 mb-5 rounded">
+                <h3>Registro de usuario</h3>
 
-    <h1>Register</h1>
-
-    {{ form_start(registrationForm) }}
-        {{ form_row(registrationForm.email) }}
-        {{ form_row(registrationForm.plainPassword, {
-            label: 'Password'
-        }) }}
-        {{ form_row(registrationForm.agreeTerms) }}
-
-        <button type="submit" class="btn">Register</button>
-    {{ form_end(registrationForm) }}
+                {{ form_start(registrationForm) }}
+                    {# form_widget trae los campos definidos en el type #}
+                    {{ form_widget(registrationForm) }}
+                    <button type="submit" class="btn btn-primary btn-lg btn-block">Registrarse</button>
+                {{ form_end(registrationForm) }}
+            </div>
+        </div>
+    </div>
 {% endblock %}
