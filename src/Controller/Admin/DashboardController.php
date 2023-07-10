@@ -9,6 +9,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Curso;
 use App\Entity\User;
+use App\Entity\TipoCurso;
 
 class DashboardController extends AbstractDashboardController
 {
@@ -17,6 +18,20 @@ class DashboardController extends AbstractDashboardController
      */
     public function index(): Response
     {
+        // redirect to some CRUD controller
+        //$routeBuilder = $this->get(AdminUrlGenerator::class);
+
+        //return $this->redirect($routeBuilder->setController(OneOfYourCrudController::class)->generateUrl());
+
+        // you can also redirect to different pages depending on the current user
+        //if ('jane' === $this->getUser()->getUsername()) {
+        //    return $this->redirect('...');
+        //}
+
+        // you can also render some template to display a proper Dashboard
+        // (tip: it's easier if your template extends from @EasyAdmin/page/content.html.twig)
+        //return $this->render('some/path/my-dashboard.html.twig');
+
         return parent::index();
     }
 
@@ -61,5 +76,6 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToDashboard('Dashboard', 'fa fa-home');
         yield MenuItem::linkToCrud('Cursos', 'fa fa-chalkboard', Curso::class);
         yield MenuItem::linkToCrud('Usuarios', 'fa fa-users', User::class);
+        yield MenuItem::linkToCrud('Tipo Cursos', 'fa fa-users', TipoCurso::class);
     }
 }
