@@ -38,6 +38,11 @@ class TipoCurso
     {
         $this->cursos = new ArrayCollection();
     }
+    
+    public function __toString()
+    {
+        return $this->nombre;
+    }
 
     public function getId(): ?int
     {

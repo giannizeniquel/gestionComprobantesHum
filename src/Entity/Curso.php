@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\CursoRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -66,6 +68,16 @@ class Curso
      * @ORM\ManyToOne(targetEntity=TipoCurso::class, inversedBy="cursos")
      */
     private $tipo;
+
+    /**
+     * @ORM\ManyToMany(targetEntity=User::class, mappedBy="cursos")
+     */
+    private $users;
+
+    public function __construct()
+    {
+        $this->users = new ArrayCollection();
+    }
 
     public function __toString()
     {
@@ -193,6 +205,33 @@ class Curso
     public function setTipo(?TipoCurso $tipo): self
     {
         $this->tipo = $tipo;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, User>
+     */
+    public function getUsers(): Collection
+    {
+        return $this->users;
+    }
+
+    public function addUser(User $user): self
+    {
+        if (!$this->users->contains($user)) {
+            $this->users[] = $user;
+            $user->addCurso($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUser(User $user): self
+    {
+        if ($this->users->removeElement($user)) {
+            $user->removeCurso($this);
+        }
 
         return $this;
     }
