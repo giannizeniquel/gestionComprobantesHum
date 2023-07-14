@@ -56,7 +56,7 @@ class UserCrudController extends AbstractCrudController
             //TextField::new('password', 'Contraseña')->hideOnForm(),
             TextField::new('telefono','Teléfono'),
             TextField::new('domicilio'),
-            ArrayField::new('roles'),
+            ArrayField::new('roles')->setPermission('ROLE_ADMIN'),
             AssociationField::new('cursos')
         ];
         
@@ -71,6 +71,9 @@ class UserCrudController extends AbstractCrudController
     public function configureActions(Actions $actions): Actions
     {
         return $actions
-        ->add(Crud::PAGE_INDEX, Action::DETAIL);
+        ->add(Crud::PAGE_INDEX, Action::DETAIL)
+        ->setPermission(Action::NEW, 'ROLE_ADMIN')
+        ->setPermission(Action::DELETE, 'ROLE_ADMIN')
+        ->setPermission(Action::INDEX, 'ROLE_ADMIN');
     }
 }

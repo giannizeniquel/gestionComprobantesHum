@@ -79,6 +79,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->cursos = new ArrayCollection();
     }
 
+    public function __toString()
+    {  
+        if ($this->apellido && $this->nombre) {
+            return $this->apellido.', '.$this->nombre;
+        }else{
+            return $this->email;
+        }
+        
+    }
+
     public function getId(): ?int
     {
         return $this->id;

@@ -4,6 +4,8 @@ namespace App\Controller\Admin;
 
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
+use EasyCorp\Bundle\EasyAdminBundle\Config\UserMenu;
+use Symfony\Component\Security\Core\User\UserInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -75,8 +77,16 @@ class DashboardController extends AbstractDashboardController
     public function configureMenuItems(): iterable
     {
         yield MenuItem::linkToDashboard('Dashboard', 'fa fa-home');
-        yield MenuItem::linkToCrud('Usuarios', 'fa fa-users', User::class)->setPermission('ROLE_ADMIN');
-        yield MenuItem::linkToCrud('Cursos', 'fa fa-chalkboard', Curso::class)->setPermission('ROLE_ADMIN');
-        yield MenuItem::linkToCrud('Tipo Cursos', 'fa fa-shapes', TipoCurso::class)->setPermission('ROLE_ADMIN');
+
+        if (in_array('ROLE_ADMIN',$this->getUser()->getRoles())) {
+            yield MenuItem::linkToCrud('Usuarios', 'fa fa-users', User::class)->setPermission('ROLE_ADMIN');
+            yield MenuItem::linkToCrud('Cursos', 'fa fa-chalkboard', Curso::class)->setPermission('ROLE_ADMIN');
+            yield MenuItem::linkToCrud('Tipo Cursos', 'fa fa-shapes', TipoCurso::class)->setPermission('ROLE_ADMIN');
+
+        }else{
+            yield MenuItem::linkToCrud('Mis Datos', 'fa fa-user', User::class)
+                ->setAction('detail')
+                ->setEntityId($this->getUser()->getId());
+        }
     }
 }
