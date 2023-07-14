@@ -3,6 +3,8 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Curso;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
@@ -45,48 +47,25 @@ class CursoCrudController extends AbstractCrudController
 
     public function configureFields(string $pageName): iterable
     {
-        if (Crud::PAGE_NEW === $pageName)
-        {
-            yield TextField::new('nombre');
-            yield TextField::new('descripcion');
-            yield TextField::new('observacion');
-            yield BooleanField::new('activo');
-            yield TextField::new('duracion');
-            yield TextField::new('cuotas');
-            yield NumberField::new('precio');
-            yield IntegerField::new('capacidad');
-            yield TextField::new('modalidad');
-            yield AssociationField::new('tipo')->setFormTypeOptions(['by_reference' => false,])->autocomplete();
-        }
-
-        if (Crud::PAGE_EDIT === $pageName)
-        {
-            yield TextField::new('nombre');
-            yield TextField::new('descripcion');
-            yield TextField::new('observacion');
-            yield BooleanField::new('activo');
-            yield TextField::new('duracion');
-            yield TextField::new('cuotas');
-            yield NumberField::new('precio');
-            yield IntegerField::new('capacidad');
-            yield TextField::new('modalidad');
-            yield AssociationField::new('tipo')->setFormTypeOptions(['by_reference' => true,])->autocomplete();
-        }
-
-        if (Crud::PAGE_INDEX === $pageName)
-        {
-            yield IdField::new('id');
-            yield TextField::new('nombre');
-            yield TextField::new('descripcion');
-            yield TextField::new('observacion');
-            yield BooleanField::new('activo');
-            yield TextField::new('duracion');
-            yield TextField::new('cuotas');
-            yield NumberField::new('precio');
-            yield IntegerField::new('capacidad');
-            yield TextField::new('modalidad');
-            yield AssociationField::new('tipo')->setFormTypeOptions(['by_reference' => true,])->autocomplete();
-        }
+        return [
+            IdField::new('id')->hideOnForm(),
+            TextField::new('nombre'),
+            TextField::new('descripcion', 'Descripción'),
+            TextField::new('observacion', 'Observación'),
+            BooleanField::new('activo'),
+            TextField::new('duracion', 'Duración'),
+            TextField::new('cuotas'),
+            NumberField::new('precio'),
+            IntegerField::new('capacidad'),
+            TextField::new('modalidad'),
+            AssociationField::new('tipo', 'Tipo Curso')
+        ];
     }
 
+    public function configureActions(Actions $actions): Actions
+    {
+        return $actions
+        ->add(Crud::PAGE_INDEX, Action::DETAIL);
+    }
+    
 }
