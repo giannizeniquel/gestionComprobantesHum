@@ -76,17 +76,18 @@ class DashboardController extends AbstractDashboardController
 
     public function configureMenuItems(): iterable
     {
-        yield MenuItem::linkToDashboard('Dashboard', 'fa fa-home');
+        yield MenuItem::linkToDashboard('Inicio', 'fa fa-home');
 
         if (in_array('ROLE_ADMIN',$this->getUser()->getRoles())) {
-            yield MenuItem::linkToCrud('Usuarios', 'fa fa-users', User::class)->setPermission('ROLE_ADMIN');
-            yield MenuItem::linkToCrud('Cursos', 'fa fa-chalkboard', Curso::class)->setPermission('ROLE_ADMIN');
-            yield MenuItem::linkToCrud('Tipo Cursos', 'fa fa-shapes', TipoCurso::class)->setPermission('ROLE_ADMIN');
+            yield MenuItem::linkToCrud('Usuarios', 'fa fa-users', User::class);
+            yield MenuItem::linkToCrud('Cursos', 'fa fa-chalkboard', Curso::class);
+            yield MenuItem::linkToCrud('Tipo Cursos', 'fa fa-shapes', TipoCurso::class);
 
         }else{
             yield MenuItem::linkToCrud('Mis Datos', 'fa fa-user', User::class)
                 ->setAction('detail')
                 ->setEntityId($this->getUser()->getId());
+            yield MenuItem::linktoRoute('Mis Cursos', 'fa fa-chalkboard', 'misCursos');
         }
     }
 }

@@ -58,7 +58,8 @@ class CursoCrudController extends AbstractCrudController
             NumberField::new('precio'),
             IntegerField::new('capacidad'),
             TextField::new('modalidad'),
-            AssociationField::new('tipo', 'Tipo Curso')
+            AssociationField::new('tipo', 'Tipo Curso'),
+            AssociationField::new('users', 'Alumnos')
         ];
     }
 

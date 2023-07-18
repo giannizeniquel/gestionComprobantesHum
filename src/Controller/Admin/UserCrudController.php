@@ -14,6 +14,11 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\NumberField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ArrayField;
+use LDAP\Result;
+use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\Response;
+use App\Repository\UserRepository;
+
 
 class UserCrudController extends AbstractCrudController
 {
@@ -75,5 +80,17 @@ class UserCrudController extends AbstractCrudController
         ->setPermission(Action::NEW, 'ROLE_ADMIN')
         ->setPermission(Action::DELETE, 'ROLE_ADMIN')
         ->setPermission(Action::INDEX, 'ROLE_ADMIN');
+    }
+    
+    /**
+     * @Route("/admin/misCursos", name="misCursos")
+     */
+    public function obtenerCursosUsuario(UserRepository $userRepository): Response
+    {
+        $userId = $this->getUser()->getId();
+        $cursos = $userRepository
+            ->findByMisCursos($userId);
+        
+            return $this->render('user/userCursos.html.twig', ['cursos' => $cursos]);
     }
 }

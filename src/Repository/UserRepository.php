@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\User;
+use App\Entity\Curso;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
@@ -56,28 +57,45 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         $this->add($user, true);
     }
 
-//    /**
-//     * @return User[] Returns an array of User objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('u')
-//            ->andWhere('u.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('u.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+   /**
+    * @return User[] Returns an array of User objects
+    */
+   public function findByExampleField($value): array
+   {
+       return $this->createQueryBuilder('u')
+           ->andWhere('u.exampleField = :val')
+           ->setParameter('val', $value)
+           ->orderBy('u.id', 'ASC')
+           ->setMaxResults(10)
+           ->getQuery()
+           ->getResult()
+       ;
+   }
+    /**
+    * @return Curso[] Returns an array of User objects
+    */
+    public function findByMisCursos($userId): array
+    {
+        $qb = $this->getEntityManager()->createQueryBuilder();
+        $qb->select('c')
+            ->from('App:Curso', 'c')
+            ->join('c.users', 'u')
+            ->where('u.id = :userId')
+            ->setParameter('userId', $userId)
+            ;
 
-//    public function findOneBySomeField($value): ?User
-//    {
-//        return $this->createQueryBuilder('u')
-//            ->andWhere('u.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+        $query = $qb->getQuery();
+
+        return $query->execute();
+    }
+
+   public function findOneBySomeField($value): ?User
+   {
+       return $this->createQueryBuilder('u')
+           ->andWhere('u.exampleField = :val')
+           ->setParameter('val', $value)
+           ->getQuery()
+           ->getOneOrNullResult()
+       ;
+   }
 }
