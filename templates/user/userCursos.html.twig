@@ -1,0 +1,29 @@
+{% extends '@EasyAdmin/page/content.html.twig' %}
+
+{% block content_title %}Mis Cursos{% endblock %}
+{% block page_actions %}
+    <a class="btn btn-primary" href="...">Inscribir a curso</a>
+{% endblock %}
+
+{% block main %}
+    <table class="datagrid">
+        <thead>
+            <tr>
+                <td>Curso</td>
+                <td>Precio</td>
+                <td>Saldo</td>
+                <td>Acción</td>
+            </tr>
+        </thead>
+        <tbody>
+            {% for curso in cursos %}
+                <tr>
+                    <td>{{ curso.nombre }}</td>
+                    <td>{{ curso.precio }}</td>
+                    <td>saldo</td>
+                    <td><a class="btn btn-primary" href="...">Pagar</a></td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
