@@ -46,11 +46,6 @@ class Curso
     private $duracion;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private $cuotas;
-
-    /**
      * @ORM\Column(type="float", nullable=true)
      */
     private $precio;
@@ -75,9 +70,20 @@ class Curso
      */
     private $users;
 
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $cantidadCuotas;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Pago::class, mappedBy="curso")
+     */
+    private $pagos;
+
     public function __construct()
     {
         $this->users = new ArrayCollection();
+        $this->pagos = new ArrayCollection();
     }
 
     public function __toString()
@@ -146,18 +152,6 @@ class Curso
     public function setDuracion(?string $duracion): self
     {
         $this->duracion = $duracion;
-
-        return $this;
-    }
-
-    public function getCuotas(): ?string
-    {
-        return $this->cuotas;
-    }
-
-    public function setCuotas(?string $cuotas): self
-    {
-        $this->cuotas = $cuotas;
 
         return $this;
     }
@@ -232,6 +226,48 @@ class Curso
     {
         if ($this->users->removeElement($user)) {
             $user->removeCurso($this);
+        }
+
+        return $this;
+    }
+
+    public function getCantidadCuotas(): ?int
+    {
+        return $this->cantidadCuotas;
+    }
+
+    public function setCantidadCuotas(?int $cantidadCuotas): self
+    {
+        $this->cantidadCuotas = $cantidadCuotas;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Pago>
+     */
+    public function getPagos(): Collection
+    {
+        return $this->pagos;
+    }
+
+    public function addPago(Pago $pago): self
+    {
+        if (!$this->pagos->contains($pago)) {
+            $this->pagos[] = $pago;
+            $pago->setCurso($this);
+        }
+
+        return $this;
+    }
+
+    public function removePago(Pago $pago): self
+    {
+        if ($this->pagos->removeElement($pago)) {
+            // set the owning side to null (unless already changed)
+            if ($pago->getCurso() === $this) {
+                $pago->setCurso(null);
+            }
         }
 
         return $this;

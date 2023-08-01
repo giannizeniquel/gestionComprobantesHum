@@ -74,9 +74,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $cursos;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Pago::class, mappedBy="user")
+     */
+    private $pagos;
+
     public function __construct()
     {
         $this->cursos = new ArrayCollection();
+        $this->pagos = new ArrayCollection();
     }
 
     public function __toString()
@@ -270,6 +276,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function removeCurso(Curso $curso): self
     {
         $this->cursos->removeElement($curso);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Pago>
+     */
+    public function getPagos(): Collection
+    {
+        return $this->pagos;
+    }
+
+    public function addPago(Pago $pago): self
+    {
+        if (!$this->pagos->contains($pago)) {
+            $this->pagos[] = $pago;
+            $pago->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removePago(Pago $pago): self
+    {
+        if ($this->pagos->removeElement($pago)) {
+            // set the owning side to null (unless already changed)
+            if ($pago->getUser() === $this) {
+                $pago->setUser(null);
+            }
+        }
 
         return $this;
     }
