@@ -54,7 +54,7 @@ class CursoCrudController extends AbstractCrudController
             TextField::new('observacion', 'Observación'),
             BooleanField::new('activo'),
             TextField::new('duracion', 'Duración'),
-            TextField::new('cuotas'),
+            TextField::new('cantidadCuotas'),
             NumberField::new('precio'),
             IntegerField::new('capacidad'),
             TextField::new('modalidad'),

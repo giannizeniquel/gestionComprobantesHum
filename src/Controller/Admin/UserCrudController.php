@@ -18,7 +18,8 @@ use LDAP\Result;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Response;
 use App\Repository\UserRepository;
-
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\HttpFoundation\Request;
 
 class UserCrudController extends AbstractCrudController
 {
@@ -62,7 +63,7 @@ class UserCrudController extends AbstractCrudController
             TextField::new('telefono','Teléfono'),
             TextField::new('domicilio'),
             ArrayField::new('roles')->setPermission('ROLE_ADMIN'),
-            AssociationField::new('cursos')
+            AssociationField::new('cursos', 'Cursos inscriptos')
         ];
         
         // if (Crud::PAGE_INDEX === $pageName)
