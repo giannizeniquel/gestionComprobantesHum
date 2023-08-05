@@ -80,10 +80,16 @@ class Curso
      */
     private $pagos;
 
+    /**
+     * @ORM\ManyToMany(targetEntity=Cuota::class, mappedBy="cursos")
+     */
+    private $cuotas;
+
     public function __construct()
     {
         $this->users = new ArrayCollection();
         $this->pagos = new ArrayCollection();
+        $this->cuotas = new ArrayCollection();
     }
 
     public function __toString()
@@ -268,6 +274,33 @@ class Curso
             if ($pago->getCurso() === $this) {
                 $pago->setCurso(null);
             }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Cuota>
+     */
+    public function getCuotas(): Collection
+    {
+        return $this->cuotas;
+    }
+
+    public function addCuota(Cuota $cuota): self
+    {
+        if (!$this->cuotas->contains($cuota)) {
+            $this->cuotas[] = $cuota;
+            $cuota->addCurso($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCuota(Cuota $cuota): self
+    {
+        if ($this->cuotas->removeElement($cuota)) {
+            $cuota->removeCurso($this);
         }
 
         return $this;
