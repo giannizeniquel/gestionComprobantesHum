@@ -6,6 +6,7 @@ use App\Repository\CuotaRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Form\FormTypeInterface;
 
 /**
  * @ORM\Entity(repositoryClass=CuotaRepository::class)
@@ -45,7 +46,7 @@ class Cuota
     private $pagado;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Curso::class, inversedBy="cuotas")
+     * @ORM\ManyToMany(targetEntity=Curso::class, inversedBy="cuotas", cascade={"persist"})
      */
     private $cursos;
 
@@ -62,6 +63,11 @@ class Cuota
     public function __construct()
     {
         $this->cursos = new ArrayCollection();
+    }
+
+    public function __toString()
+    {
+        return "Cuota ".$this->numeroCuota;
     }
 
     public function getId(): ?int

@@ -2,6 +2,7 @@
 
 namespace App\Controller\Admin;
 
+use App\Entity\Cuota;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
 use EasyCorp\Bundle\EasyAdminBundle\Config\UserMenu;
@@ -82,6 +83,7 @@ class DashboardController extends AbstractDashboardController
             yield MenuItem::linkToCrud('Usuarios', 'fa fa-users', User::class);
             yield MenuItem::linkToCrud('Cursos', 'fa fa-chalkboard', Curso::class);
             yield MenuItem::linkToCrud('Tipo Cursos', 'fa fa-shapes', TipoCurso::class);
+            yield MenuItem::linkToCrud('Cuotas', 'fa fa-shapes', Cuota::class);
 
         }else{
             yield MenuItem::linkToCrud('Mis Datos', 'fa fa-user', User::class)

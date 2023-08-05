@@ -81,7 +81,7 @@ class Curso
     private $pagos;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Cuota::class, mappedBy="cursos")
+     * @ORM\ManyToMany(targetEntity=Cuota::class, mappedBy="cursos", cascade={"persist"})
      */
     private $cuotas;
 

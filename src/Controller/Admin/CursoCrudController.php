@@ -3,6 +3,8 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Curso;
+use App\Entity\Cuota;
+use App\Form\CuotaType;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
@@ -13,6 +15,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\NumberField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\CollectionField;
 
 class CursoCrudController extends AbstractCrudController
 
@@ -59,7 +62,14 @@ class CursoCrudController extends AbstractCrudController
             IntegerField::new('capacidad'),
             TextField::new('modalidad'),
             AssociationField::new('tipo', 'Tipo Curso'),
-            AssociationField::new('users', 'Alumnos')
+            AssociationField::new('users', 'Alumnos'),
+            CollectionField::new('cuotas', 'Cuotas')
+                ->allowDelete()
+                ->setEntryIsComplex(true)
+                ->setEntryType(CuotaType::class)
+                ->setFormTypeOptions([
+                    'by_reference' => false,
+                ])
         ];
     }
 
