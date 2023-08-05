@@ -63,8 +63,10 @@ class Cuota
     public function __construct()
     {
         $this->cursos = new ArrayCollection();
+        $this->created_at = new \DateTimeImmutable();
     }
 
+ 
     public function __toString()
     {
         return "Cuota ".$this->numeroCuota;
@@ -83,7 +85,7 @@ class Cuota
     public function setMonto(?float $monto): self
     {
         $this->monto = $monto;
-
+        $this->updated_at = new \DateTimeImmutable('now');
         return $this;
     }
 

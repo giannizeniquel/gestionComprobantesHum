@@ -7,6 +7,8 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
+use Symfony\Component\Form\Extension\Core\Type\DateType;
+
 class CuotaType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
@@ -14,7 +16,11 @@ class CuotaType extends AbstractType
         $builder
             ->add('monto')
             ->add('descripcion')
-            ->add('fechaVencimiento')
+            
+            ->add('fechaVencimiento', DateType::class, [
+                // renders it as a single text box
+                'widget' => 'single_text',
+            ])
             ->add('numeroCuota')
         ;
     }
