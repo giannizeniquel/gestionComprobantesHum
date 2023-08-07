@@ -12,6 +12,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
 use App\Entity\Curso;
+use App\Entity\Pago;
+use App\Entity\PagoDetalle;
 use App\Entity\User;
 use App\Entity\TipoCurso;
 
@@ -84,6 +86,8 @@ class DashboardController extends AbstractDashboardController
             yield MenuItem::linkToCrud('Cursos', 'fa fa-chalkboard', Curso::class);
             yield MenuItem::linkToCrud('Tipo Cursos', 'fa fa-shapes', TipoCurso::class);
             yield MenuItem::linkToCrud('Cuotas', 'fa fa-shapes', Cuota::class);
+            yield MenuItem::linkToCrud('Pagos', 'fa fa-shapes', Pago::class);
+            yield MenuItem::linkToCrud('Pagos Detalles', 'fa fa-shapes', PagoDetalle::class);
 
         }else{
             yield MenuItem::linkToCrud('Mis Datos', 'fa fa-user', User::class)
