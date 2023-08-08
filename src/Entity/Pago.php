@@ -6,6 +6,7 @@ use App\Repository\PagoRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=PagoRepository::class)
@@ -40,7 +41,7 @@ class Pago
     private $user;
 
     /**
-     * @ORM\OneToMany(targetEntity=PagoDetalle::class, mappedBy="pago")
+     * @ORM\OneToMany(targetEntity=PagoDetalle::class, mappedBy="pago", cascade={"persist"})
      */
     private $pagoDetalles;
 

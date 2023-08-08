@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\PagoDetalleRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -53,9 +55,19 @@ class PagoDetalle
     private $observacion;
 
     /**
-     * @ORM\OneToOne(targetEntity=Archivo::class, cascade={"persist", "remove"})
+     * @ORM\OneToMany(targetEntity=Archivo::class, mappedBy="pagoDetalle", cascade={"persist"})
      */
-    private $archivo;
+    private $comprobantes;
+
+    public function __construct()
+    {
+        $this->comprobantes = new ArrayCollection();
+    }
+
+    public function __toString()
+    {
+        return 'Transaccion: '.$this->numeroTicket;
+    }
 
     public function getId(): ?int
     {
@@ -146,14 +158,32 @@ class PagoDetalle
         return $this;
     }
 
-    public function getArchivo(): ?Archivo
+    /**
+     * @return Collection<int, Archivo>
+     */
+    public function getComprobantes(): Collection
     {
-        return $this->archivo;
+        return $this->comprobantes;
     }
 
-    public function setArchivo(?Archivo $archivo): self
+    public function addComprobante(Archivo $comprobante): self
     {
-        $this->archivo = $archivo;
+        if (!$this->comprobantes->contains($comprobante)) {
+            $this->comprobantes[] = $comprobante;
+            $comprobante->setPagoDetalle($this);
+        }
+
+        return $this;
+    }
+
+    public function removeComprobante(Archivo $comprobante): self
+    {
+        if ($this->comprobantes->removeElement($comprobante)) {
+            // set the owning side to null (unless already changed)
+            if ($comprobante->getPagoDetalle() === $this) {
+                $comprobante->setPagoDetalle(null);
+            }
+        }
 
         return $this;
     }

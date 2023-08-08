@@ -22,14 +22,7 @@ class PagoDetalleCrudController extends AbstractCrudController
     public function configureFields(string $pageName): iterable
     {
         return [
-            IdField::new('id')->hideOnForm(),
-            //AssociationField::new('pago')
-            NumberField::new('monto'),
-            TextField::new('numeroTicket'),
-            NumberField::new('montoTicket'),
-            //DateField::new('fechaTicket'),
-            TextField::new('observacion'),
-            AssociationField::new('archivo')
+
         ];
     }
 }

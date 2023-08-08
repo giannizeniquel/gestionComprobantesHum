@@ -30,7 +30,7 @@ class PagoDetalleType extends AbstractType
             ])
             ->add('observacion')
             
-            ->add('archivo', CollectionType::class, [
+            ->add('comprobantes', CollectionType::class, [
                 'label' => 'Comprobante',
                 'entry_type' => ArchivoType::class,
                 'entry_options' => [

@@ -27,11 +27,6 @@ class Archivo
     private $nombre;
 
     /**
-     * @ORM\OneToOne(targetEntity=PagoDetalle::class, cascade={"persist", "remove"})
-     */
-    private $pagoDetalle;
-
-    /**
      * NOTE: This is not a mapped field of entity metadata, just a simple property.
      *
      * @Vich\UploadableField(mapping="archivos", fileNameProperty="imageName", size="imageSize")
@@ -55,6 +50,11 @@ class Archivo
      */
     private $updated_at;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=PagoDetalle::class, inversedBy="comprobantes")
+     */
+    private $pagoDetalle;
+
     public function __toString()
     {
         return $this->nombre;
@@ -77,18 +77,6 @@ class Archivo
         return $this;
     }
 
-    public function getPagoDetalle(): ?PagoDetalle
-    {
-        return $this->pagoDetalle;
-    }
-
-    public function setPagoDetalle(?PagoDetalle $pagoDetalle): self
-    {
-        $this->pagoDetalle = $pagoDetalle;
-
-        return $this;
-    }
-
     public function getImageFile(): ?File
     {
         return $this->imageFile;
@@ -101,9 +89,9 @@ class Archivo
      * must be able to accept an instance of 'File' as the bundle will inject one here
      * during Doctrine hydration.
      *
-     *
+     * @param File|\Symfony\Component\HttpFoundation\File\UploadedFile $imageFile
      */
-    public function setImageFile(?string $imageFile): self
+    public function setImageFile(?File $imageFile): self
     {
         $this->imageFile = $imageFile;
 
@@ -148,6 +136,18 @@ class Archivo
     public function setUpdatedAt(?\DateTimeImmutable $updated_at): self
     {
         $this->updated_at = $updated_at;
+
+        return $this;
+    }
+
+    public function getPagoDetalle(): ?PagoDetalle
+    {
+        return $this->pagoDetalle;
+    }
+
+    public function setPagoDetalle(?PagoDetalle $pagoDetalle): self
+    {
+        $this->pagoDetalle = $pagoDetalle;
 
         return $this;
     }
