@@ -30,9 +30,9 @@ class PagoDetalle
     private $monto;
 
     /**
-     * @ORM\Column(type="integer", nullable=true)
+     * @ORM\Column(type="json")
      */
-    private $cuotas;
+    private $cuotas = [];
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
@@ -94,18 +94,6 @@ class PagoDetalle
     public function setMonto(?float $monto): self
     {
         $this->monto = $monto;
-
-        return $this;
-    }
-
-    public function getCuotas(): ?int
-    {
-        return $this->cuotas;
-    }
-
-    public function setCuotas(?int $cuotas): self
-    {
-        $this->cuotas = $cuotas;
 
         return $this;
     }
@@ -184,6 +172,18 @@ class PagoDetalle
                 $comprobante->setPagoDetalle(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getCuotas(): ?array
+    {
+        return $this->cuotas;
+    }
+
+    public function setCuotas(array $cuotas): self
+    {
+        $this->cuotas = $cuotas;
 
         return $this;
     }
