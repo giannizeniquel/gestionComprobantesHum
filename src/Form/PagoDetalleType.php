@@ -24,17 +24,9 @@ class PagoDetalleType extends AbstractType
     {
         $builder
             ->add('monto')    
-            ->add('cuotas', EntityType::class, [
+            ->add('cuotas', ChoiceType::class, [
                 'label' => 'Cuota',
-                'class' => Cuota::class,
                 'multiple' => true,
-                'query_builder' => function (EntityRepository $er) {
-                    return $er->createQueryBuilder('cuotas')
-                        ->join('cuotas.cursos', 'curso')
-                        ->where('curso.id = 1')
-                        ->orderBy('cuotas.fechaVencimiento', 'ASC')
-                        ;
-                },
                 'choice_label' => 'descripcion',
             ])
             ->add('numeroTicket', null, [

@@ -63,4 +63,18 @@ class CuotaRepository extends ServiceEntityRepository
 //            ->getOneOrNullResult()
 //        ;
 //    }
+
+   /**
+    * @return Cuota[] Returns an array of Cuota objects
+    */
+   public function findByCuotasDeCurso($idCurso): array
+   {
+       return $this->createQueryBuilder('cuotas')
+            ->join('cuotas.cursos', 'curso')
+            ->where('curso.id = :idCurso')
+            ->setParameter('idCurso', $idCurso)
+            ->getQuery()
+            ->getResult()
+       ;
+   }
 }

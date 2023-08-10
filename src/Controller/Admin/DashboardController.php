@@ -16,6 +16,7 @@ use App\Entity\Pago;
 use App\Entity\PagoDetalle;
 use App\Entity\User;
 use App\Entity\TipoCurso;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Assets;
 
 class DashboardController extends AbstractDashboardController
 {
