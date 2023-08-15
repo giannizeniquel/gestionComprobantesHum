@@ -6,24 +6,33 @@
 {% endblock %}
 
 {% block main %}
+    {# {% set url = ea_url()
+                    .setController('App\\Controller\\Admin\\PagoCrudController')
+                    .setAction('new') %} #}
     <table class="datagrid">
         <thead>
             <tr>
                 <td>Curso</td>
-                <td>Precio</td>
-                <td>Saldo</td>
-                <td>Acción</td>
+                <td>Cuotas Totales</td>
+                <td>Cuotas Adeudadas</td>
+                <td>Acciones</td>
             </tr>
         </thead>
         <tbody>
             {% for curso in cursos %}
+                {% 
+                    set url = ea_url()
+                        .setController('App\\Controller\\Admin\\PagoCrudController')
+                        .setAction('obtenerIdCurso')
+                        .set('idCurso', curso.id)
+                %}
                 <tr>
                     <td>{{ curso.nombre }}</td>
-                    <td>{{ curso.precio }}</td>
-                    <td>saldo</td>
+                    <td>{{ curso.cantidadCuotas }}</td>
+                    <td>Calculo Cuotas Adeudadas</td>
                     <td>
-                        <a class="btn btn-primary" href="...">Generar Pago</a>
-                        <a class="btn btn-success" href="...">Ver Pagos</a>
+                        <a class="btn btn-primary" href={{url}} >Denunciar Comprobante</a>
+                        <a class="btn btn-success" href="...">Ver Comprobantes</a>
                     </td>
                 </tr>
             {% endfor %}

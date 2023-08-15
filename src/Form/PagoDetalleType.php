@@ -22,13 +22,15 @@ class PagoDetalleType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+        
         $builder
-            ->add('monto')    
             ->add('cuotas', ChoiceType::class, [
-                'label' => 'Cuota',
+                'label' => 'Cuota/s',
                 'multiple' => true,
+                
                 'choice_label' => 'descripcion',
             ])
+            ->add('monto')    
             ->add('numeroTicket', null, [
                 'label' => 'Numero de Transaccion',
             ])

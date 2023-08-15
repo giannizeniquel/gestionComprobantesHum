@@ -18,7 +18,10 @@ use EasyCorp\Bundle\EasyAdminBundle\Filter\ComparisonFilter;
 use App\Repository\UserRepository;
 use Doctrine\DBAL\Query\QueryBuilder;
 use Doctrine\ORM\EntityRepository;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Assets;
+use EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext;
+use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -27,6 +30,11 @@ use Symfony\Component\Routing\Annotation\Method;
 
 class PagoCrudController extends AbstractCrudController
 {
+    private $adminUrlGenerator;
+    public function __construct(AdminUrlGenerator $adminUrlGenerator)
+    {
+        $this->adminUrlGenerator = $adminUrlGenerator;
+    }
     public static function getEntityFqcn(): string
     {
         return Pago::class;
@@ -35,15 +43,19 @@ class PagoCrudController extends AbstractCrudController
     public function configureFields(string $pageName): iterable
     {
         yield AssociationField::new('curso')
-            ->setFormTypeOptions([
-                'query_builder' => function (EntityRepository $er) {
-                    return $er->createQueryBuilder('curso')
-                        ->join('curso.users', 'u')
-                        ->where('u.id = :userId')
-                        ->setParameter('userId', $this->getUser()->getId());
-                },
-                'by_reference' => false,
-            ]);
+        ->setFormTypeOptions([
+            'query_builder' => function (EntityRepository $er) {
+                return $er->createQueryBuilder('curso')
+                    ->join('curso.users', 'u')
+                    ->where('u.id = :userId')
+                    ->andWhere('curso.id = :idCurso')
+                    ->setParameter('userId', $this->getUser()->getId())
+                    ->setParameter('idCurso', $this->get('session')->get('idCurso'));
+            },
+            'by_reference' => false,
+        ])
+        ->renderAsNativeWidget();
+        
         yield IdField::new('id')->hideOnForm()
             ->hideOnForm();
         yield AssociationField::new('user')
@@ -58,6 +70,21 @@ class PagoCrudController extends AbstractCrudController
             ->setFormTypeOptions([
                 'by_reference' => false,
             ]);
+    }
+
+    public function obtenerIdCurso(AdminContext $context, Request $request)
+    {
+        $idCurso = $context->getRequest()->get('idCurso');
+        $session = $request->getSession();
+        $session->set('idCurso', $idCurso);
+
+        $url = $this->adminUrlGenerator
+        ->setController(PagoCrudController::class)
+        ->setAction('new')
+        ->generateUrl();
+
+        return $this->redirect($url);
+
     }
 
     public function configureFilters(Filters $filters): Filters
