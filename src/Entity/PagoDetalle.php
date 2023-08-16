@@ -177,16 +177,12 @@ class PagoDetalle
         return $this;
     }
 
-    public function getCuotas(): ?array
+    /**
+     * @return Collection<int, Cuota>
+     */
+    public function getCuotas(): Collection
     {
         return $this->cuotas;
-    }
-
-    public function setCuotas(array $cuotas): self
-    {
-        $this->cuotas = $cuotas;
-
-        return $this;
     }
 
     public function addCuota(Cuota $cuota): self
