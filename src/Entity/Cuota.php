@@ -60,10 +60,16 @@ class Cuota
      */
     private $updated_at;
 
+    /**
+     * @ORM\ManyToMany(targetEntity=PagoDetalle::class, mappedBy="cuotas")
+     */
+    private $pagoDetalles;
+
     public function __construct()
     {
         $this->cursos = new ArrayCollection();
         $this->created_at = new \DateTimeImmutable();
+        $this->pagoDetalles = new ArrayCollection();
     }
 
  
@@ -181,6 +187,33 @@ class Cuota
     public function setUpdatedAt(?\DateTimeImmutable $updated_at): self
     {
         $this->updated_at = $updated_at;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, PagoDetalle>
+     */
+    public function getPagoDetalles(): Collection
+    {
+        return $this->pagoDetalles;
+    }
+
+    public function addPagoDetalle(PagoDetalle $pagoDetalle): self
+    {
+        if (!$this->pagoDetalles->contains($pagoDetalle)) {
+            $this->pagoDetalles[] = $pagoDetalle;
+            $pagoDetalle->addCuota($this);
+        }
+
+        return $this;
+    }
+
+    public function removePagoDetalle(PagoDetalle $pagoDetalle): self
+    {
+        if ($this->pagoDetalles->removeElement($pagoDetalle)) {
+            $pagoDetalle->removeCuota($this);
+        }
 
         return $this;
     }

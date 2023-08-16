@@ -64,17 +64,27 @@ class CuotaRepository extends ServiceEntityRepository
 //        ;
 //    }
 
-   /**
+/**
     * @return Cuota[] Returns an array of Cuota objects
     */
-   public function findByCuotasDeCurso($idCurso): array
+    public function findByCuotasDeCursoAjax($idCurso): array
+    {
+        return $this->createQueryBuilder('cuotas')
+             ->join('cuotas.cursos', 'curso')
+             ->where('curso.id = :idCurso')
+             ->setParameter('idCurso', $idCurso)
+             ->getQuery()
+             ->getResult()
+        ;
+    }
+
+   public function findByCuotasDeCurso($idCurso)
    {
        return $this->createQueryBuilder('cuotas')
             ->join('cuotas.cursos', 'curso')
             ->where('curso.id = :idCurso')
             ->setParameter('idCurso', $idCurso)
-            ->getQuery()
-            ->getResult()
        ;
    }
+
 }

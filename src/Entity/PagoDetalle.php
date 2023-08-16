@@ -27,12 +27,7 @@ class PagoDetalle
     /**
      * @ORM\Column(type="float", nullable=true)
      */
-    private $monto;
-
-    /**
-     * @ORM\Column(type="json")
-     */
-    private $cuotas = [];
+    private $montoCuotas;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
@@ -59,9 +54,15 @@ class PagoDetalle
      */
     private $comprobantes;
 
+    /**
+     * @ORM\ManyToMany(targetEntity=Cuota::class, inversedBy="pagoDetalles")
+     */
+    private $cuotas;
+
     public function __construct()
     {
         $this->comprobantes = new ArrayCollection();
+        $this->cuotas = new ArrayCollection();
     }
 
     public function __toString()
@@ -86,14 +87,14 @@ class PagoDetalle
         return $this;
     }
 
-    public function getMonto(): ?float
+    public function getMontoCuotas(): ?float
     {
-        return $this->monto;
+        return $this->montoCuotas;
     }
 
-    public function setMonto(?float $monto): self
+    public function setMontoCuotas(?float $montoCuotas): self
     {
-        $this->monto = $monto;
+        $this->montoCuotas = $montoCuotas;
 
         return $this;
     }
@@ -184,6 +185,22 @@ class PagoDetalle
     public function setCuotas(array $cuotas): self
     {
         $this->cuotas = $cuotas;
+
+        return $this;
+    }
+
+    public function addCuota(Cuota $cuota): self
+    {
+        if (!$this->cuotas->contains($cuota)) {
+            $this->cuotas[] = $cuota;
+        }
+
+        return $this;
+    }
+
+    public function removeCuota(Cuota $cuota): self
+    {
+        $this->cuotas->removeElement($cuota);
 
         return $this;
     }

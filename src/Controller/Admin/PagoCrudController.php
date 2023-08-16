@@ -97,7 +97,11 @@ class PagoCrudController extends AbstractCrudController
     public function configureAssets(Assets $assets): Assets
     {
         return $assets
+            ->addHtmlContentToHead('<script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
+                                    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+                                    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>')
             ->addJsFile('/gestionComprobantesHum/public/front/js/pago.js')
+
         ;
     }
 
@@ -108,7 +112,7 @@ class PagoCrudController extends AbstractCrudController
     public function obtenerCuotasDeCurso(Request $request, CuotaRepository $cuotaRepository): JsonResponse
     {
         $idCurso = $request->request->get('idCurso');
-        $cuotas = $cuotaRepository->findByCuotasDeCurso($idCurso);
+        $cuotas = $cuotaRepository->findByCuotasDeCursoAjax($idCurso);
         $cuotasData = [];
         foreach ($cuotas as $cuota){
             // Acceder a las propiedades de la cuota

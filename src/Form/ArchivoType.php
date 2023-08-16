@@ -17,6 +17,9 @@ class ArchivoType extends AbstractType
             ->add('imageFile', VichFileType::class, [
                 'label'=>false,
                 'required' => false,
+                'attr' => [
+                    'required' => true,
+                ]
             ])
             ->add('nombre', TextType::class, [
                 'label' => 'Nombre',
