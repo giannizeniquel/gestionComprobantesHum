@@ -63,7 +63,7 @@ class UserCrudController extends AbstractCrudController
             TextField::new('telefono','Teléfono'),
             TextField::new('domicilio'),
             ArrayField::new('roles')->setPermission('ROLE_ADMIN'),
-            AssociationField::new('cursos', 'Cursos inscriptos')
+            AssociationField::new('cursos', 'Cursos inscriptos')->setPermission('ROLE_ADMIN'),
         ];
         
         // if (Crud::PAGE_INDEX === $pageName)

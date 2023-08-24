@@ -52,24 +52,26 @@ class CursoCrudController extends AbstractCrudController
     {
         return [
             IdField::new('id')->hideOnForm(),
+            AssociationField::new('tipo', 'Tipo Curso'),
             TextField::new('nombre'),
+            TextField::new('corte'),
             TextField::new('descripcion', 'Descripción'),
             TextField::new('observacion', 'Observación'),
             BooleanField::new('activo'),
-            TextField::new('duracion', 'Duración'),
-            TextField::new('cantidadCuotas'),
-            NumberField::new('precio'),
-            IntegerField::new('capacidad'),
-            TextField::new('modalidad'),
-            AssociationField::new('tipo', 'Tipo Curso'),
-            AssociationField::new('users', 'Alumnos'),
+            IntegerField::new('cantidadCuotas'),
+            AssociationField::new('users', 'Alumnos inscriptos'),
             CollectionField::new('cuotas', 'Cuotas')
                 ->allowDelete()
                 ->setEntryIsComplex(true)
                 ->setEntryType(CuotaType::class)
                 ->setFormTypeOptions([
                     'by_reference' => false,
-                ])
+                ]),
+
+            // TextField::new('duracion', 'Duración'),
+            // NumberField::new('precio'),
+            // IntegerField::new('capacidad'),
+            // TextField::new('modalidad'),
         ];
     }
 

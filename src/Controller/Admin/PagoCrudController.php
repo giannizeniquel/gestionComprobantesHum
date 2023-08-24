@@ -19,7 +19,9 @@ use App\Repository\UserRepository;
 use Doctrine\DBAL\Query\QueryBuilder;
 use Doctrine\ORM\EntityRepository;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Assets;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext;
 use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -42,19 +44,24 @@ class PagoCrudController extends AbstractCrudController
 
     public function configureFields(string $pageName): iterable
     {
-        yield AssociationField::new('curso')
-        ->setFormTypeOptions([
-            'query_builder' => function (EntityRepository $er) {
-                return $er->createQueryBuilder('curso')
-                    ->join('curso.users', 'u')
-                    ->where('u.id = :userId')
-                    ->andWhere('curso.id = :idCurso')
-                    ->setParameter('userId', $this->getUser()->getId())
-                    ->setParameter('idCurso', $this->get('session')->get('idCurso'));
-            },
-            'by_reference' => false,
-        ])
-        ->renderAsNativeWidget();
+        if (Crud::PAGE_NEW === $pageName)
+        {
+            yield AssociationField::new('curso')
+            ->setFormTypeOptions([
+                'query_builder' => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('curso')
+                        ->join('curso.users', 'u')
+                        ->where('u.id = :userId')
+                        ->andWhere('curso.id = :idCurso')
+                        ->setParameter('userId', $this->getUser()->getId())
+                        ->setParameter('idCurso', $this->get('session')->get('idCurso'));
+                },
+                'by_reference' => false,
+            ])
+            ->renderAsNativeWidget();
+        }else if (Crud::PAGE_INDEX === $pageName) {
+            yield AssociationField::new('curso');
+        }
         
         yield IdField::new('id')->hideOnForm()
             ->hideOnForm();
@@ -87,6 +94,13 @@ class PagoCrudController extends AbstractCrudController
 
     }
 
+    public function configureActions(Actions $actions): Actions
+    {
+        return $actions
+        ->add(Crud::PAGE_INDEX, Action::DETAIL);
+        
+    }
+
     public function configureFilters(Filters $filters): Filters
     {
         return $filters
@@ -113,7 +127,18 @@ class PagoCrudController extends AbstractCrudController
     {
         $idCurso = $request->request->get('idCurso');
         $cuotas = $cuotaRepository->findByCuotasDeCursoAjax($idCurso);
+        $cuotasPagadas = $cuotaRepository->findByCuotasPagadasDeCursoAjax($idCurso);
+        $cuotasPagadasData = [];
         $cuotasData = [];
+        $totalCuotas = [];
+
+        foreach ($cuotasPagadas as $cuotaP){
+            $idCuotaP = $cuotaP->getId();
+            $cuotasPagadasData[] = [
+                'idCuota' => $idCuotaP,
+            ];
+        }
+
         foreach ($cuotas as $cuota){
             // Acceder a las propiedades de la cuota
             $idCuota = $cuota->getId();
@@ -133,7 +158,12 @@ class PagoCrudController extends AbstractCrudController
                 'toString' => $toString,
             ];
         }
+
+        $totalCuotas[] = [
+            'cuotasData' => $cuotasData,
+            'cuotasPagadasData' => $cuotasPagadasData
+        ];
         
-        return $this->json($cuotasData);
+        return $this->json($totalCuotas);
     }
 }

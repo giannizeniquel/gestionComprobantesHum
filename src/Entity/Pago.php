@@ -26,7 +26,7 @@ class Pago
     private $monto;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Curso::class, inversedBy="cuotas")
+     * @ORM\ManyToOne(targetEntity=Curso::class, inversedBy="pagos", cascade={"persist"})
      */
     private $curso;
 

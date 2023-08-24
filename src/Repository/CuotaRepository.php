@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Cuota;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\Security\Core\Security;
 
 /**
  * @extends ServiceEntityRepository<Cuota>
@@ -16,9 +17,16 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class CuotaRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+
+     /**
+     * @var Security
+     */
+    private $security;
+    
+    public function __construct(ManagerRegistry $registry, Security $security)
     {
         parent::__construct($registry, Cuota::class);
+        $this->security = $security;
     }
 
     public function add(Cuota $entity, bool $flush = false): void
@@ -64,7 +72,7 @@ class CuotaRepository extends ServiceEntityRepository
 //        ;
 //    }
 
-/**
+    /**
     * @return Cuota[] Returns an array of Cuota objects
     */
     public function findByCuotasDeCursoAjax($idCurso): array
@@ -78,13 +86,33 @@ class CuotaRepository extends ServiceEntityRepository
         ;
     }
 
-   public function findByCuotasDeCurso($idCurso)
-   {
-       return $this->createQueryBuilder('cuotas')
+    /**
+    * @return Cuota[] Returns an array of Cuota objects
+    */
+    public function findByCuotasPagadasDeCursoAjax($idCurso): array
+    {
+        $idUser = $this->security->getUser();
+        return $this->createQueryBuilder('cuotas')
+            ->join('cuotas.cursos', 'curso')
+            ->join('cuotas.pagoDetalles', 'pagoDetalle')
+            ->join('pagoDetalle.pago', 'pago')
+            ->join('pago.user', 'user')
+            ->where('curso.id = :idCurso')
+            ->andWhere('user.id = :idUser')
+            ->setParameter('idCurso', $idCurso)
+            ->setParameter('idUser', $idUser)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    public function findByCuotasDeCurso($idCurso)
+    {
+        return $this->createQueryBuilder('cuotas')
             ->join('cuotas.cursos', 'curso')
             ->where('curso.id = :idCurso')
             ->setParameter('idCurso', $idCurso)
-       ;
-   }
+        ;
+    }
 
 }

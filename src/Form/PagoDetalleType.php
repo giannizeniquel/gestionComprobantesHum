@@ -21,6 +21,8 @@ use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Vich\UploaderBundle\Form\Type\VichFileType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 class PagoDetalleType extends AbstractType
 {
@@ -63,18 +65,15 @@ class PagoDetalleType extends AbstractType
             ])
             ->add('observacion')
             
-            ->add('comprobantes', CollectionType::class, [
-                'label' => 'Comprobante',
-                'entry_type' => ArchivoType::class,
-                'entry_options' => [
-                    'label' => false
-                ],
-                'allow_add' => true,
-                'allow_delete' => true,
+            ->add('imageFile', VichFileType::class, [
+                'label'=> 'Subir Comprobante',
+                'required' => false,
                 'attr' => [
                     'required' => true,
                 ]
-
+            ])
+            ->add('nombreArchivo', TextType::class, [
+                'label' => 'Nombre Archivo',
             ])
         ;
     }

@@ -85,6 +85,11 @@ class Curso
      */
     private $cuotas;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $corte;
+
     public function __construct()
     {
         $this->users = new ArrayCollection();
@@ -302,6 +307,18 @@ class Curso
         if ($this->cuotas->removeElement($cuota)) {
             $cuota->removeCurso($this);
         }
+
+        return $this;
+    }
+
+    public function getCorte(): ?string
+    {
+        return $this->corte;
+    }
+
+    public function setCorte(?string $corte): self
+    {
+        $this->corte = $corte;
 
         return $this;
     }

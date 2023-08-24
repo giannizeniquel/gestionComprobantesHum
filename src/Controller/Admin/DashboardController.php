@@ -91,7 +91,7 @@ class DashboardController extends AbstractDashboardController
             yield MenuItem::linkToCrud('Pagos Detalles', 'fa fa-shapes', PagoDetalle::class);
 
         }else{
-            yield MenuItem::linkToCrud('Mis Datos', 'fa fa-user', User::class)
+            yield MenuItem::linkToCrud('Datos Personales', 'fa fa-user', User::class)
                 ->setAction('detail')
                 ->setEntityId($this->getUser()->getId());
             yield MenuItem::linktoRoute('Mis Cursos', 'fa fa-chalkboard', 'misCursos');
