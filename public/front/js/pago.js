@@ -32,16 +32,16 @@ if(url.includes('crudAction=new') || url.includes('crudAction=edit')) {
 
                     arr_cuotas = totalCuotas[0]['cuotasData'];
                     arr_cuotas_pagadas = totalCuotas[0]['cuotasPagadasData'];
-                    console.log(totalCuotas);
-                    console.log(arr_cuotas);
-                    console.log(arr_cuotas_pagadas);
 
                     let idsNoPermitidos = arr_cuotas_pagadas.map(idCuota => idCuota.idCuota);
 
+                    //recorremos todos los select cuotas
                     for (let i = 0; i < selectsCuotas.length; i++) {
+                        //recorremos options de cada select
                         for (let j = 0; j < selectsCuotas[i].length; j++) {
+                            //recorremos cuotas pagadas
                             for (let k = 0; k < idsNoPermitidos.length; k++) {
-                                
+                                //filtramos las cuotas que ya estan pagadas
                                 if(selectsCuotas[i][j].value === idsNoPermitidos[k].toString()) {
                                     selectsCuotas[i][j].remove();
                                 }
