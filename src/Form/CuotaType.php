@@ -16,11 +16,6 @@ class CuotaType extends AbstractType
         $builder
             ->add('monto')
             ->add('descripcion')
-            
-            ->add('fechaVencimiento', DateType::class, [
-                // renders it as a single text box
-                'widget' => 'single_text',
-            ])
             ->add('numeroCuota')
         ;
     }

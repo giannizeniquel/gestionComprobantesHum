@@ -99,4 +99,24 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
     //         ->getOneOrNullResult()
     //     ;
     // }
+
+
+   //->select('c', 'u') // trae todos los cursos y los  Usuarios
+   //->from('App:Curso', 'c')
+   //->join('c.users', 'u');         
+
+
+    /**
+    * @return Curso[] Returns an array of User objects
+    */
+    public function findUsuariosCursos(): array
+    {
+        $qb = $this->getEntityManager()->createQueryBuilder();
+        $qb -> select('c.id AS curso_id', 'u.nombre', 'u.apellido', 'u.email')
+            ->from('App:Curso', 'c')
+            ->join('c.users', 'u');                                     
+        $query = $qb->getQuery();
+    
+        return $query->getResult(); 
+    }
 }

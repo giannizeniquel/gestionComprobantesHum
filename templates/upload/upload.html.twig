@@ -1,0 +1,11 @@
+
+{% extends '@EasyAdmin/page/content.html.twig' %}
+
+{% block body %}
+    <h1>Subir Archivo Excel</h1>
+    {{ form_start(form) }}
+    {{ form_row(form.file) }}
+    {{ form_row(form.submit) }}
+    {{ form_end(form) }}
+{% endblock %}
+

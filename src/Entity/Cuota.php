@@ -30,10 +30,7 @@ class Cuota
      */
     private $descripcion;
 
-    /**
-     * @ORM\Column(type="date", nullable=true)
-     */
-    private $fechaVencimiento;
+ 
 
     /**
      * @ORM\Column(type="string", length=10)
@@ -103,18 +100,6 @@ class Cuota
     public function setDescripcion(?string $descripcion): self
     {
         $this->descripcion = $descripcion;
-
-        return $this;
-    }
-
-    public function getFechaVencimiento(): ?\DateTimeInterface
-    {
-        return $this->fechaVencimiento;
-    }
-
-    public function setFechaVencimiento(?\DateTimeInterface $fechaVencimiento): self
-    {
-        $this->fechaVencimiento = $fechaVencimiento;
 
         return $this;
     }

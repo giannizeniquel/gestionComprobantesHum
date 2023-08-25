@@ -18,6 +18,8 @@ use LDAP\Result;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Response;
 use App\Repository\UserRepository;
+use App\Repository\CursoRepository;
+use PhpOffice\PhpSpreadsheet\IOFactory;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -94,4 +96,74 @@ class UserCrudController extends AbstractCrudController
         
             return $this->render('user/userCursos.html.twig', ['cursos' => $cursos]);
     }
+
+
+
+
+/**
+ * @Route("/upload-excel", name="xlsx", methods={"POST"})
+ * @param Request 
+ * @param UserRepository 
+ * @param CursoRepository 
+ * @throws \Exception
+ */
+public function xslx(Request $request, UserRepository $userRepository, CursoRepository $cursoRepository)
+{
+    $file = $request->files->get('file');
+
+    if (!$file) {
+        return $this->json('Archivo no encontrado en la solicitud', 400);
+    }
+
+    $fileFolder = __DIR__ . '/../../public/uploads/';
+    $filePathName = md5(uniqid()) . $file->getClientOriginalName();
+
+    try {
+        $file->move($fileFolder, $filePathName);
+    } catch (FileException $e) {
+        return $this->json('Error al mover el archivo', 500);
+    }
+
+    $spreadsheet = IOFactory::load($fileFolder . $filePathName);
+    $row = $spreadsheet->getActiveSheet()->removeRow(1);
+    $sheetData = $spreadsheet->getActiveSheet()->toArray(null, true, true, true);
+
+    $entityManager = $this->getDoctrine()->getManager();
+
+    foreach ($sheetData as $row) {
+        $nombre = $row['A'];
+        $apellido = $row['B'];
+        $email = $row['C'];
+        $telefono = $row['D'];
+        $dni= $row['F'];
+        $password = $row['E'];
+        $cursoId = $row['G'];
+
+
+
+        $userExists = $userRepository->findOneBy(['email' => $email]);
+
+        if (!$userExists) {
+            $user = new User();
+            $user->setNombre($nombre);
+            $user->setApellido($apellido);
+            $user->setEmail($email);
+            $user->setTelefono($telefono);
+            $user->setPassword('$2y$13$tB5VfB66JCSzioZaUXKWx.nxDdXQ5knrABCR0P4IsdKOM6FfqE6.C');
+            $user->setDni($dni);
+            $entityManager->persist($user);
+
+            
+            $curso = $cursoRepository->find($cursoId); // Obtener el curso por ID
+            if ($curso) {
+                $user->addCurso($curso); // Establecer la relación entre usuario y curso
+            }
+        }
+    }
+
+    $entityManager->flush();
+
+    return $this->json('Usuarios registrados y cursos asignados', 200);
+ }
+
 }
