@@ -134,10 +134,9 @@ public function xslx(Request $request, UserRepository $userRepository, CursoRepo
         $nombre = $row['A'];
         $apellido = $row['B'];
         $email = $row['C'];
-        $telefono = $row['D'];
         $dni= $row['F'];
         $password = $row['E'];
-        $cursoId = $row['G'];
+        $cursoId = $row['F'];
 
 
 
@@ -148,7 +147,6 @@ public function xslx(Request $request, UserRepository $userRepository, CursoRepo
             $user->setNombre($nombre);
             $user->setApellido($apellido);
             $user->setEmail($email);
-            $user->setTelefono($telefono);
             $user->setPassword('$2y$13$tB5VfB66JCSzioZaUXKWx.nxDdXQ5knrABCR0P4IsdKOM6FfqE6.C');
             $user->setDni($dni);
             $entityManager->persist($user);
@@ -165,5 +163,9 @@ public function xslx(Request $request, UserRepository $userRepository, CursoRepo
 
     return $this->json('Usuarios registrados y cursos asignados', 200);
  }
+
+
+
+ 
 
 }

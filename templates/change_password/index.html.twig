@@ -1,0 +1,16 @@
+
+{% extends '@EasyAdmin/page/content.html.twig' %}
+
+
+{% block content_title %}Cambiar contraseña{% endblock %}
+
+{% block main %}
+        
+        {{ form_start(form) }}
+            {{ form_row(form.currentPassword) }}
+            {{ form_row(form.newPassword) }}
+            {{ form_row(form.confirmPassword) }}
+            <button type="submit" class="btn btn-primary">Cambiar contraseña</button>
+        {{ form_end(form) }}
+   
+{% endblock %}

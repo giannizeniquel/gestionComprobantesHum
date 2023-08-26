@@ -50,7 +50,7 @@ class DashboardController extends AbstractDashboardController
             //->setTitle('<img src="..."> ACME <span class="text-small">Corp.</span>')
 
             // the path defined in this method is passed to the Twig asset() function
-            //->setFaviconPath('favicon.svg')
+            ->setFaviconPath('favicon.svg')
 
             // the domain used by default is 'messages'
             ->setTranslationDomain('my-custom-domain')
@@ -63,8 +63,7 @@ class DashboardController extends AbstractDashboardController
             // browser width, instead of the default design which sets a max width
             ->renderContentMaximized()
 
-            // set this option if you prefer the sidebar (which contains the main menu)
-            // to be displayed as a narrow column instead of the default expanded design
+         
             //->renderSidebarMinimized()
 
             // by default, all backend URLs include a signature hash. If a user changes any
@@ -85,16 +84,29 @@ class DashboardController extends AbstractDashboardController
         if (in_array('ROLE_ADMIN',$this->getUser()->getRoles())) {
             yield MenuItem::linkToCrud('Usuarios', 'fa fa-users', User::class);
             yield MenuItem::linkToCrud('Cursos', 'fa fa-chalkboard', Curso::class);
-            yield MenuItem::linkToCrud('Tipo Cursos', 'fa fa-shapes', TipoCurso::class);
+            yield MenuItem::linkToCrud('Tipo Cursos', 'fa fa-tags', TipoCurso::class);
             yield MenuItem::linkToCrud('Cuotas', 'fa fa-shapes', Cuota::class);
-            yield MenuItem::linkToCrud('Pagos', 'fa fa-shapes', Pago::class);
-            yield MenuItem::linkToCrud('Pagos Detalles', 'fa fa-shapes', PagoDetalle::class);
+            yield MenuItem::linkToCrud('Pagos', 'fa fa-file-text-o', Pago::class);
+               //  yield MenuItem::linkToCrud('Pagos Detalles', 'fa fa-shapes', PagoDetalle::class);
+
+            yield MenuItem::section('Seguridad');
+       
+            yield MenuItem::linktoRoute('Cambiar contraseña', 'fas fa-key', 'change_password');
+
+            yield MenuItem::section('Links');
+            yield MenuItem::linkToUrl('Guia de uso', 'fab fa-youtube', 'https://symfony.com/doc/current/bundles/EasyAdminBundle/index.html')->setLinkTarget('_blank');         
+            yield MenuItem::linkToUrl('Humanidades', 'fas fa-university', 'https://hum.unne.edu.ar/')->setLinkTarget('_blank');
+
+
 
         }else{
             yield MenuItem::linkToCrud('Datos Personales', 'fa fa-user', User::class)
                 ->setAction('detail')
                 ->setEntityId($this->getUser()->getId());
             yield MenuItem::linktoRoute('Mis Cursos', 'fa fa-chalkboard', 'misCursos');
+            yield MenuItem::section('Recursos');
+            yield MenuItem::linkToUrl('Guia de uso', 'fab fa-youtube', 'https://symfony.com/doc/current/bundles/EasyAdminBundle/index.html')->setLinkTarget('_blank');
+
         }
     }
 }
