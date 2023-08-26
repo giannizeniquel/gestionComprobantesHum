@@ -10,7 +10,7 @@ use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
-class UploadType extends AbstractType
+class CargaExcelType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
@@ -19,7 +19,7 @@ class UploadType extends AbstractType
             'label' => 'Selecciona un archivo Excel',
         ])
         ->add('submit', SubmitType::class, [
-            'label' => 'Subir Archivo',
+            'label' => 'Enviar Archivo',
         ]);
     }
 

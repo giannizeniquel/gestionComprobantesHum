@@ -83,10 +83,13 @@ class DashboardController extends AbstractDashboardController
 
         if (in_array('ROLE_ADMIN',$this->getUser()->getRoles())) {
             yield MenuItem::linkToCrud('Usuarios', 'fa fa-users', User::class);
+            yield MenuItem::linktoRoute('Cargar usuarios', 'fas fa-upload', 'xlsx');
+
             yield MenuItem::linkToCrud('Cursos', 'fa fa-chalkboard', Curso::class);
             yield MenuItem::linkToCrud('Tipo Cursos', 'fa fa-tags', TipoCurso::class);
             yield MenuItem::linkToCrud('Cuotas', 'fa fa-shapes', Cuota::class);
             yield MenuItem::linkToCrud('Pagos', 'fa fa-file-text-o', Pago::class);
+            
                //  yield MenuItem::linkToCrud('Pagos Detalles', 'fa fa-shapes', PagoDetalle::class);
 
             yield MenuItem::section('Seguridad');
