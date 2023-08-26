@@ -3,7 +3,7 @@ vich_uploader:
 
     mappings:
         archivos:
-            uri_prefix: /gestionComprobantesHum/public/archivos/comprobantes
+            uri_prefix: /public/archivos/comprobantes
             upload_destination: '%kernel.project_dir%/public/archivos/comprobantes'
             namer: Vich\UploaderBundle\Naming\SmartUniqueNamer
 
