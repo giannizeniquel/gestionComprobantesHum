@@ -59,7 +59,7 @@ class PagoCrudController extends AbstractCrudController
                 'by_reference' => false,
             ])
             ->renderAsNativeWidget();
-        }else if (Crud::PAGE_INDEX === $pageName) {
+        }else if (Crud::PAGE_INDEX === $pageName || Crud::PAGE_EDIT === $pageName) {
             yield AssociationField::new('curso');
         }
         
