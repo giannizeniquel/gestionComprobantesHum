@@ -1,5 +1,6 @@
 <?php
 
+
 namespace App\Controller;
 
 use App\Entity\User;
@@ -65,6 +66,11 @@ class CargaExcelController extends AbstractDashboardController
 
             $entityManager = $this->getDoctrine()->getManager();
 
+            $batchSize = 50; // Cantidad de registros por lote
+            $entityManager = $this->getDoctrine()->getManager();
+            $batchCount = 0;
+
+
             foreach ($sheetData as $row) {
                 $nombre = $row['A'];
                 $apellido = $row['B'];
@@ -88,7 +94,19 @@ class CargaExcelController extends AbstractDashboardController
                 if ($curso) {
                     $user->addCurso($curso); // Establece la relación entre usuario y curso
                 }
+
+                ++$batchCount;
+                if ($batchCount % $batchSize === 0) {
+                    $entityManager->flush();
+                    $entityManager->clear();
+                }
             }
+        }
+
+        // Asegurarse de que los registros finales se persistan
+        if ($batchCount % $batchSize !== 0) {
+            $entityManager->flush();
+            $entityManager->clear();
         }
 
         $entityManager->flush();

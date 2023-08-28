@@ -107,8 +107,15 @@ class DashboardController extends AbstractDashboardController
                 ->setAction('detail')
                 ->setEntityId($this->getUser()->getId());
             yield MenuItem::linktoRoute('Mis Cursos', 'fa fa-chalkboard', 'misCursos');
+
+            yield MenuItem::section('Seguridad');
+       
+            yield MenuItem::linktoRoute('Cambiar contraseña', 'fas fa-key', 'change_password');
             yield MenuItem::section('Recursos');
             yield MenuItem::linkToUrl('Guia de uso', 'fab fa-youtube', 'https://symfony.com/doc/current/bundles/EasyAdminBundle/index.html')->setLinkTarget('_blank');
+            yield MenuItem::linkToUrl('Humanidades', 'fas fa-university', 'https://hum.unne.edu.ar/')->setLinkTarget('_blank');
+
+
 
         }
     }
