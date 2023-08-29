@@ -271,4 +271,6 @@ class PagoDetalle
 
         return $this;
     }
+
+
 }

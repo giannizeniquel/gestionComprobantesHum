@@ -21,6 +21,7 @@ use App\Repository\UserRepository;
 use App\Repository\CursoRepository;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\Request;
+use Doctrine\ORM\EntityManagerInterface;
 
 
 class UserCrudController extends AbstractCrudController
@@ -84,18 +85,47 @@ class UserCrudController extends AbstractCrudController
         ->setPermission(Action::DELETE, 'ROLE_ADMIN')
         ->setPermission(Action::INDEX, 'ROLE_ADMIN');
     }
-    
     /**
      * @Route("/admin/misCursos", name="misCursos")
-     */
-    public function obtenerCursosUsuario(UserRepository $userRepository): Response
+     */public function obtenerCursosUsuario(UserRepository $userRepository, EntityManagerInterface $entityManager): Response
     {
         $userId = $this->getUser()->getId();
-        $cursos = $userRepository
-            ->findByMisCursos($userId);
-        
-            return $this->render('user/userCursos.html.twig', ['cursos' => $cursos]);
-    }
+        $cursos = $userRepository->findByMisCursos($userId);
 
+        $usuario = $this->getUser();
+        // $cuotasPorCurso = []; //almacena cuotas pagadas por curso
+
+        // if ($usuario) {
+        //     $pagos = $usuario->getPagos();
+        //    // dump($pagos);
+        //     foreach ($pagos as $pago) {
+        //         $pagoDetalles = $pago->getPagoDetalles();
+        //        // dump($pagoDetalles);
+        //         foreach ($pagoDetalles as $pagoDetalle) {
+        //             $cuotas = $pagoDetalle->getCuotas();
+        //            // dump($cuotas);
+        //             foreach ($cuotas as $cuota) {
+                        
+        //                 $curso = $cuota->getCursos()[0];
+        //                 //dump($curso);
+        //                 // Si el curso ya existe en el array, incrementa su contador de cuotas
+        //                 if (isset($cuotasPorCurso[$curso->getId()])) {
+        //                     $cuotasPorCurso[$curso->getId()]++;
+        //                    // dump($cuotasPorCurso);die;
+        //                 } else {
+        //                     // Si el curso no existe en el array, inicializa su contador de cuotas
+        //                     $cuotasPorCurso[$curso->getId()] = 1;
+        //                    // dump($curso);die;
+        //                 }
+        //             }
+        //         }
+        //     }
+        // } dump($curso); dd($cuotasPorCurso)di;
+
+        return $this->render('user/userCursos.html.twig', [
+            'cursos' => $cursos,
+          //  'cuotasPorCurso' => $cuotasPorCurso,
+        ]);
+    }
 
 }

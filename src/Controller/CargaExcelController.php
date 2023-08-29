@@ -41,7 +41,7 @@ class CargaExcelController extends AbstractDashboardController
     {
         $form = $this->createForm(CargaExcelType::class);
         $form->handleRequest($request);
-      
+             
 
         if ($form->isSubmitted() && $form->isValid()) {
             // Obtener el archivo subido
@@ -72,29 +72,30 @@ class CargaExcelController extends AbstractDashboardController
 
 
             foreach ($sheetData as $row) {
-                $nombre = $row['A'];
+                $email = $row['A'];
                 $apellido = $row['B'];
-                $email = $row['C'];
-                $password = $row['D'];
-                $dni= $row['E'];
+                $nombre = $row['C'];
+                $dni = $row['D'];
+                $password= $row['E'];
                 $cursoId = $row['F'];
 
           $userExists = $userRepository->findOneBy(['email' => $email]);
 
             if (!$userExists) {
                 $user = new User();
-                $user->setNombre($nombre);
-                $user->setApellido($apellido);
                 $user->setEmail($email);
-                $hashedPassword = $passwordHasher->hashPassword($user, $password);
-                $user->setPassword($hashedPassword);  // Establece la contraseña codificada
+                $user->setApellido($apellido);
+                $user->setNombre($nombre);
                 $user->setDni($dni);
-                $entityManager->persist($user);
+               // $hashedPassword = $passwordHasher->hashPassword($user, $password);
+                $user->setPassword('$2y$13$fGb8QrKMwIz6Vwn4ok/GG.Vlb93gHz/2ZXZthrIw.NVlUe0zBmQtK');  // Establece la contraseña codificada
                 $curso = $cursoRepository->find($cursoId); // Obtener el curso por ID
+                
                 if ($curso) {
                     $user->addCurso($curso); // Establece la relación entre usuario y curso
                 }
-
+                $entityManager->persist($user);
+              
                 ++$batchCount;
                 if ($batchCount % $batchSize === 0) {
                     $entityManager->flush();

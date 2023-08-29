@@ -16,7 +16,7 @@ class CargaExcelType extends AbstractType
     {
         $builder
         ->add('file', FileType::class, [
-            'label' => 'Selecciona un archivo Excel',
+            'label' => 'Selecciona un archivo',
         ])
         ->add('submit', SubmitType::class, [
             'label' => 'Enviar Archivo',
