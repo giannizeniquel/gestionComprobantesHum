@@ -14,7 +14,7 @@
             <tr>
                 <td>Curso</td>
                 <td>Cuotas Totales</td>
-                <td>Cuotas Adeudadas</td>
+                <td>Cuotas Declaradas</td>
                 <td>Acciones</td>
             </tr>
         </thead>
@@ -35,7 +35,15 @@
                 <tr>
                     <td>{{ curso.nombre }}</td>
                     <td>{{ curso.cantidadCuotas }}</td>
-                    <td>Calculo Cuotas Adeudadas</td>
+                    {# calculo cantidad de cuotas pagadas #}
+                    {% set cantCuotasPagadas = 0 %}
+                    {% for pago in curso.pagos %}
+                        {% for pagoDetalle in pago.pagoDetalles %}
+                            {% set cantCuotasPagadas = (cantCuotasPagadas + pagoDetalle.cuotas|length) %} 
+                        {% endfor %}
+                    {% endfor %}
+                    <td>{{ cantCuotasPagadas }}</td>
+                    {# fin calculo #}
                     <td>
                         <a class="btn btn-primary" href={{url_new_pagoCurso}} >Denunciar Comprobante</a>
                         {# <a class="btn btn-success" href={{url_list_pagoCurso}}>Ver Comprobantes</a> #}
