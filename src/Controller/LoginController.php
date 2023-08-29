@@ -13,7 +13,7 @@ class LoginController extends AbstractController
   /**
    * @Route("/login", name="app_login")
    */
-  public function index(AuthenticationUtils $authenticationUtils): Response
+  public function login(AuthenticationUtils $authenticationUtils): Response
   {
 
     if ($this->getUser()) {
@@ -28,7 +28,7 @@ class LoginController extends AbstractController
     return $this->render('@EasyAdmin/page/login.html.twig', [
       'last_username' => $lastUsername,
       'error'         => $error,
-      'page_title' => 'Iniciar Sesión',
+      'page_title' => 'Iniciar Sesion',
       'csrf_token_intention' => 'authenticate',
       'target_path' => 'admin',
       'username_label' => 'Email',
