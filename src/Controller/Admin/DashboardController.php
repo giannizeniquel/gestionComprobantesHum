@@ -37,7 +37,7 @@ class DashboardController extends AbstractDashboardController
 
         // you can also render some template to display a proper Dashboard
         // (tip: it's easier if your template extends from @EasyAdmin/page/content.html.twig)
-        //return $this->render('some/path/my-dashboard.html.twig');
+        return $this->render('home/home.html.twig');
 
         return parent::index();
     }
@@ -76,6 +76,15 @@ class DashboardController extends AbstractDashboardController
             // need to generate relative URLs instead, call this method
             ->generateRelativeUrls();
     }
+    
+
+    
+    public function configureUserMenu(UserInterface $user): UserMenu
+    {
+        return parent::configureUserMenu($user)
+            ->setName($user->getFullname());
+    }
+
 
     public function configureMenuItems(): iterable
     {
@@ -87,7 +96,7 @@ class DashboardController extends AbstractDashboardController
 
             yield MenuItem::linkToCrud('Cursos', 'fa fa-chalkboard', Curso::class);
             yield MenuItem::linkToCrud('Tipo Cursos', 'fa fa-tags', TipoCurso::class);
-            yield MenuItem::linkToCrud('Cuotas', 'fa fa-shapes', Cuota::class);
+           // yield MenuItem::linkToCrud('Cuotas', 'fa fa-shapes', Cuota::class);
             yield MenuItem::linkToCrud('Pagos', 'fa fa-file-text-o', Pago::class);
             
                //  yield MenuItem::linkToCrud('Pagos Detalles', 'fa fa-shapes', PagoDetalle::class);
