@@ -11,52 +11,46 @@
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.js"></script>
 {% endblock head_javascript %}
 
-{% block content_title %}Mis Cursos{% endblock %}
+{% block content_title %}Mis Informes de Pagos{% endblock %}
 {% block page_actions %}
-    {% 
-        set url_ver_pagoCursos = ea_url()
-            .setController('App\\Controller\\Admin\\UserCrudController')
-            .setAction('obtenerPagosUsuario')
-    %}
-    <a class="btn btn-success" href={{ url_ver_pagoCursos }}>Ver Informes de Pagos</a>
+    {# <a class="btn btn-primary" href="...">Accion</a> #}
 {% endblock %}
 
 {% block main %}
 
     {# las class son de la libreria de DataTable: https://datatables.net/manual/ #}
-    <table id="tablaCursos" class="nowrap hover row-border order-column">
+    <table id="tablaPagos" class="nowrap hover row-border order-column">
         <thead>
             <tr>
-                <td><strong>ID Curso</strong></td>
-                <td><strong>Nombre</strong></td>
-                <td><strong>Cuotas Totales</strong></td>
-                <td><strong>Cuotas Declaradas</strong></td>
+                <td><strong>ID Pago</strong></td>
+                <td><strong>Curso</strong></td>
+                <td><strong>Observaciones</strong></td>
+                <td><strong>Monto</strong></td>
                 <td></td>
             </tr>
         </thead>
         <tbody>
-            {% for curso in cursos %}
+            {% for pago in pagos %}
                 {% 
-                    set url_new_pagoCurso = ea_url()
+                    set url_show_pago = ea_url()
                         .setController('App\\Controller\\Admin\\PagoCrudController')
-                        .setAction('obtenerIdCurso')
-                        .set('idCurso', curso.id)
+                        .setAction('detail')
+                        .setEntityId(pago.id)
+                %}
+                {% 
+                    set url_edit_pago = ea_url()
+                        .setController('App\\Controller\\Admin\\PagoCrudController')
+                        .setAction('edit')
+                        .setEntityId(pago.id) 
                 %}
                 <tr>
-                    <td class="idCurso">{{ curso.id }}</td>
-                    <td class="nombre">{{ curso.nombre }}</td>
-                    <td class="totalCuotas">{{ curso.cantidadCuotas }}</td>
-                    {# calculo cantidad de cuotas pagadas #}
-                    {% set cantCuotasPagadas = 0 %}
-                    {% for pago in curso.pagos %}
-                        {% for pagoDetalle in pago.pagoDetalles %}
-                            {% set cantCuotasPagadas = (cantCuotasPagadas + pagoDetalle.cuotas|length) %} 
-                        {% endfor %}
-                    {% endfor %}
-                    <td class="cuotasPagadas">{{ cantCuotasPagadas }}</td>
-                    {# fin calculo #}
-                    <td>
-                        <a class="btn btn-primary" href={{ url_new_pagoCurso }} >Denunciar Comprobante</a>
+                    <td class="idPago">{{pago.id}}</td>
+                    <td class="curso">{{pago.curso}}</td>
+                    <td class="obs">{{pago.observacion}}</td>
+                    <td class="monto">{{pago.monto}}</td>
+                    <td class="botones">
+                        <a class="btn btn-success" href={{url_show_pago}} >Ver</a>
+                        <a class="btn btn-primary" href={{url_edit_pago}}>Editar</a>
                     </td>
                 </tr>
             {% endfor %}
@@ -74,23 +68,23 @@
                 navigator.userAgent.match(/iPod/i) || navigator.userAgent.match(/BlackBerry/i) ||
                 navigator.userAgent.match(/Windows Phone/i)
             ){
-                $( "#tablaCursos" ).removeClass( "nowrap hover row-border order-column" ).addClass( "datagrid" );
+                $( "#tablaPagos" ).removeClass( "nowrap hover row-border order-column" ).addClass( "datagrid" );
 
-                $( ".idCurso" ).text(function(index, element){
+                $( ".idPago" ).text(function(index, element){
                     this.innerHTML = "<strong>ID: </strong>" + element;
                 });
-                $( ".nombre" ).text(function(index, element){
+                $( ".curso" ).text(function(index, element){
                     this.innerHTML = "<strong>Curso: </strong>" + element;
                 });
-                $( ".totalCuotas" ).text(function(index, element){
-                    this.innerHTML = "<strong>Cuotas Totales: </strong>" + element;
+                $( ".obs" ).text(function(index, element){
+                    this.innerHTML = "<strong>Obs: </strong>" + element;
                 });
-                $( ".cuotasPagadas" ).text(function(index, element){
-                    this.innerHTML = "<strong>Cuotas Declaradas: </strong>" + element;
+                $( ".monto" ).text(function(index, element){
+                    this.innerHTML = "<strong>Monto: </strong>" + element;
                 });
             }else{
                 //si no es mobile utilizo datatable para paginado y otras funciones
-                $('#tablaCursos').DataTable({
+                $('#tablaPagos').DataTable({
                     searching: true,
                     language: {
                         search: "Buscar: ",
