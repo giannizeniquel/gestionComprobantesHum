@@ -89,7 +89,8 @@ class DashboardController extends AbstractDashboardController
             yield MenuItem::linkToCrud('Tipo Cursos', 'fa fa-tags', TipoCurso::class);
             yield MenuItem::linkToCrud('Cuotas', 'fa fa-shapes', Cuota::class);
             yield MenuItem::linkToCrud('Pagos', 'fa fa-file-text-o', Pago::class);
-            
+            yield MenuItem::section('');
+            yield MenuItem::linktoRoute('Agregar un usuario', 'fa fa-user', 'app_register');
                //  yield MenuItem::linkToCrud('Pagos Detalles', 'fa fa-shapes', PagoDetalle::class);
 
             yield MenuItem::section('Seguridad');
