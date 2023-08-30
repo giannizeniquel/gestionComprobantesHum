@@ -94,7 +94,10 @@ class UserCrudController extends AbstractCrudController
         $cursos = $userRepository
             ->findByMisCursos($userId);
         
-            return $this->render('user/userCursos.html.twig', ['cursos' => $cursos]);
+            return $this->render('user/userCursos.html.twig', [
+                'cursos' => $cursos,
+                'userId' => $userId
+            ]);
     }
 
     /**

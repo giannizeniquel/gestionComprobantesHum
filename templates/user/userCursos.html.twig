@@ -50,7 +50,9 @@
                     {% set cantCuotasPagadas = 0 %}
                     {% for pago in curso.pagos %}
                         {% for pagoDetalle in pago.pagoDetalles %}
-                            {% set cantCuotasPagadas = (cantCuotasPagadas + pagoDetalle.cuotas|length) %} 
+                            {% if pago.user.id == userId %}
+                                {% set cantCuotasPagadas = (cantCuotasPagadas + pagoDetalle.cuotas|length) %}
+                            {% endif %}
                         {% endfor %}
                     {% endfor %}
                     <td class="cuotasPagadas">{{ cantCuotasPagadas }}</td>
