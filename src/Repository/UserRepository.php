@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\User;
 use App\Entity\Curso;
+use App\Entity\Pago;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
@@ -81,6 +82,24 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         $qb->select('c')
             ->from('App:Curso', 'c')
             ->join('c.users', 'u')
+            ->where('u.id = :userId')
+            ->setParameter('userId', $userId)
+            ;
+
+        $query = $qb->getQuery();
+
+        return $query->execute();
+    }
+
+    /**
+    * @return Pago[] Returns an array of User objects
+    */
+    public function findByMisPagos($userId): array
+    {
+        $qb = $this->getEntityManager()->createQueryBuilder();
+        $qb->select('p')
+            ->from('App:Pago', 'p')
+            ->join('p.user', 'u')
             ->where('u.id = :userId')
             ->setParameter('userId', $userId)
             ;

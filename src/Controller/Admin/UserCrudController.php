@@ -90,42 +90,25 @@ class UserCrudController extends AbstractCrudController
      */public function obtenerCursosUsuario(UserRepository $userRepository, EntityManagerInterface $entityManager): Response
     {
         $userId = $this->getUser()->getId();
-        $cursos = $userRepository->findByMisCursos($userId);
+        $cursos = $userRepository
+            ->findByMisCursos($userId);
+        
+            return $this->render('user/userCursos.html.twig', [
+                'cursos' => $cursos,
+                'userId' => $userId
+            ]);
+    }
 
-        $usuario = $this->getUser();
-        // $cuotasPorCurso = []; //almacena cuotas pagadas por curso
-
-        // if ($usuario) {
-        //     $pagos = $usuario->getPagos();
-        //    // dump($pagos);
-        //     foreach ($pagos as $pago) {
-        //         $pagoDetalles = $pago->getPagoDetalles();
-        //        // dump($pagoDetalles);
-        //         foreach ($pagoDetalles as $pagoDetalle) {
-        //             $cuotas = $pagoDetalle->getCuotas();
-        //            // dump($cuotas);
-        //             foreach ($cuotas as $cuota) {
-                        
-        //                 $curso = $cuota->getCursos()[0];
-        //                 //dump($curso);
-        //                 // Si el curso ya existe en el array, incrementa su contador de cuotas
-        //                 if (isset($cuotasPorCurso[$curso->getId()])) {
-        //                     $cuotasPorCurso[$curso->getId()]++;
-        //                    // dump($cuotasPorCurso);die;
-        //                 } else {
-        //                     // Si el curso no existe en el array, inicializa su contador de cuotas
-        //                     $cuotasPorCurso[$curso->getId()] = 1;
-        //                    // dump($curso);die;
-        //                 }
-        //             }
-        //         }
-        //     }
-        // } dump($curso); dd($cuotasPorCurso)di;
-
-        return $this->render('user/userCursos.html.twig', [
-            'cursos' => $cursos,
-          //  'cuotasPorCurso' => $cuotasPorCurso,
-        ]);
+    /**
+     * @Route("/admin/misPagos", name="misPagos")
+     */
+    public function obtenerPagosUsuario(UserRepository $userRepository): Response
+    {
+        $userId = $this->getUser()->getId();
+        $pagos = $userRepository
+            ->findByMisPagos($userId);
+        
+            return $this->render('user/userPagos.html.twig', ['pagos' => $pagos]);
     }
 
 }
