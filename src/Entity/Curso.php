@@ -90,6 +90,11 @@ class Curso
      */
     private $corte;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Carrera::class, inversedBy="cursos")
+     */
+    private $carrera;
+
     public function __construct()
     {
         $this->users = new ArrayCollection();
@@ -319,6 +324,18 @@ class Curso
     public function setCorte(?string $corte): self
     {
         $this->corte = $corte;
+
+        return $this;
+    }
+
+    public function getCarrera(): ?Carrera
+    {
+        return $this->carrera;
+    }
+
+    public function setCarrera(?Carrera $carrera): self
+    {
+        $this->carrera = $carrera;
 
         return $this;
     }

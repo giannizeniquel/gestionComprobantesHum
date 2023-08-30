@@ -4,6 +4,7 @@ namespace App\Controller\Admin;
 
 use App\Entity\Curso;
 use App\Entity\Cuota;
+use App\Entity\Carrera;
 use App\Form\CuotaType;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
@@ -51,8 +52,10 @@ class CursoCrudController extends AbstractCrudController
     public function configureFields(string $pageName): iterable
     {
         return [
-            IdField::new('id')->hideOnForm(),
+            IdField::new('id'),
             AssociationField::new('tipo', 'Tipo Curso'),
+            AssociationField::new('carrera', 'Tipo Carrera'),
+
             TextField::new('nombre'),
             TextField::new('corte'),
             TextField::new('descripcion', 'Descripción'),

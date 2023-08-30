@@ -15,6 +15,7 @@ use App\Entity\Curso;
 use App\Entity\Pago;
 use App\Entity\PagoDetalle;
 use App\Entity\User;
+use App\Entity\Carrera;
 use App\Entity\TipoCurso;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Assets;
 
@@ -82,7 +83,7 @@ class DashboardController extends AbstractDashboardController
     public function configureUserMenu(UserInterface $user): UserMenu
     {
         return parent::configureUserMenu($user)
-            ->setName($user->getFullname());
+            ->setName($user->getNombre());
     }
 
 
@@ -96,6 +97,8 @@ class DashboardController extends AbstractDashboardController
 
             yield MenuItem::linkToCrud('Cursos', 'fa fa-chalkboard', Curso::class);
             yield MenuItem::linkToCrud('Tipo Cursos', 'fa fa-tags', TipoCurso::class);
+            yield MenuItem::linkToCrud('Tipo Carrera', 'fa fa-tags', Carrera::class);
+
            // yield MenuItem::linkToCrud('Cuotas', 'fa fa-shapes', Cuota::class);
             yield MenuItem::linkToCrud('Pagos', 'fa fa-file-text-o', Pago::class);
             
