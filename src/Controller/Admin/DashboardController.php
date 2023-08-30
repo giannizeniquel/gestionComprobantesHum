@@ -83,7 +83,7 @@ class DashboardController extends AbstractDashboardController
     public function configureUserMenu(UserInterface $user): UserMenu
     {
         return parent::configureUserMenu($user)
-            ->setName($user->getNombre());
+            ->setName($user->getFullname());
     }
 
 
@@ -97,7 +97,7 @@ class DashboardController extends AbstractDashboardController
 
             yield MenuItem::linkToCrud('Cursos', 'fa fa-chalkboard', Curso::class);
             yield MenuItem::linkToCrud('Tipo Cursos', 'fa fa-tags', TipoCurso::class);
-            yield MenuItem::linkToCrud('Tipo Carrera', 'fa fa-tags', Carrera::class);
+            yield MenuItem::linkToCrud('Tipo Carrera', 'fa fa-tag', Carrera::class);
 
            // yield MenuItem::linkToCrud('Cuotas', 'fa fa-shapes', Cuota::class);
             yield MenuItem::linkToCrud('Pagos', 'fa fa-file-text-o', Pago::class);

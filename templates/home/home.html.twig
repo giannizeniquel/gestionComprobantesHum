@@ -30,40 +30,56 @@
             align-items: center;
             justify-content: space-around;
         }
+
+        
         
     </style>
 
-    {% for flash_error in app.flashes('verify_email_error') %}
-        <div class="alert alert-danger" role="alert">{{ flash_error }}</div>
-    {% endfor %}
+  
     <div id="container-banner">
         <div class="banner">
-            <div class="mt-3">
+            <div class="mt-2">
                 <img class="image" src="https://hum.unne.edu.ar/hum_inicio/imagenes/hum_logo.png" width="185" height="76">
             </div>
-            <div class="mt-3 mb-3">
+            <div class="mt-2 mb-3">
                 <img class="image" src="https://hum.unne.edu.ar/hum_inicio/imagenes/logo_60_2.png" width="293" height="43">
             </div>
         </div>
     </div>
-    <div class="container" id="container">
-        <div class="row col-12">
-          
+ 
 
+     <div class="container py-4">
+    <header class="pb-3 mb-4 border-bottom">
+      <a href="/" class="d-flex align-items-center text-dark text-decoration-none">
+     
+      </a>
+    </header>
 
-          
-        </div>
-        {# <div class="row col-12">
-            <div class="bg-light mt-4 p-4 shadow p-3 mb-5 rounded">
-                <div class="row col-6 mx-auto">
-                    <h4>Generar usuario</h4>
-                </div>
-                {{ form_start(registrationForm) }} #}
-                    {# form_widget trae los campos definidos en el type #}
-                    {# {{ form_widget(registrationForm) }}
-                    <button type="submit" class="btn btn-primary btn-lg btn-block">Registrarse</button>
-                {{ form_end(registrationForm) }}
-            </div>
-        </div> #}
+    <div class="p-5 mb-4 bg-light rounded-3">
+      <div class="container-fluid py-5">
+        <h1 class="display-6 fw-bold">{{ app.user.fullname }}</h1>
+       
+
+        <p class="col-md-8 fs-6">{{ "now"|date("m/d/Y") }} just like the one in previous versions of Bootstrap. Check out the examples below for how you can remix and restyle it to your liking.</p>
+      </div>
     </div>
+
+   {# <div class="row align-items-md-stretch">
+      <div class="col-md-6">
+        <div class="h-100 p-5 text-white bg-dark rounded-3">
+          <h2>Change the background</h2>
+          <p>Swap the background-color utility and add a `.text-*` color utility to mix up the jumbotron look. Then, mix and match with additional component themes and more.</p>
+          <button class="btn btn-outline-light" type="button">Example button</button>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="h-100 p-5 bg-light border rounded-3">
+          <h2>Add borders</h2>
+          <p>Or, keep it light and add a border for some added definition to the boundaries of your content. Be sure to look under the hood at the source HTML here as we've adjusted the alignment and sizing of both column's content for equal-height.</p>
+          <button class="btn btn-outline-secondary" type="button">Example button</button>
+        </div>
+      </div>
+    </div>
+    </div>#}
+
 {% endblock %}
