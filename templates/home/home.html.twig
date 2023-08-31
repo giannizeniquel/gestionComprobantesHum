@@ -29,12 +29,9 @@
             flex-direction: column;
             align-items: center;
             justify-content: space-around;
-        }
-
-        
+        }       
         
     </style>
-
   
     <div id="container-banner">
         <div class="banner">
@@ -44,42 +41,50 @@
             <div class="mt-2 mb-3">
                 <img class="image" src="https://hum.unne.edu.ar/hum_inicio/imagenes/logo_60_2.png" width="293" height="43">
             </div>
+      
         </div>
     </div>
- 
-
-     <div class="container py-4">
-    <header class="pb-3 mb-4 border-bottom">
-      <a href="/" class="d-flex align-items-center text-dark text-decoration-none">
-     
-      </a>
-    </header>
-
+    <div class="container py-4">
+            <header class="pb-7 mb-4 border-bottom">
+              <a href="/" class="d-flex align-items-center text-dark text-decoration-none">
+                <h1 class="display-7 fw-bold">
+              
+                </h1>
+              </a>
+            </header>
     <div class="p-5 mb-4 bg-light rounded-3">
-      <div class="container-fluid py-5">
-        <h1 class="display-6 fw-bold">{{ app.user.fullname }}</h1>
-       
 
-        <p class="col-md-8 fs-6">{{ "now"|date("m/d/Y") }} just like the one in previous versions of Bootstrap. Check out the examples below for how you can remix and restyle it to your liking.</p>
+        <div class="bd-example">
+          <div class="container-fluid py-8">
+          <p class="h2">  <h2 class="display-8 fw-bold text-success">DATOS BANCARIOS<h2>
+          <p class="h4 fw-bold text-success">PARA DEPÓSITOS Y/O TRANSFERENCIA ELECTRÓNICA</p></p>
+        </div>
+        <div class="container-fluid">
+              <div class="row">
+                <div class="col-md-6" >
+                    <p class="h5 fw-bold" >	FACULTAD DE HUMANIDADES UNNE</p>	
+                      <p class="h5 ">CUENTA CORRIENTE - PESOS		</p>	
+                        <p class="h5 fw-bold"> NRO. CUENTA   
+                        <span class="h4 text-muted"> 4291023558 </span>
+	                      </p>   
+                      <p class="h5 "> SUCURSAL RESISTENCIA	</p> 
+                      <p class="h5 fw-bold">
+                      CLAVE BANCARIA UNIFORME (CBU)</p>
+                     <span class="h4 text-muted"> 0110429920042910235589</span>
+                </div>
+                <div class="col-md-6">
+                  <p class="h5 fw-bold">CUIT N° <span class="h4 text-muted"> 30-99900421-7</span>	 </p>
+                </div>
+              </div>
+        </div>
+          
+      
       </div>
+   
     </div>
+  </div>
 
-   {# <div class="row align-items-md-stretch">
-      <div class="col-md-6">
-        <div class="h-100 p-5 text-white bg-dark rounded-3">
-          <h2>Change the background</h2>
-          <p>Swap the background-color utility and add a `.text-*` color utility to mix up the jumbotron look. Then, mix and match with additional component themes and more.</p>
-          <button class="btn btn-outline-light" type="button">Example button</button>
-        </div>
-      </div>
-      <div class="col-md-6">
-        <div class="h-100 p-5 bg-light border rounded-3">
-          <h2>Add borders</h2>
-          <p>Or, keep it light and add a border for some added definition to the boundaries of your content. Be sure to look under the hood at the source HTML here as we've adjusted the alignment and sizing of both column's content for equal-height.</p>
-          <button class="btn btn-outline-secondary" type="button">Example button</button>
-        </div>
-      </div>
+
     </div>
-    </div>#}
 
 {% endblock %}
