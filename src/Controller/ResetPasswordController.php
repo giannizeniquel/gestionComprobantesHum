@@ -19,6 +19,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 use SymfonyCasts\Bundle\ResetPassword\Controller\ResetPasswordControllerTrait;
 use SymfonyCasts\Bundle\ResetPassword\Exception\ResetPasswordExceptionInterface;
 use SymfonyCasts\Bundle\ResetPassword\ResetPasswordHelperInterface;
+Use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
 
 /**
  * @Route("/reset-password")
@@ -165,12 +166,12 @@ class ResetPasswordController extends AbstractController
         }
 
         $email = (new TemplatedEmail())
-            ->from(new Address('contacto@fundacionsantacatalina.org.ar', 'ges pagos'))
+            ->from(new Address('contacto@fundacionsantacatalina.org.ar', 'Restablecer contraseña'))
             ->to($user->getEmail())
-            ->subject('Your password reset request')
+            ->subject('Solicitud de restablecimiento de password')
             //->replyTo('pagosgestionhum@gmail.com')
             ->htmlTemplate('reset_password/email.html.twig')
-            ->text('prueba correos')
+            ->text('Facultad de Humanidades-UNNE')
             ->context([
                 'resetToken' => $resetToken,
             ])
