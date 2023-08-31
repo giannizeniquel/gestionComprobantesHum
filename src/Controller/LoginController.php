@@ -8,6 +8,8 @@ use Symfony\Component\Routing\Annotation\Route;
 
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
+
+
 class LoginController extends AbstractController
 {
   /**
@@ -34,6 +36,14 @@ class LoginController extends AbstractController
       'username_label' => 'Email',
       'password_label' => 'Contraseña',
       'sign_in_label' => 'Ingresar',
+      // the path (i.e. a relative or absolute URL) to visit when clicking the "forgot password?" link (default: '#')
+      'forgot_password_label' => 'Olvido su contraseña?',
+      'forgot_password_enabled' => true,
+      'forgot_password_path' => $this->generateUrl('app_forgot_password_request',['slug' => 'app_forgot_password_request']),
+
+        
+            // the label displayed for the "forgot password?" link (the |trans filter is applied to it)
+          //  
 
     ]);
   }
