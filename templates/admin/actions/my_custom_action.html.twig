@@ -1,0 +1,39 @@
+{% block custom_detalle_field %}
+
+    <h3>Detalles del Pago</h3>
+    <table class="table">
+        <thead>
+            <tr>
+               {# <th>ID</th>#}
+                <th>Nro. Ticket</th>
+                <th>Monto</th>
+                <th>Fecha Ticket</th>
+                <th>Nombre archivo</th>
+                <th>Archivo</th>
+                <th>Observación</th>
+                <th>Actualizado</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for detalle in field.value %}
+                   <tr>
+                  
+                   {# <td>{{ detalle.id }}</td>#}
+                    <td>{{ detalle.numeroTicket }}</td>
+                    <td>{{ detalle.montoCuota ?: 'N/A' }}</td>
+                    <td>{{ detalle.fechaTicket|date('d-m-Y') }}</td>
+                    <td>{{ detalle.nombreArchivo ?: 'N/A' }}</td>
+                     <td>
+                       {% if detalle.imageName is not null %}
+                        <a href="{{ asset('archivos/comprobantes/' ~ detalle.imageName) }}" target="_blank">Ver archivo</a>
+                    {% else %}
+                        No se ha cargado ningún archivo.
+                    {% endif %}
+                    </td>
+                    <td>{{ detalle.observacion ?: 'N/A' }}</td>
+                    <td>{{ detalle.getUpdate ?: 'N/A' }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

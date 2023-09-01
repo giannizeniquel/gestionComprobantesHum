@@ -29,6 +29,9 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\Annotation\Method;
+use EasyCorp\Bundle\EasyAdminBundle\Field\Field;
+
+
 
 class PagoCrudController extends AbstractCrudController
 {
@@ -62,22 +65,29 @@ class PagoCrudController extends AbstractCrudController
         }else if (Crud::PAGE_INDEX === $pageName || Crud::PAGE_EDIT === $pageName) {
             yield AssociationField::new('curso');
         }
+
+        if (Crud::PAGE_DETAIL === $pageName) {
+            yield CollectionField::new('getPagoMasDetallesObj', '')
+            ->setTemplatePath('admin/actions/my_custom_action.html.twig');
+        }
         
-        yield IdField::new('id')->hideOnForm()
+        yield IdField::new('id')->hideOnDetail()
             ->hideOnForm();
-        yield AssociationField::new('user')
+        yield AssociationField::new('user','Creador')
             ->autocomplete()
             ->hideOnForm();
-        yield NumberField::new('monto', 'Monto a abonado');
+        yield NumberField::new('monto', 'Monto total') ;//->hideOnDetail();
         yield TextField::new('observacion', 'Observaciones');
-        yield CollectionField::new('pagoDetalles', 'Detalle')
+        yield CollectionField::new('pagoDetalles', 'Detalle') ->hideOnDetail()
             ->allowDelete()
             ->setEntryIsComplex(true)
             ->setEntryType(PagoDetalleType::class)
             ->setFormTypeOptions([
                 'by_reference' => false,
             ]);
+            
     }
+
 
     public function obtenerIdCurso(AdminContext $context, Request $request)
     {
@@ -101,6 +111,7 @@ class PagoCrudController extends AbstractCrudController
         ->setPermission(Action::INDEX, 'ROLE_ADMIN');
         
     }
+
 
     public function configureFilters(Filters $filters): Filters
     {
