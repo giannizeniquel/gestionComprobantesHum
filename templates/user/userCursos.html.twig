@@ -58,7 +58,12 @@
                     <td class="cuotasPagadas">{{ cantCuotasPagadas }}</td>
                     {# fin calculo #}
                     <td>
-                        <a class="btn btn-primary" href={{ url_new_pagoCurso }} >Denunciar Comprobante</a>
+                        {% if cantCuotasPagadas < curso.cantidadCuotas|number_format %}
+                            <a class="btn btn-primary" href={{ url_new_pagoCurso }} >Denunciar Comprobante</a>
+                        {% else %}
+                            <span class="fw-bold text-success">Cuotas canceladas</span>
+                        {% endif %}
+                        
                     </td>
                 </tr>
             {% endfor %}
