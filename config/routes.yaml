@@ -1,3 +1,8 @@
+# index:
+#    path: /
+#    controller: App\Controller\RegistrationController::register
+
 index:
    path: /
-   controller: App\Controller\RegistrationController::register
+   controller: App\Controller\LoginController::login
+   schemes: [https]
