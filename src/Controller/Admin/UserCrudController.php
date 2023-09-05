@@ -65,7 +65,7 @@ class UserCrudController extends AbstractCrudController
             //TextField::new('password', 'Contraseña')->hideOnForm(),
             TextField::new('telefono','Teléfono'),
             TextField::new('domicilio'),
-            ArrayField::new('roles')->setPermission('ROLE_ADMIN'),
+            ArrayField::new('roles')->setPermission('ROLE_ADMIN'),//TODO: probar con CollectionField y asocia un type con opciones predefinidas
             AssociationField::new('cursos', 'Cursos inscriptos')->setPermission('ROLE_ADMIN'),
         ];
         

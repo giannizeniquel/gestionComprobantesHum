@@ -7,6 +7,7 @@ use App\Entity\Pago;
 use App\Entity\User;
 use App\Form\PagoDetalleType;
 use App\Repository\CuotaRepository;
+use App\Repository\PagoRepository;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Filters;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
@@ -44,22 +45,22 @@ class PagoCrudController extends AbstractCrudController
 
     public function configureFields(string $pageName): iterable
     {
-        if (Crud::PAGE_NEW === $pageName)
+        if (Crud::PAGE_NEW === $pageName || Crud::PAGE_EDIT === $pageName)
         {
             yield AssociationField::new('curso')
-            ->setFormTypeOptions([
-                'query_builder' => function (EntityRepository $er) {
-                    return $er->createQueryBuilder('curso')
-                        ->join('curso.users', 'u')
-                        ->where('u.id = :userId')
-                        ->andWhere('curso.id = :idCurso')
-                        ->setParameter('userId', $this->getUser()->getId())
-                        ->setParameter('idCurso', $this->get('session')->get('idCurso'));
-                },
-                'by_reference' => false,
-            ])
-            ->renderAsNativeWidget();
-        }else if (Crud::PAGE_INDEX === $pageName || Crud::PAGE_EDIT === $pageName || Crud::PAGE_DETAIL === $pageName) {
+                ->setFormTypeOptions([
+                    'query_builder' => function (EntityRepository $er) {
+                        return $er->createQueryBuilder('curso')
+                            ->join('curso.users', 'u')
+                            ->where('u.id = :userId')
+                            ->andWhere('curso.id = :idCurso')
+                            ->setParameter('userId', $this->getUser()->getId())
+                            ->setParameter('idCurso', $this->get('session')->get('idCurso'));
+                    },
+                    'by_reference' => true,
+                ])
+                ->renderAsNativeWidget();
+        }else{
             yield AssociationField::new('curso');
         }
         
@@ -68,27 +69,39 @@ class PagoCrudController extends AbstractCrudController
         yield AssociationField::new('user')
             ->autocomplete()
             ->hideOnForm();
-        yield NumberField::new('monto', 'Monto a abonado');
+        yield NumberField::new('monto', 'Monto a abonado')
+            ->hideOnForm()
+            ->setHelp('Se calcula de la suma de todas las cuotas');
         yield TextField::new('observacion', 'Observaciones');
         yield CollectionField::new('pagoDetalles', 'Detalle')
-            ->allowDelete()
             ->setEntryIsComplex(true)
             ->setEntryType(PagoDetalleType::class)
             ->setFormTypeOptions([
                 'by_reference' => false,
             ]);
+        
     }
 
-    public function obtenerIdCurso(AdminContext $context, Request $request)
+    public function obtenerIdCurso(AdminContext $context, Request $request, PagoRepository $pagoRepository)
     {
         $idCurso = $context->getRequest()->get('idCurso');
+        $idPago = $context->getRequest()->get('idPago');
+        $accion = $context->getRequest()->get('accionEditar');
         $session = $request->getSession();
         $session->set('idCurso', $idCurso);
 
-        $url = $this->adminUrlGenerator
-        ->setController(PagoCrudController::class)
-        ->setAction('new')
-        ->generateUrl();
+        if ($accion == 'editar') {
+            $url = $this->adminUrlGenerator
+                ->setController(PagoCrudController::class)
+                ->setAction('edit')
+                ->setEntityId($idPago)
+                ->generateUrl();
+        }else{
+            $url = $this->adminUrlGenerator
+                ->setController(PagoCrudController::class)
+                ->setAction('new')
+                ->generateUrl();
+        }
 
         return $this->redirect($url);
 

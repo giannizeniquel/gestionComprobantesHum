@@ -34,6 +34,7 @@ class PagoSubscriber implements EventSubscriberInterface
     {
         return [
             BeforeEntityPersistedEvent::class => 'onBeforeEntityPersistedEvent',
+            BeforeEntityUpdatedEvent::class => 'onBeforeEntityUpdatedEvent',
             AfterEntityPersistedEvent::class => 'onAfterEntityPersistedEvent',
             AfterEntityUpdatedEvent::class => 'onAfterEntityUpdatedEvent',
         ];
@@ -41,11 +42,41 @@ class PagoSubscriber implements EventSubscriberInterface
 
     public function onBeforeEntityPersistedEvent(BeforeEntityPersistedEvent $event): void
     {
+        dump($this->security->getUser()->getId());
+        die;
         $entity = $event->getEntityInstance();
-
+        $pagoDetalles = $entity->getPagoDetalles();
+        $montoTotalCuotas = 0;
+        foreach ($pagoDetalles as $pagoDetalle) {
+            $cuotasPagoDetalles = $pagoDetalle->getCuotas();
+            foreach ($cuotasPagoDetalles as $cuota){
+                $montoTotalCuotas = $montoTotalCuotas + $cuota->getMonto();
+            }
+        }
         if ($entity instanceof Pago) {
             $entity->setUser($this->security->getUser());
+            $entity->setmonto($montoTotalCuotas);
         } 
+    }
+
+    public function onBeforeEntityUpdatedEvent(BeforeEntityPersistedEvent $event): void
+    {
+        
+        dump($this->security->getUser()->getId());
+        die;
+        $entity = $event->getEntityInstance();
+        $pagoDetalles = $entity->getPagoDetalles();
+        $montoTotalCuotas = 0;
+        foreach ($pagoDetalles as $pagoDetalle) {
+            $cuotasPagoDetalles = $pagoDetalle->getCuotas();
+            foreach ($cuotasPagoDetalles as $cuota){
+                $montoTotalCuotas = $montoTotalCuotas + $cuota->getMonto();
+            }
+        }
+        if ($entity instanceof Pago) {
+            $entity->setUser($this->security->getUser());
+            $entity->setmonto($montoTotalCuotas);
+        }  
     }
 
     public function onAfterEntityPersistedEvent(): Response
