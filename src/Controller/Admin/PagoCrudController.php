@@ -30,6 +30,9 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\Annotation\Method;
+use EasyCorp\Bundle\EasyAdminBundle\Field\Field;
+
+
 
 class PagoCrudController extends AbstractCrudController
 {
@@ -63,17 +66,23 @@ class PagoCrudController extends AbstractCrudController
         }else{
             yield AssociationField::new('curso');
         }
+
+        if (Crud::PAGE_DETAIL === $pageName) {
+            yield CollectionField::new('getPagoMasDetallesObj', '')
+            ->setTemplatePath('admin/actions/my_custom_action.html.twig');
+        }
         
-        yield IdField::new('id')->hideOnForm()
+        yield IdField::new('id')->hideOnDetail()
             ->hideOnForm();
-        yield AssociationField::new('user')
+        yield AssociationField::new('user','Creador')
             ->autocomplete()
             ->hideOnForm();
-        yield NumberField::new('monto', 'Monto a abonado')
+        yield NumberField::new('monto', 'Monto Total')
             ->hideOnForm()
             ->setHelp('Se calcula de la suma de todas las cuotas');
         yield TextField::new('observacion', 'Observaciones');
         yield CollectionField::new('pagoDetalles', 'Detalle')
+            ->hideOnDetail()
             ->setEntryIsComplex(true)
             ->setEntryType(PagoDetalleType::class)
             ->setFormTypeOptions([
@@ -114,6 +123,7 @@ class PagoCrudController extends AbstractCrudController
         ->setPermission(Action::INDEX, 'ROLE_ADMIN');
         
     }
+
 
     public function configureFilters(Filters $filters): Filters
     {

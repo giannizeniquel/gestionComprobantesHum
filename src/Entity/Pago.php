@@ -185,4 +185,26 @@ class Pago
         return $this;
     }
 
+
+     //se usa en el detail de pagos para obtener mas detalle 
+    public function getPagoMasDetallesObj(): array
+    {
+        $masDetalles = [];
+        foreach ($this->pagoDetalles as $detalle) {
+            $masDetalles[] = [
+                'id' => $detalle->getId(),
+                'numeroTicket' => $detalle->getNumeroTicket(),
+                'montoCuota' => $detalle->getMontoCuotas(),
+                'fechaTicket' => $detalle->getFechaTicket(),
+                'observacion'=>$detalle->getObservacion(),
+                'nombreArchivo'=>$detalle->getNombreArchivo(),
+                'imageName'=>$detalle->getImageName(),             
+                'getUpdate' => $detalle->getUpdatedAt() ? $detalle->getUpdatedAt()->format('d-m-Y') : '',
+                //  'fechaTicket' => $detalle->getFechaTicket(),
+
+            ];
+        }
+        return $masDetalles;
+    }
+
 }

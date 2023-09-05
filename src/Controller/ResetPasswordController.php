@@ -166,10 +166,9 @@ class ResetPasswordController extends AbstractController
         }
 
         $email = (new TemplatedEmail())
-            ->from(new Address('contacto@fundacionsantacatalina.org.ar', 'Restablecer contraseña'))
+            ->from(new Address('gespagoshum@gespagoshum.wiz.com.ar', 'Restablecer contraseña'))
             ->to($user->getEmail())
             ->subject('Solicitud de restablecimiento de password')
-            //->replyTo('pagosgestionhum@gmail.com')
             ->htmlTemplate('reset_password/email.html.twig')
             ->text('Facultad de Humanidades-UNNE')
             ->context([
