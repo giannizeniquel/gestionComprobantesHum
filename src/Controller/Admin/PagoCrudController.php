@@ -66,12 +66,6 @@ class PagoCrudController extends AbstractCrudController
         }else{
             yield AssociationField::new('curso');
         }
-
-        if (Crud::PAGE_DETAIL === $pageName) {
-            yield CollectionField::new('getPagoMasDetallesObj', '')
-            ->setTemplatePath('admin/actions/my_custom_action.html.twig');
-        }
-        
         yield IdField::new('id')->hideOnDetail()
             ->hideOnForm();
         yield AssociationField::new('user','Creador')
@@ -88,6 +82,10 @@ class PagoCrudController extends AbstractCrudController
             ->setFormTypeOptions([
                 'by_reference' => false,
             ]);
+        if (Crud::PAGE_DETAIL === $pageName) {
+            yield CollectionField::new('getPagoMasDetallesObj', '')
+            ->setTemplatePath('admin/actions/my_custom_action.html.twig');
+        }
         
     }
 

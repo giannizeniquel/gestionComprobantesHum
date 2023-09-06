@@ -42,8 +42,6 @@ class PagoSubscriber implements EventSubscriberInterface
 
     public function onBeforeEntityPersistedEvent(BeforeEntityPersistedEvent $event): void
     {
-        dump($this->security->getUser()->getId());
-        die;
         $entity = $event->getEntityInstance();
         $pagoDetalles = $entity->getPagoDetalles();
         $montoTotalCuotas = 0;
@@ -62,8 +60,6 @@ class PagoSubscriber implements EventSubscriberInterface
     public function onBeforeEntityUpdatedEvent(BeforeEntityPersistedEvent $event): void
     {
         
-        dump($this->security->getUser()->getId());
-        die;
         $entity = $event->getEntityInstance();
         $pagoDetalles = $entity->getPagoDetalles();
         $montoTotalCuotas = 0;
@@ -87,7 +83,7 @@ class PagoSubscriber implements EventSubscriberInterface
 
     public function onAfterEntityUpdatedEvent(): Response
     {
-        $url =  $this->adminUrlGenerator->setController('App\\Controller\\Admin\\UserCrudController')->setAction('obtenerPagosUsuario');
+        $url =  $this->adminUrlGenerator->setController('App\\Controller\\Admin\\PagoCrudController')->setAction('detail');
         return (new RedirectResponse($url))->send();  
     }
 
