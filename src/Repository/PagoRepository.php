@@ -39,6 +39,95 @@ class PagoRepository extends ServiceEntityRepository
         }
     }
 
+    
+   
+   
+    public function findAllPagos(): array
+    {
+        $qb = $this->createQueryBuilder('pago')
+        ->select('pago, PARTIAL curso.{id, nombre, activo}, PARTIAL user.{id, dni, apellido},
+        PARTIAL cuota.{id, monto, numeroCuota}, 
+        PARTIAL pagoDetalle.{id, montoCuotas, numeroTicket, 
+        montoTicket, fechaTicket, observacion, imageName}')
+        ->join('pago.curso', 'curso')
+        ->join('pago.user', 'user')
+        ->join('pago.pagoDetalles', 'pagoDetalle')
+        ->join('pagoDetalle.cuotas', 'cuota')
+        ->orderBy('pago.id', 'ASC');
+
+            $query = $qb->getQuery();
+            
+            return $query->execute();
+    }
+
+
+    public function findAllPagosPorDniFecha($dni, $startDate, $endDate): array
+{
+    $qb = $this->createQueryBuilder('pago')
+        ->select('pago, PARTIAL curso.{id, nombre, activo}, PARTIAL user.{id, dni, apellido},
+            PARTIAL cuota.{id, monto, numeroCuota}, 
+            PARTIAL pagoDetalle.{id, montoCuotas, numeroTicket, 
+            montoTicket, fechaTicket, observacion, imageName}')
+        ->join('pago.curso', 'curso')
+        ->join('pago.user', 'user')
+        ->join('pago.pagoDetalles', 'pagoDetalle')
+        ->join('pagoDetalle.cuotas', 'cuota')
+        ->orderBy('pago.id', 'ASC');
+        // Condiciones OR para cada filtro
+        $orX = $qb->expr()->orX();
+
+        if ($dni) {
+            $orX->add($qb->expr()->eq('user.dni', ':dni'));
+            $orX->add($qb->expr()->eq('user.apellido', ':dni'));
+            $qb->setParameter('dni', $dni);
+        }
+
+        if ($startDate) {
+            $startDate = new \DateTimeImmutable($startDate);
+            $qb->andWhere($qb->expr()->gte('pago.created_at', ':startDate'));
+            $qb->setParameter('startDate', $startDate);
+        }
+
+        if ($endDate) {
+            $endDate = new \DateTimeImmutable($endDate);
+            $qb->andWhere($qb->expr()->lte('pago.created_at', ':endDate'));
+            $qb->setParameter('endDate', $endDate);
+        }
+
+        // Agrega las condiciones OR al query builder
+        $qb->andWhere($orX);
+
+        return $qb->getQuery()->getResult();
+        }
+  
+    public function findAllPagosPorDni($dni): array
+    {
+        $qb = $this->createQueryBuilder('pago')
+            ->select('pago, PARTIAL curso.{id, nombre, activo}, PARTIAL user.{id, dni, apellido},
+                PARTIAL cuota.{id, monto, numeroCuota}, 
+                PARTIAL pagoDetalle.{id, montoCuotas, numeroTicket, 
+                montoTicket, fechaTicket, observacion, imageName}')
+            ->join('pago.curso', 'curso')
+            ->join('pago.user', 'user')
+            ->join('pago.pagoDetalles', 'pagoDetalle')
+            ->join('pagoDetalle.cuotas', 'cuota')
+            ->orderBy('pago.id', 'ASC');
+    
+        if (is_string($dni)) {
+            $qb->where(
+                $qb->expr()->orX(
+                    $qb->expr()->eq('user.dni', ':dni'),
+                    $qb->expr()->eq('user.apellido', ':dni')
+                )
+            );
+    
+            $qb->setParameter('dni', $dni);
+        }
+    
+        return $qb->getQuery()->getResult();
+    }
+
+
 //    /**
 //     * @return Pago[] Returns an array of Pago objects
 //     */

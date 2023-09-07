@@ -1,0 +1,74 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<div class="container mt-3">
+
+  <p></p>
+  <button type="button" class="btn btn-primary  btn-sm" data-bs-toggle="collapse" data-bs-target="#demo"> Realizar busquedas</button>
+  <div id="demo" class="collapse">
+         <div class="row">
+            <div class="col shadow p-2 bg-light border m-1">
+                
+            </div>
+            
+            <div class="col shadow p-2 bg-light border m-1">
+                {{ form_start(buscar, { 'action': path('pagos_buscar') }) }}
+                {{ form_widget(buscar) }}
+                {{ form_end(buscar) }}
+            </div>
+            
+            <div class="col shadow p-2 bg-light border m-1">
+            filtro
+            </div>
+            
+        </div>
+  </div>
+</div>
+        
+  
+    
+{# tabla #}
+<div class="container">
+    <div class="table-responsive">
+        <table class="table nowrap hover row-border order-column">
+            <thead>
+                <tr>
+                    <th>Pago</th>
+                    <th>Estudiante</th>
+                    <th>Curso</th>
+                    <th>Monto Total</th>
+                    <th>Monto Cuota</th>
+                    <th>Números Ticket</th>
+                    <th>Ticket</th>
+                    <th>Fecha</th>
+
+                    <th>Observaciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for pago in pagos %}
+                    {% for detalle in pago.pagoDetalles %}
+                        <tr>
+                            <td>{{ pago.id }}</td>
+                            <td>{{ pago.user.dni }}: {{ pago.user.apellido }}</td>
+                            <td>{{ pago.curso.id }}: {{ pago.curso.nombre }}</td>
+                            <td>{{ pago.monto }}</td>
+                            <td>{{ detalle.montoCuotas }}</td>
+                            <td>{{ detalle.numeroTicket }}</td>
+                            <td>{% if detalle.imageName is not null %}
+                        <a href="{{ asset('archivos/comprobantes/' ~ detalle.imageName) }}" target="_blank">Ver archivo</a>
+                    {% else %}
+                        No se ha cargado ningún archivo.
+                    {% endif %}</td>
+                            <td>{{ pago.createdAt |date('d-m-Y')}}</td>
+
+                            <td>{{ detalle.observacion ?: 'N/A'}}</td>
+                        </tr>
+                    {% endfor %}
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
+
