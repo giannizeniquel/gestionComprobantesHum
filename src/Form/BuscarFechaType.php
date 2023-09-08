@@ -24,7 +24,7 @@ class BuscarFechaType extends AbstractType
 {
     $builder
         ->add('dni', SearchType::class, array(
-            'label' => 'Buscar producto',
+            'label' => 'DNI o Apellido',
             'required' => false,
             'attr' => array(
                 'class' => 'form-control',
@@ -37,7 +37,7 @@ class BuscarFechaType extends AbstractType
             )
         ))
         ->add('startDate', DateType::class, array(
-            'label' => 'Fecha de fin',
+            'label' => 'Desde',
             'widget' => 'single_text',
             'html5' => true, // Cambia a true para utilizar la entrada de fecha HTML5
             'attr' => array(
@@ -47,7 +47,7 @@ class BuscarFechaType extends AbstractType
             'required' => false,
         ))
         ->add('endDate', DateType::class, array(
-            'label' => 'Fecha de fin',
+            'label' => 'Hasta',
             'widget' => 'single_text',
             'html5' => true, // Cambia a true para utilizar la entrada de fecha HTML5
             'attr' => array(
@@ -58,7 +58,7 @@ class BuscarFechaType extends AbstractType
         ))
 
         ->add('submit', SubmitType::class, [
-            'label' => 'Buscar dni o apellido del estudiante', // Cambia el texto del botón si es necesario
+            'label' => 'Buscar ', // Cambia el texto del botón si es necesario
             'attr' => ['class' => 'btn btn-light'], // Agrega clases CSS si es necesario
         ]);
 }

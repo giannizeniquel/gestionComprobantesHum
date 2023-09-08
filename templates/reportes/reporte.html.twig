@@ -1,34 +1,43 @@
 {% extends 'base.html.twig' %}
 
-{% block body %}
-<div class="container mt-3">
 
+    {% block stylesheets %}
+        {{ encore_entry_link_tags('app') }}
+        <style>
+            .w-80 {
+                width: 85%;
+                margin: 0 auto; /* Para centrar el contenido horizontalmente */
+            }
+        </style>
+    {% endblock %}
+
+{% block body %}
+<div class="w-80 mt-3">
   <p></p>
-  <button type="button" class="btn btn-primary  btn-sm" data-bs-toggle="collapse" data-bs-target="#demo"> Realizar busquedas</button>
+  <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="collapse" data-bs-target="#demo"> Realizar búsquedas</button> 
+  
   <div id="demo" class="collapse">
-         <div class="row">
-            <div class="col shadow p-2 bg-light border m-1">
-                
-            </div>
-            
-            <div class="col shadow p-2 bg-light border m-1">
-                {{ form_start(buscar, { 'action': path('pagos_buscar') }) }}
-                {{ form_widget(buscar) }}
-                {{ form_end(buscar) }}
-            </div>
-            
-            <div class="col shadow p-2 bg-light border m-1">
-            filtro
-            </div>
-            
-        </div>
+    <div >
+      <div class="col">
+        {{ form_start(buscar) }}
+        {{ form_row(buscar.dni, {'label': 'DNI'}) }}
+       
+      </div>
+      <div>
+        
+        {{ form_row(buscar.startDate, {'label': 'Fecha de inicio'}) }}
+        {{ form_row(buscar.endDate, {'label': 'Fecha de fin'}) }}
+        {{ form_widget(buscar._token) }}
+        {{ form_end(buscar) }}
+
+        
+      </div>
+    </div>
   </div>
 </div>
-        
-  
     
 {# tabla #}
-<div class="container">
+<div class="w-80">
     <div class="table-responsive">
         <table class="table nowrap hover row-border order-column">
             <thead>
@@ -68,6 +77,7 @@
                 {% endfor %}
             </tbody>
         </table>
+        <a class="btn btn-info btn-sm" href={{ path('reporte_pago') }}>Volver</a>
     </div>
 </div>
 {% endblock %}

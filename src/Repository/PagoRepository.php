@@ -94,11 +94,11 @@ class PagoRepository extends ServiceEntityRepository
             $qb->setParameter('endDate', $endDate);
         }
 
-        // Agrega las condiciones OR al query builder
-        $qb->andWhere($orX);
+         $qb->andWhere($orX);
 
         return $qb->getQuery()->getResult();
         }
+        
   
     public function findAllPagosPorDni($dni): array
     {
