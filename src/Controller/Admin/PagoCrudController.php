@@ -6,6 +6,7 @@ use App\Entity\Cuota;
 use App\Entity\Pago;
 use App\Entity\User;
 use App\Form\PagoDetalleType;
+use App\Form\BuscarFechaType;
 use App\Repository\CuotaRepository;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Filters;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
@@ -16,6 +17,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\NumberField;
 use EasyCorp\Bundle\EasyAdminBundle\Filter\ComparisonFilter;
 use App\Repository\UserRepository;
+use App\Repository\PagoRepository;
 use Doctrine\DBAL\Query\QueryBuilder;
 use Doctrine\ORM\EntityRepository;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
@@ -178,4 +180,42 @@ class PagoCrudController extends AbstractCrudController
         
         return $this->json($totalCuotas);
     }
+
+
+    /**
+     * @Route("/lista-pago", name="lista_pago")
+     * @throws \Exception
+     */
+    public function indexAllPagos(Request $request, PagoRepository $pagoRepository, $filtro = null): Response
+   { 
+      
+    $buscarFiltroForm = $this->createForm(BuscarFechaType::class, null, [
+        'action' => $this->generateUrl('lista_pago'),
+    ]);
+    $buscarFiltroForm->handleRequest($request);
+
+    // Verificar si el formulario fue enviado y es válido antes de obtener los datos del filtro
+    if ($buscarFiltroForm->isSubmitted() && $buscarFiltroForm->isValid()) {
+        $filtro = $buscarFiltroForm->getData();
+        
+         // Asegurarse de que $filtro no sea nulo
+        if ($filtro !== null) {
+            $pagos = $pagoRepository->findAllPagosPorDniFecha($filtro['dni'], $filtro['startDate'], $filtro['endDate']);      
+        } else {
+            // Si $filtro es nulo, puedes manejarlo de acuerdo a tus necesidades.
+            // Por ejemplo, puedes establecer $datos en un valor por defecto.
+            $pagos = []; // O cualquier otro valor por defecto que desees
+        }
+    } else {
+        // Si el formulario no fue enviado o no es válido, también puedes manejarlo según tus necesidades.
+        $pagos = $pagoRepository->findAllPagos();
+        // O cualquier otro valor por defecto que desees
+    }
+
+    return $this->render('reportes/reporte.html.twig', [
+        'pagos' => $pagos,
+       
+        'buscar' => $buscarFiltroForm->createView(),
+    ]);
+}
 }

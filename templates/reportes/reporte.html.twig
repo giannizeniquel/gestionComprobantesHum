@@ -1,18 +1,14 @@
 {% extends 'base.html.twig' %}
-
+ {% block title %}Reporte pagos{% endblock %}
 
     {% block stylesheets %}
+    {{parent()}}
         {{ encore_entry_link_tags('app') }}
-        <style>
-            .w-80 {
-                width: 85%;
-                margin: 0 auto; /* Para centrar el contenido horizontalmente */
-            }
-        </style>
+   
     {% endblock %}
 
 {% block body %}
-<div class="w-80 mt-3">
+<div class="w-90 mt-3">
   <p></p>
   <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="collapse" data-bs-target="#demo"> Realizar búsquedas</button> 
   
@@ -21,26 +17,37 @@
       <div class="col">
         {{ form_start(buscar) }}
         {{ form_row(buscar.dni, {'label': 'DNI'}) }}
-       
       </div>
       <div>
-        
         {{ form_row(buscar.startDate, {'label': 'Fecha de inicio'}) }}
         {{ form_row(buscar.endDate, {'label': 'Fecha de fin'}) }}
         {{ form_widget(buscar._token) }}
         {{ form_end(buscar) }}
 
-        
+        {#a class="btn btn-light btn" href={{ path('lista_pago') }}>limpiar</a>#}
       </div>
+      
     </div>
   </div>
+  <div class="w-90">
+    <div class="row">
+             <div class="col-md-5 offset-md-10">
+        
+               <button id="excel"  type="button" class="btn btn-outline-secondary  btn-sm" alt="Exportar a Excel">
+                    <span class="far fa-file-excel"></span> Excel
+                </button>
+               <button id="imprimir"  class="btn btn-outline-secondary  btn-sm"  alt="Imprimir">
+                    <span class="far fa-file-pdf"></span> Imprimir
+                </button>
+         </div>
+    </div>
+</div>
 </div>
     
 {# tabla #}
-<div class="w-80">
-    <div class="table-responsive">
-        <table class="table nowrap hover row-border order-column">
-            <thead>
+<div class="w-90">
+           <table class="table responsive sm">
+              <thead class="table-light">
                 <tr>
                     <th>Pago</th>
                     <th>Estudiante</th>
@@ -50,7 +57,6 @@
                     <th>Números Ticket</th>
                     <th>Ticket</th>
                     <th>Fecha</th>
-
                     <th>Observaciones</th>
                 </tr>
             </thead>
@@ -70,15 +76,40 @@
                         No se ha cargado ningún archivo.
                     {% endif %}</td>
                             <td>{{ pago.createdAt |date('d-m-Y')}}</td>
-
                             <td>{{ detalle.observacion ?: 'N/A'}}</td>
                         </tr>
                     {% endfor %}
                 {% endfor %}
             </tbody>
         </table>
-        <a class="btn btn-info btn-sm" href={{ path('reporte_pago') }}>Volver</a>
-    </div>
+        
+ 
 </div>
+
+
+ {% set path_excel = 'lista_pago' %}
 {% endblock %}
 
+
+{% block javascripts %}
+{{ parent() }}
+
+<script>
+    $(document).ready(function(){
+        $('#imprimir').on('click', function(e){
+            e.preventDefault();
+            window.print();
+        });
+
+             $('#excel').on('click', function(e) {
+            e.preventDefault();
+            var form = $("form[name='rango_fecha']");
+            var actionOriginal = form.attr('action');
+            form.attr('action', actionOriginal + '.xlsx' )
+            form.submit();
+            form.attr('action', actionOriginal);
+
+        });
+    });
+</script>
+{% endblock %}
