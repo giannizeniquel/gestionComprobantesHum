@@ -7,6 +7,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Event\AfterEntityPersistedEvent;
 use EasyCorp\Bundle\EasyAdminBundle\Event\AfterEntityUpdatedEvent;
 use EasyCorp\Bundle\EasyAdminBundle\Event\BeforeEntityPersistedEvent;
+use EasyCorp\Bundle\EasyAdminBundle\Event\BeforeEntityUpdatedEvent;
 use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -53,13 +54,12 @@ class PagoSubscriber implements EventSubscriberInterface
         }
         if ($entity instanceof Pago) {
             $entity->setUser($this->security->getUser());
-            $entity->setmonto($montoTotalCuotas);
-        } 
+            $entity->setMonto($montoTotalCuotas);
+        }
     }
 
-    public function onBeforeEntityUpdatedEvent(BeforeEntityPersistedEvent $event): void
+    public function onBeforeEntityUpdatedEvent(BeforeEntityUpdatedEvent $event): void
     {
-        
         $entity = $event->getEntityInstance();
         $pagoDetalles = $entity->getPagoDetalles();
         $montoTotalCuotas = 0;
@@ -71,8 +71,8 @@ class PagoSubscriber implements EventSubscriberInterface
         }
         if ($entity instanceof Pago) {
             $entity->setUser($this->security->getUser());
-            $entity->setmonto($montoTotalCuotas);
-        }  
+            $entity->setMonto($montoTotalCuotas);
+        } 
     }
 
     public function onAfterEntityPersistedEvent(): Response
@@ -81,7 +81,7 @@ class PagoSubscriber implements EventSubscriberInterface
         return (new RedirectResponse($url))->send(); 
     }
 
-    public function onAfterEntityUpdatedEvent(): Response
+    public function onAfterEntityUpdatedEvent(AfterEntityUpdatedEvent $event): Response
     {
         $url =  $this->adminUrlGenerator->setController('App\\Controller\\Admin\\PagoCrudController')->setAction('detail');
         return (new RedirectResponse($url))->send();  

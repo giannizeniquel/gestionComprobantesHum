@@ -67,13 +67,17 @@ class PagoDetalleType extends AbstractType
             
             ->add('imageFile', VichFileType::class, [
                 'label'=> 'Subir Comprobante',
-                'required' => false,
+                'required' => true,
                 'attr' => [
                     'required' => true,
                 ]
             ])
             ->add('nombreArchivo', TextType::class, [
                 'label' => 'Nombre Archivo',
+                'required' => true,
+                'attr' => [
+                    'required' => true,
+                ]
             ])
         ;
     }
