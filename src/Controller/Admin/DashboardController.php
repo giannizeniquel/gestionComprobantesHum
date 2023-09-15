@@ -40,7 +40,7 @@ class DashboardController extends AbstractDashboardController
         // (tip: it's easier if your template extends from @EasyAdmin/page/content.html.twig)
         return $this->render('home/home.html.twig');
 
-        return parent::index();
+        //return parent::index();
     }
 
     public function configureDashboard(): Dashboard
