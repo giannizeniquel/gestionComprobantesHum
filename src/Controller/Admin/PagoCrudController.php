@@ -33,6 +33,10 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\Annotation\Method;
 use EasyCorp\Bundle\EasyAdminBundle\Field\Field;
 
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use Symfony\Component\HttpFoundation\StreamedResponse;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 
 class PagoCrudController extends AbstractCrudController
@@ -183,39 +187,199 @@ class PagoCrudController extends AbstractCrudController
 
 
     /**
-     * @Route("/lista-pago", name="lista_pago")
+     * @Route("/lista-pago.{_format}", name="lista_pago", defaults={"_format"="html"}, requirements={"_format"="html|xlsx"})
      * @throws \Exception
      */
-    public function indexAllPagos(Request $request, PagoRepository $pagoRepository, $filtro = null): Response
-   { 
-      
-    $buscarFiltroForm = $this->createForm(BuscarFechaType::class, null, [
-        'action' => $this->generateUrl('lista_pago'),
-    ]);
-    $buscarFiltroForm->handleRequest($request);
-
-    // Verificar si el formulario fue enviado y es válido antes de obtener los datos del filtro
-    if ($buscarFiltroForm->isSubmitted() && $buscarFiltroForm->isValid()) {
-        $filtro = $buscarFiltroForm->getData();
+        public function indexAllPagos(Request $request, PagoRepository $pagoRepository): Response
+    { 
         
-         // Asegurarse de que $filtro no sea nulo
-        if ($filtro !== null) {
-            $pagos = $pagoRepository->findAllPagosPorDniFecha($filtro['dni'], $filtro['startDate'], $filtro['endDate']);      
+        $buscarFiltroForm = $this->createForm(BuscarFechaType::class, null, [
+            'action' => $this->generateUrl('lista_pago'),
+        ]);
+        $buscarFiltroForm->handleRequest($request);
+
+        // Verificar si el formulario fue enviado y es válido antes de obtener los datos del filtro
+        if ($buscarFiltroForm->isSubmitted() && $buscarFiltroForm->isValid()) {
+            $filtro = $buscarFiltroForm->getData();
+            
+            // Asegurarse de que $filtro no sea nulo
+            if ($filtro !== null) {
+                $pagos = $pagoRepository
+                ->findAllPagosPorDniFecha($filtro['dni'], 
+                                        $filtro['startDate'], 
+                                        $filtro['endDate']);      
+            } else {
+                // Si $filtro es nulo, puedes manejarlo de acuerdo a tus necesidades.
+                // Por ejemplo, puedes establecer $datos en un valor por defecto.
+                $pagos = []; // O cualquier otro valor por defecto que desees
+            }
         } else {
-            // Si $filtro es nulo, puedes manejarlo de acuerdo a tus necesidades.
-            // Por ejemplo, puedes establecer $datos en un valor por defecto.
-            $pagos = []; // O cualquier otro valor por defecto que desees
+            // Si el formulario no fue enviado o no es válido, también puedes manejarlo según tus necesidades.
+            $pagos = $pagoRepository->findAllPagos();
+            // O cualquier otro valor por defecto que desees
         }
-    } else {
-        // Si el formulario no fue enviado o no es válido, también puedes manejarlo según tus necesidades.
-        $pagos = $pagoRepository->findAllPagos();
-        // O cualquier otro valor por defecto que desees
+        if ($request->getRequestFormat() == 'xlsx') {
+            // if ($pagos === null) {
+            //     // Manejar el caso en que $pagos sea nulo, por ejemplo, definiendo un valor predeterminado.
+            //     $pagos = []; // O cualquier otro valor predeterminado
+            // }
+        
+            $datosExcel = array(
+                'encabezado' => array(
+                    'titulo' => 'Reporte pagos',
+                    // 'filtro' => array(
+                    //     'dni' => isset($dni['dni']) ? $dni['dni'] : 'ValorPredeterminado',
+                    //     'Fecha Desde' => ($filtro['startDate'] !== null) ? $filtro['startDate']->format('d-M-Y') : 'N/A',
+                    //     'Fecha Hasta' => ($filtro['endDate'] !== null) ? $filtro['endDate']->format('d-M-Y') : 'N/A',
+                   // ),
+                ),
+                'columnas' => array(
+                    'Pago',
+                    'Estudiante',
+                    'Curso',
+                    'Monto Total',
+                    'Monto Cuota',
+                    'Números Ticket',
+                    'Ticket',
+                    'Fecha',
+                ),
+                'Observaciones',
+                'pagos' => $pagos, // Ahora asegurado de que $pagos no es nulo
+            );
+           // dd($pagos);
+        
+            $response = $this->renderExcel($datosExcel);
+            $response->headers->set('Content-Disposition', 'attachment; filename="nombre_del_archivo.xlsx"');
+            
+            return $response;
+        
+        } else {
+
+        return $this->render('reportes/reporte.html.twig', [
+            'pagos' => $pagos,
+            'buscar' => $buscarFiltroForm->createView(),
+        ]);
+    }
+  }
+
+
+  private function renderExcel($pagos)
+  {
+    // Crea un nuevo objeto Spreadsheet 
+    $spreadsheet = new Spreadsheet();
+
+    // Establecer propiedades
+    $this->ponerPropiedades($spreadsheet, 'Título del libro');
+
+    // // Genera el contenido
+    // $this->generarEncabezadoExcel($spreadsheet, $pagos['encabezado']);
+    $this->generarEncabezadoColumnas($spreadsheet, $pagos['columnas']);
+    $this->generarDatos($spreadsheet, $pagos['pagos']);
+    // $this->formatearExcel($spreadsheet, $pagos['encabezado']['titulo']);
+
+    $response = $this->generarExcelResponse($spreadsheet);
+
+    return $response;
     }
 
-    return $this->render('reportes/reporte.html.twig', [
-        'pagos' => $pagos,
-       
-        'buscar' => $buscarFiltroForm->createView(),
-    ]);
-}
+
+    private function ponerPropiedades($spreadsheet, $titulo)
+    {
+      $spreadsheet->getProperties()
+      ->setCustomProperty('Humanidades', 'Ges  Pagos')
+                ->setLastModifiedBy('Sistema')
+                ->setTitle($titulo)
+                ->setSubject('')
+                ->setDescription('')
+                ->setKeywords('')
+                ->setCategory('');
+    }
+
+    private function generarEncabezadoColumnas($spreadsheet, $encabezadoColumnas, $fila = 5)
+    {
+        $columna = 0;
+        foreach ($encabezadoColumnas as $titulo) {
+            $spreadsheet->getActiveSheet()->setCellValueByColumnAndRow($columna++, $fila, $titulo);
+        }
+        $rango = 'A'.$fila.':'.chr(65 + --$columna).$fila;
+    
+        $spreadsheet->getActiveSheet()->getStyle($rango)->applyFromArray($this->estiloTitulo());
+        $spreadsheet->getActiveSheet()->getStyle($rango)->applyFromArray([
+            'font' => [
+                'bold' => true,
+                'color' => ['rgb' => '00FFFF'],
+            ],
+            'alignment' => [
+                'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+                'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER,
+            ],
+        ]);
+    }
+    private function estiloTitulo()
+    {
+        $styleArray = [
+            'font' => [
+                'name' => 'Verdana',
+                'bold' => true,
+                'italic' => false,
+                'strike' => false,
+             //   'size' => 16,
+               // 'color' => ['rgb' => 'FFFFFF'],
+            ],
+            // 'fill' => [
+            //     'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+            //     'startColor' => ['argb' => 'FF48D1CC'],
+            // ],
+            // 'borders' => [
+            //     'allBorders' => [
+            //         'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+            //     ],
+            // ],
+            // 'alignment' => [
+            //     'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+            //     'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER,
+            //     'textRotation' => 0,
+            //     'wrapText' => true,
+            // ],
+        ];
+    
+        return $styleArray;
+    }
+    private function generarDatos($spreadsheet, $pagos)
+    {  // dd($pagos);
+        $fila = 6;
+        foreach ($pagos as $pago) {
+            $columna = 0;
+            
+            // Acceder a las propiedades del objeto Pago
+            $spreadsheet->getActiveSheet()->setCellValueByColumnAndRow($columna++, $fila, $pago->getId());
+            $spreadsheet->getActiveSheet()->setCellValueByColumnAndRow($columna++, $fila, $pago->getUser());
+            $spreadsheet->getActiveSheet()->setCellValueByColumnAndRow($columna++, $fila, $pago->getCurso());
+            $spreadsheet->getActiveSheet()->setCellValueByColumnAndRow($columna++, $fila, $pago->getMonto());
+            foreach ($pago->getPagoDetalles() as $detalle) {
+                $spreadsheet->getActiveSheet()->setCellValueByColumnAndRow($columna++, $fila, $detalle->getNumeroTicket());
+                $spreadsheet->getActiveSheet()->setCellValueByColumnAndRow($columna++, $fila, $detalle->getFechaTicket());
+            $spreadsheet->getActiveSheet()->setCellValueByColumnAndRow($columna++, $fila, $detalle->getMontoCuotas());
+            }
+                      
+            $spreadsheet->getActiveSheet()->setCellValueByColumnAndRow($columna++, $fila, $pago->getUpdatedAt());
+            
+            ++$fila;
+        }
+    }
+
+    private function generarExcelResponse($spreadsheet)
+    {
+        // Crea un archivo temporal
+        $tempFilePath = tempnam(sys_get_temp_dir(), 'excel');
+
+        // Guarda el contenido en el archivo temporal
+        $writer = new Xlsx($spreadsheet);
+        $writer->save($tempFilePath);
+        $response = new BinaryFileResponse($tempFilePath);
+        $response->headers->set('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        $response->headers->set('Content-Disposition', 'attachment;filename="nombre_del_archivo.xlsx"');
+        $response->headers->set('Cache-Control', 'max-age=0');
+        return $response;
+    }
 }

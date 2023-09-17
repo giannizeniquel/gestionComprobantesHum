@@ -101,14 +101,13 @@
             window.print();
         });
 
-             $('#excel').on('click', function(e) {
+        $('#excel').on('click', function(e) {
             e.preventDefault();
-            var form = $("form[name='rango_fecha']");
+            var form = $("form[name='buscar_fecha']"); // Cambiar a "buscar" si ese es el nombre correcto del formulario
             var actionOriginal = form.attr('action');
-            form.attr('action', actionOriginal + '.xlsx' )
+            form.attr('action', actionOriginal + '.xlsx');
             form.submit();
-            form.attr('action', actionOriginal);
-
+            form.attr('action', actionOriginal); // Restablecer la acción original del formulario
         });
     });
 </script>

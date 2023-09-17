@@ -51,7 +51,7 @@ class DashboardController extends AbstractDashboardController
             //->setTitle('<img src="..."> ACME <span class="text-small">Corp.</span>')
 
             // the path defined in this method is passed to the Twig asset() function
-            ->setFaviconPath('favicon.svg')
+            ->setFaviconPath('unne.png')
 
             // the domain used by default is 'messages'
             ->setTranslationDomain('my-custom-domain')
