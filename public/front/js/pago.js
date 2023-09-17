@@ -9,10 +9,12 @@ if(url.includes('crudAction=new') || url.includes('crudAction=edit')) {
         const add_detalle = document.getElementsByClassName('field-collection-add-button')[0]; // Cambia esto al selector adecuado
         const select_pagoCurso = document.getElementById('Pago_curso');
         if(select_pagoCurso) {
-            select_pagoCurso.selectedIndex = 1;
-            select_pagoCurso.setAttribute('placeholder', select_pagoCurso[1].innerText);
-            select_pagoCurso.setAttribute('required', true);
-            $(select_pagoCurso[0]).remove(); //elimino el option vacio
+            if (!url.includes('crudAction=edit')) {
+                select_pagoCurso.selectedIndex = 1;
+                select_pagoCurso.setAttribute('placeholder', select_pagoCurso[1].innerText);
+                select_pagoCurso.setAttribute('required', true);
+                $(select_pagoCurso[0]).remove(); //elimino el option vacio
+            }
             $('#Pago_curso').select2({
                 minimumResultsForSearch: -1, //elimina la busqueda
             });

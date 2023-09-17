@@ -2,6 +2,7 @@
 
 namespace App\Controller\Admin;
 
+use App\Controller\LoginController;
 use App\Entity\Cuota;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
@@ -38,7 +39,12 @@ class DashboardController extends AbstractDashboardController
 
         // you can also render some template to display a proper Dashboard
         // (tip: it's easier if your template extends from @EasyAdmin/page/content.html.twig)
-        return $this->render('home/home.html.twig');
+
+        if ($this->getUser()) {
+            return $this->render('home/home.html.twig');
+        } else {
+            return $this->redirectToRoute('app_login');
+        }
 
         //return parent::index();
     }
@@ -54,7 +60,7 @@ class DashboardController extends AbstractDashboardController
             ->setFaviconPath('favicon.svg')
 
             // the domain used by default is 'messages'
-            ->setTranslationDomain('my-custom-domain')
+            ->setTranslationDomain('admin')
 
             // there's no need to define the "text direction" explicitly because
             // its default value is inferred dynamically from the user locale
@@ -64,7 +70,7 @@ class DashboardController extends AbstractDashboardController
             // browser width, instead of the default design which sets a max width
             ->renderContentMaximized()
 
-         
+
             //->renderSidebarMinimized()
 
             // by default, all backend URLs include a signature hash. If a user changes any
@@ -77,9 +83,9 @@ class DashboardController extends AbstractDashboardController
             // need to generate relative URLs instead, call this method
             ->generateRelativeUrls();
     }
-    
 
-    
+
+
     public function configureUserMenu(UserInterface $user): UserMenu
     {
         return parent::configureUserMenu($user)
@@ -91,7 +97,7 @@ class DashboardController extends AbstractDashboardController
     {
         yield MenuItem::linkToDashboard('Inicio', 'fa fa-home');
 
-        if (in_array('ROLE_ADMIN',$this->getUser()->getRoles())) {
+        if (in_array('ROLE_ADMIN', $this->getUser()->getRoles())) {
             yield MenuItem::linkToCrud('Usuarios', 'fa fa-users', User::class);
             yield MenuItem::linktoRoute('Cargar usuarios', 'fas fa-upload', 'xlsx');
 
@@ -99,23 +105,20 @@ class DashboardController extends AbstractDashboardController
             yield MenuItem::linkToCrud('Tipo Cursos', 'fa fa-tags', TipoCurso::class);
             yield MenuItem::linkToCrud('Tipo Carrera', 'fa fa-tag', Carrera::class);
 
-           // yield MenuItem::linkToCrud('Cuotas', 'fa fa-shapes', Cuota::class);
+            // yield MenuItem::linkToCrud('Cuotas', 'fa fa-shapes', Cuota::class);
             yield MenuItem::linkToCrud('Pagos', 'fa fa-file-text-o', Pago::class);
             yield MenuItem::section('');
             yield MenuItem::linktoRoute('Agregar un usuario', 'fa fa-user', 'app_register');
-               //  yield MenuItem::linkToCrud('Pagos Detalles', 'fa fa-shapes', PagoDetalle::class);
+            //  yield MenuItem::linkToCrud('Pagos Detalles', 'fa fa-shapes', PagoDetalle::class);
 
             yield MenuItem::section('Seguridad');
-       
+
             yield MenuItem::linktoRoute('Cambiar contraseña', 'fas fa-key', 'change_password');
 
             yield MenuItem::section('Links');
-            yield MenuItem::linkToUrl('Guia de uso', 'fab fa-youtube', 'https://symfony.com/doc/current/bundles/EasyAdminBundle/index.html')->setLinkTarget('_blank');         
+            yield MenuItem::linkToUrl('Guia de uso', 'fab fa-youtube', 'https://symfony.com/doc/current/bundles/EasyAdminBundle/index.html')->setLinkTarget('_blank');
             yield MenuItem::linkToUrl('Humanidades', 'fas fa-university', 'https://hum.unne.edu.ar/')->setLinkTarget('_blank');
-
-
-
-        }else{
+        } else {
             yield MenuItem::section('Menu usuario');
             yield MenuItem::linkToCrud('Datos Personales', 'fa fa-user', User::class)
                 ->setAction('detail')
@@ -129,9 +132,6 @@ class DashboardController extends AbstractDashboardController
             yield MenuItem::section('Recursos');
             yield MenuItem::linkToUrl('Guia de uso', 'fab fa-youtube', 'https://symfony.com/doc/current/bundles/EasyAdminBundle/index.html')->setLinkTarget('_blank');
             yield MenuItem::linkToUrl('Humanidades', 'fas fa-university', 'https://hum.unne.edu.ar/')->setLinkTarget('_blank');
-
-
-
         }
     }
 }
