@@ -40,8 +40,10 @@
                 {% 
                     set url_edit_pago = ea_url()
                         .setController('App\\Controller\\Admin\\PagoCrudController')
-                        .setAction('edit')
-                        .setEntityId(pago.id) 
+                        .setAction('obtenerIdCurso')
+                        .set('idPago', pago.id)
+                        .set('idCurso', pago.curso.id)
+                        .set('accionEditar', 'editar')
                 %}
                 <tr>
                     <td class="idPago">{{pago.id}}</td>

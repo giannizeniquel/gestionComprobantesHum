@@ -1,8 +1,13 @@
 # index:
 #    path: /
-#    controller: App\Controller\RegistrationController::register
-
-index:
-   path: /
-   controller: App\Controller\LoginController::login
-   schemes: [https]
+#    controller: Symfony\Bundle\FrameworkBundle\Controller\RedirectController::urlRedirectAction
+homepage:
+  path: /
+  controller: Symfony\Bundle\FrameworkBundle\Controller\RedirectController::urlRedirectAction
+  defaults:
+    path: /index.php/login
+    permanent: true
+# index:
+#   path: /login
+#   controller: App\Controller\LoginController::login
+#   schemes: [https]

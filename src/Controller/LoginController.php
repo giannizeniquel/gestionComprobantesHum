@@ -13,7 +13,7 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 class LoginController extends AbstractController
 {
   /**
-   * @Route("/", name="app_login")
+   * @Route("/login", name="app_login")
    */
   public function login(AuthenticationUtils $authenticationUtils): Response
   {
@@ -21,7 +21,7 @@ class LoginController extends AbstractController
     if ($this->getUser()) {
       return $this->redirectToRoute('admin');
     }
-    
+
     // get the login error if there is one
     $error = $authenticationUtils->getLastAuthenticationError();
     // last username entered by the user
@@ -39,11 +39,11 @@ class LoginController extends AbstractController
       // the path (i.e. a relative or absolute URL) to visit when clicking the "forgot password?" link (default: '#')
       'forgot_password_label' => 'Olvido su contraseña?',
       'forgot_password_enabled' => true,
-      'forgot_password_path' => $this->generateUrl('app_forgot_password_request',['slug' => 'app_forgot_password_request']),
+      'forgot_password_path' => $this->generateUrl('app_forgot_password_request', ['slug' => 'app_forgot_password_request']),
 
-        
-            // the label displayed for the "forgot password?" link (the |trans filter is applied to it)
-          //  
+
+      // the label displayed for the "forgot password?" link (the |trans filter is applied to it)
+
 
     ]);
   }

@@ -7,6 +7,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Event\AfterEntityPersistedEvent;
 use EasyCorp\Bundle\EasyAdminBundle\Event\AfterEntityUpdatedEvent;
 use EasyCorp\Bundle\EasyAdminBundle\Event\BeforeEntityPersistedEvent;
+use EasyCorp\Bundle\EasyAdminBundle\Event\BeforeEntityUpdatedEvent;
 use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -34,6 +35,7 @@ class PagoSubscriber implements EventSubscriberInterface
     {
         return [
             BeforeEntityPersistedEvent::class => 'onBeforeEntityPersistedEvent',
+            BeforeEntityUpdatedEvent::class => 'onBeforeEntityUpdatedEvent',
             AfterEntityPersistedEvent::class => 'onAfterEntityPersistedEvent',
             AfterEntityUpdatedEvent::class => 'onAfterEntityUpdatedEvent',
         ];
@@ -42,22 +44,61 @@ class PagoSubscriber implements EventSubscriberInterface
     public function onBeforeEntityPersistedEvent(BeforeEntityPersistedEvent $event): void
     {
         $entity = $event->getEntityInstance();
-
         if ($entity instanceof Pago) {
+            $pagoDetalles = $entity->getPagoDetalles();
+            $montoTotalCuotas = 0;
+            foreach ($pagoDetalles as $pagoDetalle) {
+                $cuotasPagoDetalles = $pagoDetalle->getCuotas();
+                foreach ($cuotasPagoDetalles as $cuota){
+                    $montoTotalCuotas = $montoTotalCuotas + $cuota->getMonto();
+                }
+            }
+        
             $entity->setUser($this->security->getUser());
+            $entity->setMonto($montoTotalCuotas);
+        }
+    }
+
+    public function onBeforeEntityUpdatedEvent(BeforeEntityUpdatedEvent $event): void
+    {
+        $entity = $event->getEntityInstance();
+        if ($entity instanceof Pago) {
+            $pagoDetalles = $entity->getPagoDetalles();
+            $montoTotalCuotas = 0;
+            foreach ($pagoDetalles as $pagoDetalle) {
+                $cuotasPagoDetalles = $pagoDetalle->getCuotas();
+                foreach ($cuotasPagoDetalles as $cuota){
+                    $montoTotalCuotas = $montoTotalCuotas + $cuota->getMonto();
+                }
+            }
+            $entity->setUser($this->security->getUser());
+            $entity->setMonto($montoTotalCuotas);
         } 
     }
 
-    public function onAfterEntityPersistedEvent(): Response
+    public function onAfterEntityPersistedEvent(AfterEntityPersistedEvent $event): Response
     {
-        $url =  $this->adminUrlGenerator->setController('App\\Controller\\Admin\\UserCrudController')->setAction('obtenerPagosUsuario');
-        return (new RedirectResponse($url))->send(); 
+        $entity = $event->getEntityInstance();
+        if ($entity instanceof Pago) {
+            $url =  $this->adminUrlGenerator->setController('App\\Controller\\Admin\\UserCrudController')->setAction('obtenerPagosUsuario');
+            return (new RedirectResponse($url))->send(); 
+        }else{
+            $url =  $this->adminUrlGenerator->setController('App\\Controller\\Admin\\DashboardController')->setAction('index');
+            return (new RedirectResponse($url))->send();
+        }
+
     }
 
-    public function onAfterEntityUpdatedEvent(): Response
+    public function onAfterEntityUpdatedEvent(AfterEntityUpdatedEvent $event): Response
     {
-        $url =  $this->adminUrlGenerator->setController('App\\Controller\\Admin\\UserCrudController')->setAction('obtenerPagosUsuario');
-        return (new RedirectResponse($url))->send();  
+        $entity = $event->getEntityInstance();
+        if ($entity instanceof Pago) {
+            $url =  $this->adminUrlGenerator->setController('App\\Controller\\Admin\\PagoCrudController')->setAction('detail');
+            return (new RedirectResponse($url))->send(); 
+        }else{
+            $url =  $this->adminUrlGenerator->setController('App\\Controller\\Admin\\DashboardController')->setAction('index');
+            return (new RedirectResponse($url))->send();
+        }
     }
 
 }

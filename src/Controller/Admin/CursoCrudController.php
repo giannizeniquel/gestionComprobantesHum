@@ -52,7 +52,7 @@ class CursoCrudController extends AbstractCrudController
     public function configureFields(string $pageName): iterable
     {
         return [
-            IdField::new('id'),
+            IdField::new('id')->hideOnForm(),
             AssociationField::new('tipo', 'Tipo Curso'),
             AssociationField::new('carrera', 'Tipo Carrera'),
 
@@ -62,7 +62,9 @@ class CursoCrudController extends AbstractCrudController
             TextField::new('observacion', 'Observación'),
             BooleanField::new('activo'),
             IntegerField::new('cantidadCuotas'),
-            AssociationField::new('users', 'Alumnos inscriptos'),
+            //los users se van a asociar a los cursos a traves de la carga por lotes de users
+            //dejamos activa la relacion en formularios desde user, para cubrir excepciones
+            AssociationField::new('users', 'Alumnos inscriptos')->hideOnForm(),
             CollectionField::new('cuotas', 'Cuotas')
                 ->allowDelete()
                 ->setEntryIsComplex(true)
