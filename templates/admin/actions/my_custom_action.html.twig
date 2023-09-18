@@ -1,39 +1,74 @@
 {% block custom_detalle_field %}
 
-    <h3>Detalles del Pago</h3>
-    <table class="table">
-        <thead>
-            <tr>
-               {# <th>ID</th>#}
-                <th>Nro. Ticket</th>
-                <th>Monto</th>
-                <th>Fecha Ticket</th>
-                <th>Nombre archivo</th>
-                <th>Archivo</th>
-                <th>Observación</th>
-                <th>Actualizado</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for detalle in field.value %}
-                   <tr>
-                  
-                   {# <td>{{ detalle.id }}</td>#}
-                    <td>{{ detalle.numeroTicket }}</td>
-                    <td>{{ detalle.montoCuota ?: 'N/A' }}</td>
-                    <td>{{ detalle.fechaTicket|date('d-m-Y') }}</td>
-                    <td>{{ detalle.nombreArchivo ?: 'N/A' }}</td>
-                     <td>
-                       {% if detalle.imageName is not null %}
-                        <a href="{{ asset('archivos/comprobantes/' ~ detalle.imageName) }}" target="_blank">Ver archivo</a>
-                    {% else %}
-                        No se ha cargado ningún archivo.
-                    {% endif %}
-                    </td>
-                    <td>{{ detalle.observacion ?: 'N/A' }}</td>
-                    <td>{{ detalle.getUpdate ?: 'N/A' }}</td>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+	{# <h3>Detalles del Pago</h3> #}
+    <table id="tablaPagos" class="table">
+		<thead>
+			<tr>
+				{# <th>ID</th>#}
+				<th>Nro. Ticket</th>
+				<th>Monto</th>
+				<th>Fecha Ticket</th>
+				<th>Nombre archivo</th>
+				<th>Archivo</th>
+				<th>Observación</th>
+				<th>Actualizado</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for detalle in field.value %}
+				<tr>
+
+					{# <td>{{ detalle.id }}</td>#}
+					<td class="nroTicket">{{ detalle.numeroTicket }}</td>
+					<td class="monotCuota">{{ detalle.montoCuota ?: 'N/A' }}</td>
+					<td class="fechaTicket">{{ detalle.fechaTicket|date('d-m-Y') }}</td>
+					<td class="nombreArchivo">{{ detalle.nombreArchivo ?: 'N/A' }}</td>
+					<td class="archivo">
+						{% if detalle.imageName is not null %}
+							<a href="{{ asset('archivos/comprobantes/' ~ detalle.imageName) }}" target="_blank">Ver archivo</a>
+						{% else %}
+							No se ha cargado ningún archivo.
+						{% endif %}
+					</td>
+					<td class="observacion">{{ detalle.observacion ?: 'N/A' }}</td>
+					<td class="getUpdate">{{ detalle.getUpdate ?: 'N/A' }}</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
 {% endblock %}
+
+{% block body_javascript %}
+    <script>
+        $(document).ready(function () {
+            if (navigator.userAgent.match(/Android/i) || navigator.userAgent.match(/webOS/i) ||
+                navigator.userAgent.match(/iPhone/i) || navigator.userAgent.match(/iPad/i) || 
+                navigator.userAgent.match(/iPod/i) || navigator.userAgent.match(/BlackBerry/i) || 
+                navigator.userAgent.match(/Windows Phone/i)) 
+            {
+                let formpanelbody = document.getElementsByClassName('form-panel-body');
+                formpanelbody[1].children[0].children[0].id = "tablaDetalleMobile";
+                $("#tablaDetalleMobile").removeClass("data-row");
+                $("#tablaPagos").removeClass("table").addClass("datagrid");
+                $(".nroTicket").text(function (index, element) {
+                    this.innerHTML = "<strong>Nro. Ticket: </strong>" + element;
+                }).css("padding-left", "10%");
+                $(".monotCuota").text(function (index, element) {
+                    this.innerHTML = "<strong>Monto Cuota: </strong>" + element;
+                }).css("padding-left", "10%");
+                $(".fechaTicket").text(function (index, element) {
+                    this.innerHTML = "<strong>Fecha Ticket: </strong>" + element;
+                }).css("padding-left", "10%");
+                $(".nombreArchivo").text(function (index, element) {
+                    this.innerHTML = "<strong>Nombre archivo: </strong>" + element;
+                }).css("padding-left", "10%");
+                $(".observacion").text(function (index, element) {
+                    this.innerHTML = "<strong>Obs: </strong>" + element;
+                }).css("padding-left", "10%");
+                $(".getUpdate").text(function (index, element) {
+                    this.innerHTML = "<strong>Actualizado: </strong>" + element;
+                }).css("padding-left", "10%");
+            }
+        });
+    </script>
+{% endblock body_javascript %}

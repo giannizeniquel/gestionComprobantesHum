@@ -31,8 +31,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\Annotation\Method;
 use EasyCorp\Bundle\EasyAdminBundle\Field\Field;
-
-
+use EasyCorp\Bundle\EasyAdminBundle\Field\FormField;
 
 class PagoCrudController extends AbstractCrudController
 {
@@ -48,8 +47,7 @@ class PagoCrudController extends AbstractCrudController
 
     public function configureFields(string $pageName): iterable
     {
-        if (Crud::PAGE_NEW === $pageName || Crud::PAGE_EDIT === $pageName)
-        {
+        if (Crud::PAGE_NEW === $pageName || Crud::PAGE_EDIT === $pageName) {
             yield AssociationField::new('curso')
                 ->setFormTypeOptions([
                     'query_builder' => function (EntityRepository $er) {
@@ -63,12 +61,12 @@ class PagoCrudController extends AbstractCrudController
                     'by_reference' => true,
                 ])
                 ->renderAsNativeWidget();
-        }else{
+        } else {
             yield AssociationField::new('curso');
         }
         yield IdField::new('id')->hideOnDetail()
             ->hideOnForm();
-        yield AssociationField::new('user','Creador')
+        yield AssociationField::new('user', 'Creador')
             ->autocomplete()
             ->hideOnForm();
         yield NumberField::new('monto', 'Monto Total')
@@ -83,6 +81,7 @@ class PagoCrudController extends AbstractCrudController
                 'by_reference' => false,
             ]);
         if (Crud::PAGE_DETAIL === $pageName) {
+            yield FormField::addPanel('Detalles del Pago');
             yield CollectionField::new('getPagoMasDetallesObj', '')
             ->setTemplatePath('admin/actions/my_custom_action.html.twig');
         }
@@ -103,7 +102,7 @@ class PagoCrudController extends AbstractCrudController
                 ->setAction('edit')
                 ->setEntityId($idPago)
                 ->generateUrl();
-        }else{
+        } else {
             $url = $this->adminUrlGenerator
                 ->setController(PagoCrudController::class)
                 ->setAction('new')
@@ -111,23 +110,20 @@ class PagoCrudController extends AbstractCrudController
         }
 
         return $this->redirect($url);
-
     }
 
     public function configureActions(Actions $actions): Actions
     {
         return $actions
-        ->add(Crud::PAGE_INDEX, Action::DETAIL)
-        ->setPermission(Action::INDEX, 'ROLE_ADMIN');
-        
+            ->add(Crud::PAGE_INDEX, Action::DETAIL)
+            ->setPermission(Action::INDEX, 'ROLE_ADMIN');
     }
 
 
     public function configureFilters(Filters $filters): Filters
     {
         return $filters
-        ->add('user')
-        ;
+            ->add('user');
     }
 
     public function configureAssets(Assets $assets): Assets
@@ -135,10 +131,10 @@ class PagoCrudController extends AbstractCrudController
         return $assets
             ->addHtmlContentToHead('<script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
                                     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-                                    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>')
-            ->addJsFile('/gestionComprobantesHum/public/front/js/pago.js')
-
-        ;
+                                    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+                                    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.css"/>
+                                    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.js"></script>')
+            ->addJsFile('/gestionComprobantesHum/public/front/js/pago.js');
     }
 
     /**
@@ -154,14 +150,14 @@ class PagoCrudController extends AbstractCrudController
         $cuotasData = [];
         $totalCuotas = [];
 
-        foreach ($cuotasPagadas as $cuotaP){
+        foreach ($cuotasPagadas as $cuotaP) {
             $idCuotaP = $cuotaP->getId();
             $cuotasPagadasData[] = [
                 'idCuota' => $idCuotaP,
             ];
         }
 
-        foreach ($cuotas as $cuota){
+        foreach ($cuotas as $cuota) {
             // Acceder a las propiedades de la cuota
             $idCuota = $cuota->getId();
             $monto = $cuota->getMonto();
@@ -169,7 +165,7 @@ class PagoCrudController extends AbstractCrudController
             $numeroCuota = $cuota->getNumeroCuota();
             $toString = $cuota->__toString();
             // ... y otras propiedades
-            
+
             // Realizar acciones con los datos de la cuota
             // Por ejemplo, puedes agregarlos a un array para usarlos después
             $cuotasData[] = [
@@ -185,7 +181,7 @@ class PagoCrudController extends AbstractCrudController
             'cuotasData' => $cuotasData,
             'cuotasPagadasData' => $cuotasPagadasData
         ];
-        
+
         return $this->json($totalCuotas);
     }
 }

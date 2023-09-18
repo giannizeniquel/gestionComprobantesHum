@@ -3,6 +3,7 @@
 namespace App\Controller\Admin;
 
 use App\Entity\User;
+use App\Form\RoleType;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
@@ -22,7 +23,7 @@ use App\Repository\CursoRepository;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\ORM\EntityManagerInterface;
-
+use EasyCorp\Bundle\EasyAdminBundle\Field\CollectionField;
 
 class UserCrudController extends AbstractCrudController
 {
@@ -63,12 +64,12 @@ class UserCrudController extends AbstractCrudController
             TextField::new('dni'),
             TextField::new('email'),
             //TextField::new('password', 'Contraseña')->hideOnForm(),
-            TextField::new('telefono','Teléfono'),
+            TextField::new('telefono', 'Teléfono'),
             TextField::new('domicilio'),
-            ArrayField::new('roles')->setPermission('ROLE_ADMIN'),//TODO: probar con CollectionField y asocia un type con opciones predefinidas
+            ArrayField::new('roles')->setPermission('ROLE_ADMIN'), //TODO: probar con CollectionField y asocia un type con opciones predefinidas
             AssociationField::new('cursos', 'Cursos inscriptos')->setPermission('ROLE_ADMIN'),
         ];
-        
+
         // if (Crud::PAGE_INDEX === $pageName)
         // {
         //      yield IdField::new('id')->hideOnForm();
@@ -80,23 +81,23 @@ class UserCrudController extends AbstractCrudController
     public function configureActions(Actions $actions): Actions
     {
         return $actions
-        ->add(Crud::PAGE_INDEX, Action::DETAIL)
-        ->setPermission(Action::NEW, 'ROLE_ADMIN')
-        ->setPermission(Action::DELETE, 'ROLE_ADMIN')
-        ->setPermission(Action::INDEX, 'ROLE_ADMIN');
+            ->add(Crud::PAGE_INDEX, Action::DETAIL)
+            ->setPermission(Action::NEW, 'ROLE_ADMIN')
+            ->setPermission(Action::DELETE, 'ROLE_ADMIN')
+            ->setPermission(Action::INDEX, 'ROLE_ADMIN');
     }
     /**
      * @Route("/admin/misCursos", name="misCursos")
-     */public function obtenerCursosUsuario(UserRepository $userRepository, EntityManagerInterface $entityManager): Response
+     */ public function obtenerCursosUsuario(UserRepository $userRepository, EntityManagerInterface $entityManager): Response
     {
         $userId = $this->getUser()->getId();
         $cursos = $userRepository
             ->findByMisCursos($userId);
-        
-            return $this->render('user/userCursos.html.twig', [
-                'cursos' => $cursos,
-                'userId' => $userId
-            ]);
+
+        return $this->render('user/userCursos.html.twig', [
+            'cursos' => $cursos,
+            'userId' => $userId
+        ]);
     }
 
     /**
@@ -107,8 +108,8 @@ class UserCrudController extends AbstractCrudController
         $userId = $this->getUser()->getId();
         $pagos = $userRepository
             ->findByMisPagos($userId);
-        
-            return $this->render('user/userPagos.html.twig', ['pagos' => $pagos]);
+
+        return $this->render('user/userPagos.html.twig', ['pagos' => $pagos]);
     }
 
 }
