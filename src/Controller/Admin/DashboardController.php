@@ -57,7 +57,7 @@ class DashboardController extends AbstractDashboardController
             //->setTitle('<img src="..."> ACME <span class="text-small">Corp.</span>')
 
             // the path defined in this method is passed to the Twig asset() function
-            ->setFaviconPath('favicon.svg')
+            ->setFaviconPath('unne.png')
 
             // the domain used by default is 'messages'
             ->setTranslationDomain('admin')
@@ -108,6 +108,7 @@ class DashboardController extends AbstractDashboardController
             // yield MenuItem::linkToCrud('Cuotas', 'fa fa-shapes', Cuota::class);
             yield MenuItem::linkToCrud('Pagos', 'fa fa-file-text-o', Pago::class);
             yield MenuItem::section('');
+           //yield MenuItem::linktoRoute('Lista pagos general', 'fas fa-file-excel', 'lista_pago');
             yield MenuItem::linktoRoute('Agregar un usuario', 'fa fa-user', 'app_register');
             //  yield MenuItem::linkToCrud('Pagos Detalles', 'fa fa-shapes', PagoDetalle::class);
 
