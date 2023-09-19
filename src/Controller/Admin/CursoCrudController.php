@@ -53,8 +53,8 @@ class CursoCrudController extends AbstractCrudController
     {
         return [
             IdField::new('id')->hideOnForm(),
-            AssociationField::new('tipo', 'Tipo Curso'),
-            AssociationField::new('carrera', 'Tipo Carrera'),
+            AssociationField::new('tipo', 'Propuesta'),
+            AssociationField::new('carrera', 'Oferta'),
 
             TextField::new('nombre'),
             TextField::new('corte'),

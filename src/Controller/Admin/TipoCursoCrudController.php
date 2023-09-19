@@ -20,7 +20,14 @@ class TipoCursoCrudController extends AbstractCrudController
         return TipoCurso::class;
     }
 
-    
+    public function configureCrud(Crud $crud): Crud
+    {
+        return $crud
+            ->setEntityLabelInSingular('Propuesta')
+            ->setEntityLabelInPlural('Propuestas')
+        ;
+    }
+
     public function configureFields(string $pageName): iterable
     {
         return [

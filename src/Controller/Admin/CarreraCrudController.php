@@ -23,7 +23,14 @@ class CarreraCrudController extends AbstractCrudController
         return Carrera::class;
     }
 
-    
+    public function configureCrud(Crud $crud): Crud
+    {
+        return $crud
+            ->setEntityLabelInSingular('Oferta')
+            ->setEntityLabelInPlural('Ofertas')
+        ;
+    }
+
     public function configureFields(string $pageName): iterable
     {
         return [
