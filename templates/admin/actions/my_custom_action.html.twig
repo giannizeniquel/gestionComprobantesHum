@@ -6,6 +6,7 @@
 			<tr>
 				{# <th>ID</th>#}
 				<th>Nro. Ticket</th>
+                <th>Cuotas</th>
 				<th>Monto</th>
 				<th>Fecha Ticket</th>
 				<th>Nombre archivo</th>
@@ -20,6 +21,11 @@
 
 					{# <td>{{ detalle.id }}</td>#}
 					<td class="nroTicket">{{ detalle.numeroTicket }}</td>
+                    <td class="cuotas">
+                        {% for cuota in detalle.cuotas %}
+                            - {{ cuota }}<br>
+                        {% endfor %}
+                    </td>
 					<td class="monotCuota">{{ detalle.montoCuota ?: 'N/A' }}</td>
 					<td class="fechaTicket">{{ detalle.fechaTicket|date('d-m-Y') }}</td>
 					<td class="nombreArchivo">{{ detalle.nombreArchivo ?: 'N/A' }}</td>
@@ -52,6 +58,9 @@
                 $("#tablaPagos").removeClass("table").addClass("datagrid");
                 $(".nroTicket").text(function (index, element) {
                     this.innerHTML = "<strong>Nro. Ticket: </strong>" + element;
+                }).css("padding-left", "10%");
+                $(".cuotas").text(function (index, element) {
+                    this.innerHTML = "<strong>Cuotas: </strong>" + element;
                 }).css("padding-left", "10%");
                 $(".monotCuota").text(function (index, element) {
                     this.innerHTML = "<strong>Monto Cuota: </strong>" + element;

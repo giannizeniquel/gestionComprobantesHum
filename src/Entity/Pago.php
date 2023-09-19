@@ -194,6 +194,7 @@ class Pago
             $masDetalles[] = [
                 'id' => $detalle->getId(),
                 'numeroTicket' => $detalle->getNumeroTicket(),
+                'cuotas' => $detalle->getCuotas(),
                 'montoCuota' => $detalle->getMontoCuotas(),
                 'fechaTicket' => $detalle->getFechaTicket(),
                 'observacion'=>$detalle->getObservacion(),
