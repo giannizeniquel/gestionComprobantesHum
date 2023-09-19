@@ -4,28 +4,14 @@
 namespace App\Controller;
 
 use App\Entity\User;
-use App\Entity\Curso;
 use App\Repository\UserRepository;
 use App\Repository\CursoRepository;
-use App\Form\RegistrationFormType;
-use App\Security\EmailVerifier;
-use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Mime\Address;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Contracts\Translation\TranslatorInterface;
-use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use App\Form\CargaExcelType;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoder;
-
-
 
 class CargaExcelController extends AbstractDashboardController
 {

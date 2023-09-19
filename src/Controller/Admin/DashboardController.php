@@ -2,8 +2,6 @@
 
 namespace App\Controller\Admin;
 
-use App\Controller\LoginController;
-use App\Entity\Cuota;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
 use EasyCorp\Bundle\EasyAdminBundle\Config\UserMenu;
@@ -11,14 +9,11 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
 use App\Entity\Curso;
 use App\Entity\Pago;
-use App\Entity\PagoDetalle;
 use App\Entity\User;
 use App\Entity\Carrera;
 use App\Entity\TipoCurso;
-use EasyCorp\Bundle\EasyAdminBundle\Config\Assets;
 
 class DashboardController extends AbstractDashboardController
 {
@@ -97,7 +92,7 @@ class DashboardController extends AbstractDashboardController
     {
         yield MenuItem::linkToDashboard('Inicio', 'fa fa-home');
 
-        if (in_array('ROLE_ADMIN', $this->getUser()->getRoles())) {
+        if (in_array('ROLE_ADMIN', $this->getUser()->getRoles()) || in_array('ROLE_SUPER_ADMIN', $this->getUser()->getRoles())) {
             yield MenuItem::linkToCrud('Usuarios', 'fa fa-users', User::class);
             yield MenuItem::linktoRoute('Cargar usuarios', 'fas fa-upload', 'xlsx');
 

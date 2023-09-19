@@ -2,9 +2,7 @@
 
 namespace App\Controller\Admin;
 
-use App\Entity\Cuota;
 use App\Entity\Pago;
-use App\Entity\User;
 use App\Form\PagoDetalleType;
 use App\Form\BuscarFechaType;
 use App\Repository\CuotaRepository;
@@ -16,9 +14,6 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\CollectionField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\NumberField;
-use EasyCorp\Bundle\EasyAdminBundle\Filter\ComparisonFilter;
-use App\Repository\UserRepository;
-use Doctrine\DBAL\Query\QueryBuilder;
 use Doctrine\ORM\EntityRepository;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
@@ -30,14 +25,10 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Routing\Annotation\Method;
-use EasyCorp\Bundle\EasyAdminBundle\Field\Field;
 use EasyCorp\Bundle\EasyAdminBundle\Field\FormField;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
-use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
-
 
 class PagoCrudController extends AbstractCrudController
 {
@@ -120,18 +111,24 @@ class PagoCrudController extends AbstractCrudController
 
     public function configureActions(Actions $actions): Actions
     {
-        return $actions
-            ->add(Crud::PAGE_INDEX, Action::DETAIL, )
-            ->setPermission(Action::INDEX, 'ROLE_ADMIN')
-            ->setPermission(Action::EDIT, 'ROLE_USER', 'ROLE_SUPER_ADMIN');
-
+        if(in_array('ROLE_ADMIN', $this->getUser()->getRoles())){
+            return $actions
+                ->add(Crud::PAGE_INDEX, Action::DETAIL)
+                ->setPermission(Action::INDEX, 'ROLE_ADMIN')
+                ->setPermission(Action::EDIT, 'ROLE_SUPER_ADMIN');
+        }else{
+            return $actions
+                ->add(Crud::PAGE_INDEX, Action::DETAIL)
+                ->setPermission(Action::INDEX, 'ROLE_ADMIN');
+        }
     }
 
 
     public function configureFilters(Filters $filters): Filters
     {
         return $filters
-            ->add('user');
+            ->add('user')
+            ->add('curso');
     }
 
     public function configureAssets(Assets $assets): Assets
