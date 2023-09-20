@@ -45,7 +45,7 @@ class PagoDetalleType extends AbstractType
                     'readonly' => true,
                 ],
                 'help' => 'Debe coincidir con el monto que figura en su comprobante',
-            ])    
+            ])
             ->add('numeroTicket', null, [
                 'label' => 'Numero de Transaccion',
             ])
@@ -55,9 +55,9 @@ class PagoDetalleType extends AbstractType
                 'widget' => 'single_text',
             ])
             ->add('observacion')
-            
+
             ->add('imageFile', VichFileType::class, [
-                'label'=> 'Subir Comprobante',
+                'label' => 'Subir Comprobante',
                 'required' => true,
                 'attr' => [
                     'required' => true,
@@ -69,8 +69,7 @@ class PagoDetalleType extends AbstractType
                 'attr' => [
                     'required' => true,
                 ]
-            ])
-        ;
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

@@ -23,7 +23,8 @@ class BuscarType extends AbstractType
             ]);
     }
 
-    public function configureOptions(OptionsResolver $resolver){
+    public function configureOptions(OptionsResolver $resolver)
+    {
         $resolver->setDefaults(array(
             'method' => 'GET',
             'action' => null,

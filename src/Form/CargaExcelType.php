@@ -12,13 +12,11 @@ class CargaExcelType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-        ->add('file', FileType::class, [
-            'label' => 'Selecciona un archivo',
-        ])
-        ->add('submit', SubmitType::class, [
-            'label' => 'Enviar Archivo',
-        ]);
+            ->add('file', FileType::class, [
+                'label' => 'Selecciona un archivo',
+            ])
+            ->add('submit', SubmitType::class, [
+                'label' => 'Enviar Archivo',
+            ]);
     }
-
-  
 }

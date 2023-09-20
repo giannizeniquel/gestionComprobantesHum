@@ -24,7 +24,7 @@ class PagoSubscriber implements EventSubscriberInterface
      * @var AdminUrlGenerator
      */
     private $adminUrlGenerator;
-    
+
     public function __construct(Security $security, AdminUrlGenerator $adminUrlGenerator) //
     {
         $this->security = $security;
@@ -49,11 +49,11 @@ class PagoSubscriber implements EventSubscriberInterface
             $montoTotalCuotas = 0;
             foreach ($pagoDetalles as $pagoDetalle) {
                 $cuotasPagoDetalles = $pagoDetalle->getCuotas();
-                foreach ($cuotasPagoDetalles as $cuota){
+                foreach ($cuotasPagoDetalles as $cuota) {
                     $montoTotalCuotas = $montoTotalCuotas + $cuota->getMonto();
                 }
             }
-        
+
             $entity->setUser($this->security->getUser());
             $entity->setMonto($montoTotalCuotas);
         }
@@ -67,13 +67,13 @@ class PagoSubscriber implements EventSubscriberInterface
             $montoTotalCuotas = 0;
             foreach ($pagoDetalles as $pagoDetalle) {
                 $cuotasPagoDetalles = $pagoDetalle->getCuotas();
-                foreach ($cuotasPagoDetalles as $cuota){
+                foreach ($cuotasPagoDetalles as $cuota) {
                     $montoTotalCuotas = $montoTotalCuotas + $cuota->getMonto();
                 }
             }
             $entity->setUser($this->security->getUser());
             $entity->setMonto($montoTotalCuotas);
-        } 
+        }
     }
 
     public function onAfterEntityPersistedEvent(AfterEntityPersistedEvent $event): Response
@@ -81,12 +81,11 @@ class PagoSubscriber implements EventSubscriberInterface
         $entity = $event->getEntityInstance();
         if ($entity instanceof Pago) {
             $url =  $this->adminUrlGenerator->setController('App\\Controller\\Admin\\UserCrudController')->setAction('obtenerPagosUsuario');
-            return (new RedirectResponse($url))->send(); 
-        }else{
+            return (new RedirectResponse($url))->send();
+        } else {
             $url =  $this->adminUrlGenerator->setController('App\\Controller\\Admin\\DashboardController')->setAction('index');
             return (new RedirectResponse($url))->send();
         }
-
     }
 
     public function onAfterEntityUpdatedEvent(AfterEntityUpdatedEvent $event): Response
@@ -94,11 +93,10 @@ class PagoSubscriber implements EventSubscriberInterface
         $entity = $event->getEntityInstance();
         if ($entity instanceof Pago) {
             $url =  $this->adminUrlGenerator->setController('App\\Controller\\Admin\\PagoCrudController')->setAction('detail');
-            return (new RedirectResponse($url))->send(); 
-        }else{
+            return (new RedirectResponse($url))->send();
+        } else {
             $url =  $this->adminUrlGenerator->setController('App\\Controller\\Admin\\DashboardController')->setAction('index');
             return (new RedirectResponse($url))->send();
         }
     }
-
 }

@@ -24,8 +24,7 @@ class CarreraCrudController extends AbstractCrudController
     {
         return $crud
             ->setEntityLabelInSingular('Oferta')
-            ->setEntityLabelInPlural('Ofertas')
-        ;
+            ->setEntityLabelInPlural('Ofertas');
     }
 
     public function configureFields(string $pageName): iterable
@@ -36,13 +35,10 @@ class CarreraCrudController extends AbstractCrudController
             TextField::new('descripcion', 'Descripción'),
             AssociationField::new('cursos')
         ];
-
-        
     }
     public function configureActions(Actions $actions): Actions
     {
         return $actions
-        ->add(Crud::PAGE_INDEX, Action::DETAIL);
+            ->add(Crud::PAGE_INDEX, Action::DETAIL);
     }
-    
 }

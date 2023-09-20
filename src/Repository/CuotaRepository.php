@@ -18,11 +18,11 @@ use Symfony\Component\Security\Core\Security;
 class CuotaRepository extends ServiceEntityRepository
 {
 
-     /**
+    /**
      * @var Security
      */
     private $security;
-    
+
     public function __construct(ManagerRegistry $registry, Security $security)
     {
         parent::__construct($registry, Cuota::class);
@@ -47,48 +47,47 @@ class CuotaRepository extends ServiceEntityRepository
         }
     }
 
-//    /**
-//     * @return Cuota[] Returns an array of Cuota objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('c')
-//            ->andWhere('c.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('c.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+    //    /**
+    //     * @return Cuota[] Returns an array of Cuota objects
+    //     */
+    //    public function findByExampleField($value): array
+    //    {
+    //        return $this->createQueryBuilder('c')
+    //            ->andWhere('c.exampleField = :val')
+    //            ->setParameter('val', $value)
+    //            ->orderBy('c.id', 'ASC')
+    //            ->setMaxResults(10)
+    //            ->getQuery()
+    //            ->getResult()
+    //        ;
+    //    }
 
-//    public function findOneBySomeField($value): ?Cuota
-//    {
-//        return $this->createQueryBuilder('c')
-//            ->andWhere('c.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+    //    public function findOneBySomeField($value): ?Cuota
+    //    {
+    //        return $this->createQueryBuilder('c')
+    //            ->andWhere('c.exampleField = :val')
+    //            ->setParameter('val', $value)
+    //            ->getQuery()
+    //            ->getOneOrNullResult()
+    //        ;
+    //    }
 
     /**
-    * @return Cuota[] Returns an array of Cuota objects
-    */
+     * @return Cuota[] Returns an array of Cuota objects
+     */
     public function findByCuotasDeCursoAjax($idCurso): array
     {
         return $this->createQueryBuilder('cuotas')
-             ->join('cuotas.cursos', 'curso')
-             ->where('curso.id = :idCurso')
-             ->setParameter('idCurso', $idCurso)
-             ->getQuery()
-             ->getResult()
-        ;
+            ->join('cuotas.cursos', 'curso')
+            ->where('curso.id = :idCurso')
+            ->setParameter('idCurso', $idCurso)
+            ->getQuery()
+            ->getResult();
     }
 
     /**
-    * @return Cuota[] Returns an array of Cuota objects
-    */
+     * @return Cuota[] Returns an array of Cuota objects
+     */
     public function findByCuotasPagadasDeCursoAjax($idCurso): array
     {
         $idUser = $this->security->getUser();
@@ -102,8 +101,7 @@ class CuotaRepository extends ServiceEntityRepository
             ->setParameter('idCurso', $idCurso)
             ->setParameter('idUser', $idUser)
             ->getQuery()
-            ->getResult()
-        ;
+            ->getResult();
     }
 
     public function findByCuotasDeCurso($idCurso)
@@ -111,8 +109,6 @@ class CuotaRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('cuotas')
             ->join('cuotas.cursos', 'curso')
             ->where('curso.id = :idCurso')
-            ->setParameter('idCurso', $idCurso)
-        ;
+            ->setParameter('idCurso', $idCurso);
     }
-
 }

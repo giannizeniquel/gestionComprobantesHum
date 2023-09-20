@@ -185,7 +185,7 @@ class Pago
     }
 
 
-     //se usa en el detail de pagos para obtener mas detalle 
+    //se usa en el detail de pagos para obtener mas detalle 
     public function getPagoMasDetallesObj(): array
     {
         $masDetalles = [];
@@ -196,9 +196,9 @@ class Pago
                 'cuotas' => $detalle->getCuotas(),
                 'montoCuota' => $detalle->getMontoCuotas(),
                 'fechaTicket' => $detalle->getFechaTicket(),
-                'observacion'=>$detalle->getObservacion(),
-                'nombreArchivo'=>$detalle->getNombreArchivo(),
-                'imageName'=>$detalle->getImageName(),             
+                'observacion' => $detalle->getObservacion(),
+                'nombreArchivo' => $detalle->getNombreArchivo(),
+                'imageName' => $detalle->getImageName(),
                 'getUpdate' => $detalle->getUpdatedAt() ? $detalle->getUpdatedAt()->format('d-m-Y') : '',
                 //  'fechaTicket' => $detalle->getFechaTicket(),
 
@@ -206,5 +206,4 @@ class Pago
         }
         return $masDetalles;
     }
-
 }

@@ -59,8 +59,8 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
     }
 
     /**
-    * @return User[] Returns an array of User objects
-    */
+     * @return User[] Returns an array of User objects
+     */
     // public function findByExampleField($value): array
     // {
     //     return $this->createQueryBuilder('u')
@@ -72,10 +72,10 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
     //         ->getResult()
     //     ;
     // }
-    
+
     /**
-    * @return Curso[] Returns an array of User objects
-    */
+     * @return Curso[] Returns an array of User objects
+     */
     public function findByMisCursos($userId): array
     {
         $qb = $this->getEntityManager()->createQueryBuilder();
@@ -83,8 +83,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
             ->from('App:Curso', 'c')
             ->join('c.users', 'u')
             ->where('u.id = :userId')
-            ->setParameter('userId', $userId)
-            ;
+            ->setParameter('userId', $userId);
 
         $query = $qb->getQuery();
 
@@ -92,8 +91,8 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
     }
 
     /**
-    * @return Pago[] Returns an array of User objects
-    */
+     * @return Pago[] Returns an array of User objects
+     */
     public function findByMisPagos($userId): array
     {
         $qb = $this->getEntityManager()->createQueryBuilder();
@@ -101,8 +100,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
             ->from('App:Pago', 'p')
             ->join('p.user', 'u')
             ->where('u.id = :userId')
-            ->setParameter('userId', $userId)
-            ;
+            ->setParameter('userId', $userId);
 
         $query = $qb->getQuery();
 
@@ -120,22 +118,22 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
     // }
 
 
-   //->select('c', 'u') // trae todos los cursos y los  Usuarios
-   //->from('App:Curso', 'c')
-   //->join('c.users', 'u');         
+    //->select('c', 'u') // trae todos los cursos y los  Usuarios
+    //->from('App:Curso', 'c')
+    //->join('c.users', 'u');         
 
 
     /**
-    * @return Curso[] Returns an array of User objects
-    */
+     * @return Curso[] Returns an array of User objects
+     */
     public function findUsuariosCursos(): array
     {
         $qb = $this->getEntityManager()->createQueryBuilder();
-        $qb -> select('c.id AS curso_id', 'u.nombre', 'u.apellido', 'u.email')
+        $qb->select('c.id AS curso_id', 'u.nombre', 'u.apellido', 'u.email')
             ->from('App:Curso', 'c')
-            ->join('c.users', 'u');                                     
+            ->join('c.users', 'u');
         $query = $qb->getQuery();
-    
-        return $query->getResult(); 
+
+        return $query->getResult();
     }
 }

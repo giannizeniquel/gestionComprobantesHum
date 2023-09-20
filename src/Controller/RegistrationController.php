@@ -39,7 +39,7 @@ class RegistrationController extends AbstractDashboardController
         if ($form->isSubmitted() && $form->isValid()) {
             // encode the plain password
             $user->setPassword(
-            $userPasswordHasher->hashPassword(
+                $userPasswordHasher->hashPassword(
                     $user,
                     $form->get('plainPassword')->getData()
                 )
@@ -49,7 +49,9 @@ class RegistrationController extends AbstractDashboardController
             $entityManager->flush();
 
             // generate a signed url and email it to the user
-            $this->emailVerifier->sendEmailConfirmation('app_verify_email', $user,
+            $this->emailVerifier->sendEmailConfirmation(
+                'app_verify_email',
+                $user,
                 (new TemplatedEmail())
                     ->from(new Address('gespagoshum@gespagoshum.wiz.com.ar', 'Confirmar email'))
                     ->to($user->getEmail())

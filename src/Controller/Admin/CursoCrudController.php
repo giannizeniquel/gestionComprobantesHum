@@ -28,22 +28,7 @@ class CursoCrudController extends AbstractCrudController
         return $crud
             // the labels used to refer to this entity in titles, buttons, etc.
             ->setEntityLabelInSingular('Curso')
-            ->setEntityLabelInPlural('Cursos')
-
-            // in addition to a string, the argument of the singular and plural label methods
-            // can be a closure that defines two nullable arguments: entityInstance (which will
-            // be null in 'index' and 'new' pages) and the current page name
-            // ->setEntityLabelInSingular(
-            //     fn (?Curso $curso) => $curso ? $curso->toString() : 'Curso'
-            // )
-            // ->setEntityLabelInPlural(function (?Category $category, ?string $pageName) {
-            //     return 'edit' === $pageName ? $category->getLabel() : 'Categories';
-            // })
-
-            // the Symfony Security permission needed to manage the entity
-            // (none by default, so you can manage all instances of the entity)
-            //->setEntityPermission('ROLE_EDITOR')
-        ;
+            ->setEntityLabelInPlural('Cursos');
     }
 
     public function configureFields(string $pageName): iterable
@@ -69,18 +54,12 @@ class CursoCrudController extends AbstractCrudController
                 ->setFormTypeOptions([
                     'by_reference' => false,
                 ]),
-
-            // TextField::new('duracion', 'Duración'),
-            // NumberField::new('precio'),
-            // IntegerField::new('capacidad'),
-            // TextField::new('modalidad'),
         ];
     }
 
     public function configureActions(Actions $actions): Actions
     {
         return $actions
-        ->add(Crud::PAGE_INDEX, Action::DETAIL);
+            ->add(Crud::PAGE_INDEX, Action::DETAIL);
     }
-    
 }

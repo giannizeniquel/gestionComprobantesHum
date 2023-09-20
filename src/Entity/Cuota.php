@@ -29,7 +29,7 @@ class Cuota
      */
     private $descripcion;
 
- 
+
 
     /**
      * @ORM\Column(type="string", length=10)
@@ -68,10 +68,10 @@ class Cuota
         $this->pagoDetalles = new ArrayCollection();
     }
 
- 
+
     public function __toString()
     {
-        return "Cuota ".$this->numeroCuota." (".$this->descripcion.")";
+        return "Cuota " . $this->numeroCuota . " (" . $this->descripcion . ")";
     }
 
     public function getId(): ?int

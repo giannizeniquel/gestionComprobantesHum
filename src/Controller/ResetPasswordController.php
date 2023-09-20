@@ -53,7 +53,7 @@ class ResetPasswordController extends AbstractController
                 $translator
             );
         }
-        
+
         return $this->render('reset_password/request.html.twig', [
             'requestForm' => $form->createView(),
         ]);
@@ -172,8 +172,7 @@ class ResetPasswordController extends AbstractController
             ->text('Facultad de Humanidades-UNNE')
             ->context([
                 'resetToken' => $resetToken,
-            ])
-        ;
+            ]);
 
         $mailer->send($email);
 

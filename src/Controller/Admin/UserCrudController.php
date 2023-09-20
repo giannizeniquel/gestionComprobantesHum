@@ -102,5 +102,4 @@ class UserCrudController extends AbstractCrudController
 
         return $this->render('user/userPagos.html.twig', ['pagos' => $pagos]);
     }
-
 }

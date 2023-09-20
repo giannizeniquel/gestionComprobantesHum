@@ -85,14 +85,14 @@ class DashboardController extends AbstractDashboardController
     {
         $role = 'Usuario';
 
-        if (in_array('ROLE_SUPER_ADMIN',$user->getRoles() )) {
+        if (in_array('ROLE_SUPER_ADMIN', $user->getRoles())) {
             $role = 'Dev';
-        }else if (in_array('ROLE_ADMIN',$user->getRoles() )) {
+        } else if (in_array('ROLE_ADMIN', $user->getRoles())) {
             $role = 'Admin';
         }
 
         return parent::configureUserMenu($user)
-            ->setName($user->getFullname().' ('.$role.')');
+            ->setName($user->getFullname() . ' (' . $role . ')');
     }
 
 
@@ -111,7 +111,7 @@ class DashboardController extends AbstractDashboardController
             // yield MenuItem::linkToCrud('Cuotas', 'fa fa-shapes', Cuota::class);
             yield MenuItem::linkToCrud('Pagos', 'fa fa-file-text-o', Pago::class);
             yield MenuItem::section('');
-           //yield MenuItem::linktoRoute('Lista pagos general', 'fas fa-file-excel', 'lista_pago');
+            //yield MenuItem::linktoRoute('Lista pagos general', 'fas fa-file-excel', 'lista_pago');
             yield MenuItem::linktoRoute('Agregar un usuario', 'fa fa-user', 'app_register');
             //  yield MenuItem::linkToCrud('Pagos Detalles', 'fa fa-shapes', PagoDetalle::class);
 

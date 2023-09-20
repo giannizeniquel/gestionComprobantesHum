@@ -80,9 +80,8 @@ class PagoCrudController extends AbstractCrudController
         if (Crud::PAGE_DETAIL === $pageName) {
             yield FormField::addPanel('Detalles del Pago');
             yield CollectionField::new('getPagoMasDetallesObj', '')
-            ->setTemplatePath('admin/actions/my_custom_action.html.twig');
+                ->setTemplatePath('admin/actions/my_custom_action.html.twig');
         }
-        
     }
 
     public function obtenerIdCurso(AdminContext $context, Request $request, PagoRepository $pagoRepository)
@@ -111,12 +110,12 @@ class PagoCrudController extends AbstractCrudController
 
     public function configureActions(Actions $actions): Actions
     {
-        if(in_array('ROLE_ADMIN', $this->getUser()->getRoles())){
+        if (in_array('ROLE_ADMIN', $this->getUser()->getRoles())) {
             return $actions
                 ->add(Crud::PAGE_INDEX, Action::DETAIL)
                 ->setPermission(Action::INDEX, 'ROLE_ADMIN')
                 ->setPermission(Action::EDIT, 'ROLE_SUPER_ADMIN');
-        }else{
+        } else {
             return $actions
                 ->add(Crud::PAGE_INDEX, Action::DETAIL)
                 ->setPermission(Action::INDEX, 'ROLE_ADMIN');
@@ -195,9 +194,8 @@ class PagoCrudController extends AbstractCrudController
      * @Route("/lista-pago.{_format}", name="lista_pago", defaults={"_format"="html"}, requirements={"_format"="html|xlsx"})
      * @throws \Exception
      */
-        public function indexAllPagos(Request $request, PagoRepository $pagoRepository): Response
-    { 
-        
+    public function indexAllPagos(Request $request, PagoRepository $pagoRepository): Response
+    {
         $buscarFiltroForm = $this->createForm(BuscarFechaType::class, null, [
             'action' => $this->generateUrl('lista_pago'),
         ]);
@@ -206,13 +204,15 @@ class PagoCrudController extends AbstractCrudController
         // Verificar si el formulario fue enviado y es válido antes de obtener los datos del filtro
         if ($buscarFiltroForm->isSubmitted() && $buscarFiltroForm->isValid()) {
             $filtro = $buscarFiltroForm->getData();
-            
+
             // Asegurarse de que $filtro no sea nulo
             if ($filtro !== null) {
                 $pagos = $pagoRepository
-                ->findAllPagosPorDniFecha($filtro['dni'], 
-                                        $filtro['startDate'], 
-                                        $filtro['endDate']);      
+                    ->findAllPagosPorDniFecha(
+                        $filtro['dni'],
+                        $filtro['startDate'],
+                        $filtro['endDate']
+                    );
             } else {
                 // Si $filtro es nulo, puedes manejarlo de acuerdo a tus necesidades.
                 // Por ejemplo, puedes establecer $datos en un valor por defecto.
@@ -228,7 +228,7 @@ class PagoCrudController extends AbstractCrudController
             //     // Manejar el caso en que $pagos sea nulo, por ejemplo, definiendo un valor predeterminado.
             //     $pagos = []; // O cualquier otro valor predeterminado
             // }
-        
+
             $datosExcel = array(
                 'encabezado' => array(
                     'titulo' => 'Reporte pagos',
@@ -236,7 +236,7 @@ class PagoCrudController extends AbstractCrudController
                     //     'dni' => isset($dni['dni']) ? $dni['dni'] : 'ValorPredeterminado',
                     //     'Fecha Desde' => ($filtro['startDate'] !== null) ? $filtro['startDate']->format('d-M-Y') : 'N/A',
                     //     'Fecha Hasta' => ($filtro['endDate'] !== null) ? $filtro['endDate']->format('d-M-Y') : 'N/A',
-                   // ),
+                    // ),
                 ),
                 'columnas' => array(
                     'Pago',
@@ -251,53 +251,51 @@ class PagoCrudController extends AbstractCrudController
                 'Observaciones',
                 'pagos' => $pagos, // Ahora asegurado de que $pagos no es nulo
             );
-           // dd($pagos);
-        
+            // dd($pagos);
+
             $response = $this->renderExcel($datosExcel);
             $response->headers->set('Content-Disposition', 'attachment; filename="nombre_del_archivo.xlsx"');
-            
+
             return $response;
-        
         } else {
 
-        return $this->render('reportes/reporte.html.twig', [
-            'pagos' => $pagos,
-            'buscar' => $buscarFiltroForm->createView(),
-        ]);
-    }
-  }
-
-
-  private function renderExcel($pagos)
-  {
-    // Crea un nuevo objeto Spreadsheet 
-    $spreadsheet = new Spreadsheet();
-
-    // Establecer propiedades
-    $this->ponerPropiedades($spreadsheet, 'Título del libro');
-
-    // // Genera el contenido
-    // $this->generarEncabezadoExcel($spreadsheet, $pagos['encabezado']);
-    $this->generarEncabezadoColumnas($spreadsheet, $pagos['columnas']);
-    $this->generarDatos($spreadsheet, $pagos['pagos']);
-    // $this->formatearExcel($spreadsheet, $pagos['encabezado']['titulo']);
-
-    $response = $this->generarExcelResponse($spreadsheet);
-
-    return $response;
+            return $this->render('reportes/reporte.html.twig', [
+                'pagos' => $pagos,
+                'buscar' => $buscarFiltroForm->createView(),
+            ]);
+        }
     }
 
+
+    private function renderExcel($pagos)
+    {
+        // Crea un nuevo objeto Spreadsheet 
+        $spreadsheet = new Spreadsheet();
+
+        // Establecer propiedades
+        $this->ponerPropiedades($spreadsheet, 'Título del libro');
+
+        // // Genera el contenido
+        // $this->generarEncabezadoExcel($spreadsheet, $pagos['encabezado']);
+        $this->generarEncabezadoColumnas($spreadsheet, $pagos['columnas']);
+        $this->generarDatos($spreadsheet, $pagos['pagos']);
+        // $this->formatearExcel($spreadsheet, $pagos['encabezado']['titulo']);
+
+        $response = $this->generarExcelResponse($spreadsheet);
+
+        return $response;
+    }
 
     private function ponerPropiedades($spreadsheet, $titulo)
     {
-      $spreadsheet->getProperties()
-      ->setCustomProperty('Humanidades', 'Ges  Pagos')
-                ->setLastModifiedBy('Sistema')
-                ->setTitle($titulo)
-                ->setSubject('')
-                ->setDescription('')
-                ->setKeywords('')
-                ->setCategory('');
+        $spreadsheet->getProperties()
+            ->setCustomProperty('Humanidades', 'Ges  Pagos')
+            ->setLastModifiedBy('Sistema')
+            ->setTitle($titulo)
+            ->setSubject('')
+            ->setDescription('')
+            ->setKeywords('')
+            ->setCategory('');
     }
 
     private function generarEncabezadoColumnas($spreadsheet, $encabezadoColumnas, $fila = 5)
@@ -306,8 +304,8 @@ class PagoCrudController extends AbstractCrudController
         foreach ($encabezadoColumnas as $titulo) {
             $spreadsheet->getActiveSheet()->setCellValueByColumnAndRow($columna++, $fila, $titulo);
         }
-        $rango = 'A'.$fila.':'.chr(65 + --$columna).$fila;
-    
+        $rango = 'A' . $fila . ':' . chr(65 + --$columna) . $fila;
+
         $spreadsheet->getActiveSheet()->getStyle($rango)->applyFromArray($this->estiloTitulo());
         $spreadsheet->getActiveSheet()->getStyle($rango)->applyFromArray([
             'font' => [
@@ -320,6 +318,7 @@ class PagoCrudController extends AbstractCrudController
             ],
         ]);
     }
+
     private function estiloTitulo()
     {
         $styleArray = [
@@ -328,8 +327,8 @@ class PagoCrudController extends AbstractCrudController
                 'bold' => true,
                 'italic' => false,
                 'strike' => false,
-             //   'size' => 16,
-               // 'color' => ['rgb' => 'FFFFFF'],
+                //   'size' => 16,
+                // 'color' => ['rgb' => 'FFFFFF'],
             ],
             // 'fill' => [
             //     'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
@@ -347,15 +346,16 @@ class PagoCrudController extends AbstractCrudController
             //     'wrapText' => true,
             // ],
         ];
-    
+
         return $styleArray;
     }
+
     private function generarDatos($spreadsheet, $pagos)
     {  // dd($pagos);
         $fila = 6;
         foreach ($pagos as $pago) {
             $columna = 0;
-            
+
             // Acceder a las propiedades del objeto Pago
             $spreadsheet->getActiveSheet()->setCellValueByColumnAndRow($columna++, $fila, $pago->getId());
             $spreadsheet->getActiveSheet()->setCellValueByColumnAndRow($columna++, $fila, $pago->getUser());
@@ -364,11 +364,11 @@ class PagoCrudController extends AbstractCrudController
             foreach ($pago->getPagoDetalles() as $detalle) {
                 $spreadsheet->getActiveSheet()->setCellValueByColumnAndRow($columna++, $fila, $detalle->getNumeroTicket());
                 $spreadsheet->getActiveSheet()->setCellValueByColumnAndRow($columna++, $fila, $detalle->getFechaTicket());
-            $spreadsheet->getActiveSheet()->setCellValueByColumnAndRow($columna++, $fila, $detalle->getMontoCuotas());
+                $spreadsheet->getActiveSheet()->setCellValueByColumnAndRow($columna++, $fila, $detalle->getMontoCuotas());
             }
-                      
+
             $spreadsheet->getActiveSheet()->setCellValueByColumnAndRow($columna++, $fila, $pago->getUpdatedAt());
-            
+
             ++$fila;
         }
     }

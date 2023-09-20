@@ -102,5 +102,4 @@ class Carrera
     {
         return $this->nombre;
     }
-
 }

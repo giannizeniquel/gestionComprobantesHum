@@ -86,14 +86,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     public function __toString()
-    {  
+    {
         // if ($this->apellido && $this->nombre) {
         //     return $this->apellido.', '.$this->nombre;
         // }else{
         //     return $this->email;
         // }
         return $this->dni;
-        
     }
 
     public function getId(): ?int
@@ -314,6 +313,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function getFullName()
     {
-        return $this->getNombre().' '.$this->getApellido();
+        return $this->getNombre() . ' ' . $this->getApellido();
     }
 }

@@ -39,9 +39,9 @@ class PagoRepository extends ServiceEntityRepository
         }
     }
 
-    
-   
-   
+
+
+
     public function findAllPagos(): array
     {
         $qb = $this->createQueryBuilder('pago')
@@ -54,65 +54,65 @@ class PagoRepository extends ServiceEntityRepository
             ->join('pago.pagoDetalles', 'pagoDetalle')
             ->join('pagoDetalle.cuotas', 'cuota')
             ->orderBy('pago.id', 'ASC');
-    
+
         $query = $qb->getQuery();
-    
+
         return $query->getResult();
     }
 
     public function findAllPagosPorDniFecha($dni, $startDate, $endDate): array
-{
-    $qb = $this->createQueryBuilder('pago')
-        ->select('pago, PARTIAL curso.{id, nombre, activo}, PARTIAL user.{id, dni, apellido},
+    {
+        $qb = $this->createQueryBuilder('pago')
+            ->select('pago, PARTIAL curso.{id, nombre, activo}, PARTIAL user.{id, dni, apellido},
             PARTIAL cuota.{id, monto, numeroCuota}, 
             PARTIAL pagoDetalle.{id, montoCuotas, numeroTicket, 
             montoTicket, fechaTicket, observacion, imageName}')
-        ->join('pago.curso', 'curso')
-        ->join('pago.user', 'user')
-        ->join('pago.pagoDetalles', 'pagoDetalle')
-        ->join('pagoDetalle.cuotas', 'cuota');
+            ->join('pago.curso', 'curso')
+            ->join('pago.user', 'user')
+            ->join('pago.pagoDetalles', 'pagoDetalle')
+            ->join('pagoDetalle.cuotas', 'cuota');
 
-    // Condiciones OR para cada filtro
-    $orX = $qb->expr()->orX();
-    
-    if ($dni) {
-        $orX->add($qb->expr()->eq('user.dni', ':dni'));
-        $orX->add($qb->expr()->eq('user.apellido', ':dni'));
-        $qb->setParameter('dni', $dni);
-    }
-    
-    if ($startDate instanceof \DateTime) {
-        $startDate = $startDate->format('Y-m-d'); // Convierte el objeto DateTime a una cadena de fecha
+        // Condiciones OR para cada filtro
+        $orX = $qb->expr()->orX();
+
+        if ($dni) {
+            $orX->add($qb->expr()->eq('user.dni', ':dni'));
+            $orX->add($qb->expr()->eq('user.apellido', ':dni'));
+            $qb->setParameter('dni', $dni);
+        }
+
+        if ($startDate instanceof \DateTime) {
+            $startDate = $startDate->format('Y-m-d'); // Convierte el objeto DateTime a una cadena de fecha
+        }
+
+        if ($startDate) {
+            $startDate = new \DateTimeImmutable($startDate);
+            $qb->andWhere($qb->expr()->gte('pago.created_at', ':startDate'));
+            $qb->setParameter('startDate', $startDate);
+        }
+
+        if ($endDate instanceof \DateTime) {
+            $endDate = $endDate->format('Y-m-d'); // Convierte el objeto DateTime a una cadena de fecha
+        }
+
+        if ($endDate) {
+            $endDate = new \DateTimeImmutable($endDate);
+            $qb->andWhere($qb->expr()->lte('pago.created_at', ':endDate'));
+            $qb->setParameter('endDate', $endDate);
+        }
+
+        // Agregar la condición OR solo si al menos un filtro está presente
+        if ($orX->count() > 0) {
+            $qb->andWhere($orX);
+        }
+
+        // Ordenar los resultados
+        $qb->orderBy('pago.id', 'ASC');
+
+        return $qb->getQuery()->getResult();
     }
 
-    if ($startDate) {
-        $startDate = new \DateTimeImmutable($startDate);
-        $qb->andWhere($qb->expr()->gte('pago.created_at', ':startDate'));
-        $qb->setParameter('startDate', $startDate);
-    }
-    
-    if ($endDate instanceof \DateTime) {
-        $endDate = $endDate->format('Y-m-d'); // Convierte el objeto DateTime a una cadena de fecha
-    }
 
-    if ($endDate) {
-        $endDate = new \DateTimeImmutable($endDate);
-        $qb->andWhere($qb->expr()->lte('pago.created_at', ':endDate'));
-        $qb->setParameter('endDate', $endDate);
-    }
-
-    // Agregar la condición OR solo si al menos un filtro está presente
-    if ($orX->count() > 0) {
-        $qb->andWhere($orX);
-    }
-
-    // Ordenar los resultados
-    $qb->orderBy('pago.id', 'ASC');
-
-    return $qb->getQuery()->getResult();
-}
-        
-  
     public function findAllPagosPorDni($dni): array
     {
         $qb = $this->createQueryBuilder('pago')
@@ -125,7 +125,7 @@ class PagoRepository extends ServiceEntityRepository
             ->join('pago.pagoDetalles', 'pagoDetalle')
             ->join('pagoDetalle.cuotas', 'cuota')
             ->orderBy('pago.id', 'ASC');
-    
+
         if (is_string($dni)) {
             $qb->where(
                 $qb->expr()->orX(
@@ -133,36 +133,36 @@ class PagoRepository extends ServiceEntityRepository
                     $qb->expr()->eq('user.apellido', ':dni')
                 )
             );
-    
+
             $qb->setParameter('dni', $dni);
         }
-    
+
         return $qb->getQuery()->getResult();
     }
 
 
-//    /**
-//     * @return Pago[] Returns an array of Pago objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('p')
-//            ->andWhere('p.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('p.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+    //    /**
+    //     * @return Pago[] Returns an array of Pago objects
+    //     */
+    //    public function findByExampleField($value): array
+    //    {
+    //        return $this->createQueryBuilder('p')
+    //            ->andWhere('p.exampleField = :val')
+    //            ->setParameter('val', $value)
+    //            ->orderBy('p.id', 'ASC')
+    //            ->setMaxResults(10)
+    //            ->getQuery()
+    //            ->getResult()
+    //        ;
+    //    }
 
-//    public function findOneById($id): ?Pago
-//    {
-//        return $this->createQueryBuilder('p')
-//            ->andWhere('p.id = :id')
-//            ->setParameter('id', $id)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+    //    public function findOneById($id): ?Pago
+    //    {
+    //        return $this->createQueryBuilder('p')
+    //            ->andWhere('p.id = :id')
+    //            ->setParameter('id', $id)
+    //            ->getQuery()
+    //            ->getOneOrNullResult()
+    //        ;
+    //    }
 }

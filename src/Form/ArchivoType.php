@@ -15,7 +15,7 @@ class ArchivoType extends AbstractType
     {
         $builder
             ->add('imageFile', VichFileType::class, [
-                'label'=>false,
+                'label' => false,
                 'required' => false,
                 'attr' => [
                     'required' => true,
@@ -23,8 +23,7 @@ class ArchivoType extends AbstractType
             ])
             ->add('nombre', TextType::class, [
                 'label' => 'Nombre',
-            ])
-        ;
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

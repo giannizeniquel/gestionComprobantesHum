@@ -62,7 +62,7 @@ class PagoDetalle
      */
     private $nombreArchivo;
 
-        /**
+    /**
      * NOTE: This is not a mapped field of entity metadata, just a simple property.
      *
      * @Vich\UploadableField(mapping="archivos", fileNameProperty="imageName", size="imageSize")
@@ -93,7 +93,7 @@ class PagoDetalle
 
     public function __toString()
     {
-        return 'Transaccion: '.$this->numeroTicket;
+        return 'Transaccion: ' . $this->numeroTicket;
     }
 
     public function getId(): ?int
@@ -271,6 +271,4 @@ class PagoDetalle
 
         return $this;
     }
-
-
 }

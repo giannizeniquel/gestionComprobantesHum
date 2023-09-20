@@ -44,8 +44,7 @@ class RegistrationFormType extends AbstractType
                         'maxMessage' => 'La contraseña es demasiado larga, {{ limit }} caracteres como máximo',
                     ]),
                 ],
-            ])
-        ;
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

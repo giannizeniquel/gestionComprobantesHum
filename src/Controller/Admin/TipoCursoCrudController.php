@@ -22,8 +22,7 @@ class TipoCursoCrudController extends AbstractCrudController
     {
         return $crud
             ->setEntityLabelInSingular('Propuesta')
-            ->setEntityLabelInPlural('Propuestas')
-        ;
+            ->setEntityLabelInPlural('Propuestas');
     }
 
     public function configureFields(string $pageName): iterable
@@ -39,7 +38,7 @@ class TipoCursoCrudController extends AbstractCrudController
             // CollectionField::new('cursos')
             //     ->allowDelete()
             //     ->setEntryIsComplex(true)
-                
+
             //     ->setFormTypeOptions([
             //         'by_reference' => false,
             //     ])
@@ -57,6 +56,6 @@ class TipoCursoCrudController extends AbstractCrudController
     public function configureActions(Actions $actions): Actions
     {
         return $actions
-        ->add(Crud::PAGE_INDEX, Action::DETAIL);
+            ->add(Crud::PAGE_INDEX, Action::DETAIL);
     }
 }
