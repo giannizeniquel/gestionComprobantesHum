@@ -131,7 +131,7 @@ class DashboardController extends AbstractDashboardController
                 yield MenuItem::linkToUrl('Humanidades', 'fas fa-university', 'https://hum.unne.edu.ar/')->setLinkTarget('_blank');
             } else {
                 yield MenuItem::section('Menu usuario');
-                yield MenuItem::linkToCrud('Datos Personales', 'fa fa-user', User::class)
+                yield MenuItem::linkToCrud('Mi Perfil', 'fa fa-user', User::class)
                     ->setAction('detail')
                     ->setEntityId($user->getId());
                 yield MenuItem::linktoRoute('Mis Cursos', 'fa fa-chalkboard', 'misCursos');

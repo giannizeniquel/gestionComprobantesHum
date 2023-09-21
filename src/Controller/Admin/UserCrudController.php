@@ -15,6 +15,9 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Response;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Assets;
+use EasyCorp\Bundle\EasyAdminBundle\Field\FormField;
+use Symfony\Component\Console\Helper\Helper;
 
 class UserCrudController extends AbstractCrudController
 {
@@ -48,25 +51,29 @@ class UserCrudController extends AbstractCrudController
 
     public function configureFields(string $pageName): iterable
     {
-        return [
-            IdField::new('id')->hideOnForm(),
-            TextField::new('apellido'),
-            TextField::new('nombre'),
-            TextField::new('dni'),
-            TextField::new('email'),
-            //TextField::new('password', 'Contraseña')->hideOnForm(),
-            TextField::new('telefono', 'Teléfono'),
-            TextField::new('domicilio'),
-            ArrayField::new('roles')->setPermission('ROLE_ADMIN'), //TODO: probar con CollectionField y asocia un type con opciones predefinidas
-            AssociationField::new('cursos', 'Cursos inscriptos')->setPermission('ROLE_ADMIN'),
-        ];
-
-        // if (Crud::PAGE_INDEX === $pageName)
-        // {
-        //      yield IdField::new('id')->hideOnForm();
-        //      yield TextField::new('nombre');
-        //      yield TextField::new('apellido');
-        // }
+        $user = $this->getUser();
+        if($user){
+            if (!in_array('ROLE_ADMIN', $user->getRoles())) {
+                yield FormField::addPanel('Datos Personales')
+                    ->setHelp('Si necesita modificar estos datos ponerse en contacto con un administrador.');
+            }else {
+                yield FormField::addPanel('Datos Personales');
+            }
+            yield IdField::new('id')->hideOnForm();
+            yield TextField::new('apellido');
+            yield TextField::new('nombre');
+            yield TextField::new('dni');
+            yield FormField::addPanel('Contacto');
+            yield TextField::new('email');
+            //yield TextField::new('password', 'Contraseña')->hideOnForm();
+            yield TextField::new('telefono', 'Teléfono');
+            yield TextField::new('domicilio');
+            yield FormField::addPanel('Configuraciones de Administrador')->setPermission('ROLE_ADMIN');
+            yield ArrayField::new('roles')->setPermission('ROLE_ADMIN'); //TODO: probar con CollectionField y asocia un type con opciones predefinidas
+            yield AssociationField::new('cursos', 'Cursos inscriptos')->setPermission('ROLE_ADMIN');
+        }else{
+            return $this->redirectToRoute('app_login');
+        }
     }
 
     public function configureActions(Actions $actions): Actions
@@ -77,6 +84,14 @@ class UserCrudController extends AbstractCrudController
             ->setPermission(Action::DELETE, 'ROLE_ADMIN')
             ->setPermission(Action::INDEX, 'ROLE_ADMIN');
     }
+
+    public function configureAssets(Assets $assets): Assets
+    {
+        return $assets
+            ->addHtmlContentToHead('<script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>')
+            ->addJsFile('/gestionComprobantesHum/public/front/js/user.js');
+    }
+
     /**
      * @Route("/admin/misCursos", name="misCursos")
      */ public function obtenerCursosUsuario(UserRepository $userRepository, EntityManagerInterface $entityManager): Response
