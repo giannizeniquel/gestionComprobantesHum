@@ -16,6 +16,7 @@ use Symfony\Component\HttpFoundation\Response;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Assets;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Filters;
 use EasyCorp\Bundle\EasyAdminBundle\Field\FormField;
 use Symfony\Component\Console\Helper\Helper;
 
@@ -90,6 +91,16 @@ class UserCrudController extends AbstractCrudController
         return $assets
             ->addHtmlContentToHead('<script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>')
             ->addJsFile('/gestionComprobantesHum/public/front/js/user.js');
+    }
+
+    public function configureFilters(Filters $filters): Filters
+    {
+        return $filters
+            ->add('id')
+            ->add('apellido')
+            ->add('dni')
+            ->add('email')   
+        ;
     }
 
     /**
