@@ -83,16 +83,22 @@ class DashboardController extends AbstractDashboardController
 
     public function configureUserMenu(UserInterface $user): UserMenu
     {
-        $role = 'Usuario';
+        $role = '';
 
         if (in_array('ROLE_SUPER_ADMIN', $user->getRoles())) {
             $role = 'Dev';
         } else if (in_array('ROLE_ADMIN', $user->getRoles())) {
-            $role = 'Admin';
+            $role = 'Adm';
         }
 
-        return parent::configureUserMenu($user)
+        if($role != ''){
+            return parent::configureUserMenu($user)
             ->setName($user->getFullname() . ' (' . $role . ')');
+        } else {
+            return parent::configureUserMenu($user)
+            ->setName($user->getFullname());
+        }
+        
     }
 
 
