@@ -110,15 +110,21 @@ class PagoCrudController extends AbstractCrudController
 
     public function configureActions(Actions $actions): Actions
     {
-        if (in_array('ROLE_ADMIN', $this->getUser()->getRoles())) {
-            return $actions
-                ->add(Crud::PAGE_INDEX, Action::DETAIL)
-                ->setPermission(Action::INDEX, 'ROLE_ADMIN')
-                ->setPermission(Action::EDIT, 'ROLE_SUPER_ADMIN');
-        } else {
-            return $actions
-                ->add(Crud::PAGE_INDEX, Action::DETAIL)
-                ->setPermission(Action::INDEX, 'ROLE_ADMIN');
+        $user = $this->getUser();
+
+        if($user){
+            if (in_array('ROLE_ADMIN', $user->getRoles())) {
+                return $actions
+                    ->add(Crud::PAGE_INDEX, Action::DETAIL)
+                    ->setPermission(Action::INDEX, 'ROLE_ADMIN')
+                    ->setPermission(Action::EDIT, 'ROLE_SUPER_ADMIN');
+            } else {
+                return $actions
+                    ->add(Crud::PAGE_INDEX, Action::DETAIL)
+                    ->setPermission(Action::INDEX, 'ROLE_ADMIN');
+            }
+        }else{
+            return $this->redirectToRoute('app_login');
         }
     }
 

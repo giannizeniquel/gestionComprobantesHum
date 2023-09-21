@@ -98,44 +98,48 @@ class DashboardController extends AbstractDashboardController
 
     public function configureMenuItems(): iterable
     {
+        $user = $this->getUser();
         yield MenuItem::linkToDashboard('Inicio', 'fa fa-home');
+        if($user){
+            if (in_array('ROLE_ADMIN', $user->getRoles()) || in_array('ROLE_SUPER_ADMIN', $user->getRoles())) {
+                yield MenuItem::linkToCrud('Usuarios', 'fa fa-users', User::class);
+                yield MenuItem::linktoRoute('Cargar usuarios', 'fas fa-upload', 'xlsx');
 
-        if (in_array('ROLE_ADMIN', $this->getUser()->getRoles()) || in_array('ROLE_SUPER_ADMIN', $this->getUser()->getRoles())) {
-            yield MenuItem::linkToCrud('Usuarios', 'fa fa-users', User::class);
-            yield MenuItem::linktoRoute('Cargar usuarios', 'fas fa-upload', 'xlsx');
+                yield MenuItem::linkToCrud('Cursos', 'fa fa-chalkboard', Curso::class);
+                yield MenuItem::linkToCrud('Propuestas', 'fa fa-tags', TipoCurso::class);
+                yield MenuItem::linkToCrud('Ofertas', 'fa fa-tag', Carrera::class);
 
-            yield MenuItem::linkToCrud('Cursos', 'fa fa-chalkboard', Curso::class);
-            yield MenuItem::linkToCrud('Propuestas', 'fa fa-tags', TipoCurso::class);
-            yield MenuItem::linkToCrud('Ofertas', 'fa fa-tag', Carrera::class);
+                // yield MenuItem::linkToCrud('Cuotas', 'fa fa-shapes', Cuota::class);
+                yield MenuItem::linkToCrud('Pagos', 'fa fa-file-text-o', Pago::class);
+                yield MenuItem::section('');
+                //yield MenuItem::linktoRoute('Lista pagos general', 'fas fa-file-excel', 'lista_pago');
+                yield MenuItem::linktoRoute('Agregar un usuario', 'fa fa-user', 'app_register');
+                //  yield MenuItem::linkToCrud('Pagos Detalles', 'fa fa-shapes', PagoDetalle::class);
 
-            // yield MenuItem::linkToCrud('Cuotas', 'fa fa-shapes', Cuota::class);
-            yield MenuItem::linkToCrud('Pagos', 'fa fa-file-text-o', Pago::class);
-            yield MenuItem::section('');
-            //yield MenuItem::linktoRoute('Lista pagos general', 'fas fa-file-excel', 'lista_pago');
-            yield MenuItem::linktoRoute('Agregar un usuario', 'fa fa-user', 'app_register');
-            //  yield MenuItem::linkToCrud('Pagos Detalles', 'fa fa-shapes', PagoDetalle::class);
+                yield MenuItem::section('Seguridad');
 
-            yield MenuItem::section('Seguridad');
+                yield MenuItem::linktoRoute('Cambiar contraseña', 'fas fa-key', 'change_password');
 
-            yield MenuItem::linktoRoute('Cambiar contraseña', 'fas fa-key', 'change_password');
+                yield MenuItem::section('Links');
+                yield MenuItem::linkToUrl('Guia de uso', 'fab fa-youtube', 'https://symfony.com/doc/current/bundles/EasyAdminBundle/index.html')->setLinkTarget('_blank');
+                yield MenuItem::linkToUrl('Humanidades', 'fas fa-university', 'https://hum.unne.edu.ar/')->setLinkTarget('_blank');
+            } else {
+                yield MenuItem::section('Menu usuario');
+                yield MenuItem::linkToCrud('Datos Personales', 'fa fa-user', User::class)
+                    ->setAction('detail')
+                    ->setEntityId($user->getId());
+                yield MenuItem::linktoRoute('Mis Cursos', 'fa fa-chalkboard', 'misCursos');
+                yield MenuItem::linktoRoute('Mis Pagos', 'fa fa-file-text-o', 'misPagos');
 
-            yield MenuItem::section('Links');
-            yield MenuItem::linkToUrl('Guia de uso', 'fab fa-youtube', 'https://symfony.com/doc/current/bundles/EasyAdminBundle/index.html')->setLinkTarget('_blank');
-            yield MenuItem::linkToUrl('Humanidades', 'fas fa-university', 'https://hum.unne.edu.ar/')->setLinkTarget('_blank');
+                yield MenuItem::section('Seguridad');
+                yield MenuItem::linktoRoute('Cambiar contraseña', 'fas fa-key', 'change_password');
+
+                yield MenuItem::section('Recursos');
+                yield MenuItem::linkToUrl('Guia de uso', 'fab fa-youtube', 'https://symfony.com/doc/current/bundles/EasyAdminBundle/index.html')->setLinkTarget('_blank');
+                yield MenuItem::linkToUrl('Humanidades', 'fas fa-university', 'https://hum.unne.edu.ar/')->setLinkTarget('_blank');
+            }
         } else {
-            yield MenuItem::section('Menu usuario');
-            yield MenuItem::linkToCrud('Datos Personales', 'fa fa-user', User::class)
-                ->setAction('detail')
-                ->setEntityId($this->getUser()->getId());
-            yield MenuItem::linktoRoute('Mis Cursos', 'fa fa-chalkboard', 'misCursos');
-            yield MenuItem::linktoRoute('Mis Pagos', 'fa fa-file-text-o', 'misPagos');
-
-            yield MenuItem::section('Seguridad');
-            yield MenuItem::linktoRoute('Cambiar contraseña', 'fas fa-key', 'change_password');
-
-            yield MenuItem::section('Recursos');
-            yield MenuItem::linkToUrl('Guia de uso', 'fab fa-youtube', 'https://symfony.com/doc/current/bundles/EasyAdminBundle/index.html')->setLinkTarget('_blank');
-            yield MenuItem::linkToUrl('Humanidades', 'fas fa-university', 'https://hum.unne.edu.ar/')->setLinkTarget('_blank');
+            return $this->redirectToRoute('app_login');
         }
     }
 }
