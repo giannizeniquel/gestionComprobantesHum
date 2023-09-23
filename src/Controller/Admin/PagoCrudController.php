@@ -32,6 +32,7 @@ use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class PagoCrudController extends AbstractCrudController
 {
+    const TRANSLATION_DOMAIN = 'admin';
     private $adminUrlGenerator;
     public function __construct(AdminUrlGenerator $adminUrlGenerator)
     {
@@ -259,6 +260,7 @@ class PagoCrudController extends AbstractCrudController
             return $this->render('reportes/reporte.html.twig', [
                 'pagos' => $pagos,
                 'buscar' => $buscarFiltroForm->createView(),
+                'ea' => $request->query->all()
             ]);
         }
     }

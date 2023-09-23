@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+	<head>
+        <meta charset="UTF-8">
+
+		<!-- CSS de Bootstrap -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+		<!-- JavaScript de Bootstrap (requiere Popper.js) -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"> </script>
+
+		<link rel="icon" href="{{ asset('unne.png') }}" type="image/x-icon"/>
+
+		{% block javascripts %}
+			<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+			{{ encore_entry_script_tags('app') }}
+		{% endblock %}
+
+        {% block stylesheets %}
+			{{ encore_entry_link_tags('app') }}
+
+			<style>
+				.w-90 {
+					width: 90%;
+					margin: 0 auto; /* Para centrar el contenido horizontalmente */
+				}
+				#imprimir,
+				#excel {
+					margin-bottom: 20px; /* Ajusta el valor según tus necesidades */
+				}
+			</style>
+			<style>
+				.container {
+					width: 90%;
+					margin: 0 auto; /* Para centrar el contenido horizontalmente */
+				}
+			</style>
+		{% endblock %}
+	</head>
+	<body>
+		<style>
+			#container {
+				align-items: center;
+				display: flex;
+				flex-direction: column;
+				margin: 0 auto;
+				max-width: 28rem;
+				width: 94%;
+			}
+
+			#container-banner {
+				justify-content: space-around;
+			}
+
+			.banner {
+				background-color: #188191 !important;
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				justify-content: space-around;
+			}
+			.h2 {
+                text-align: center;
+                font-family: sans-serif;
+            }
+		</style>
+		<div id="container-banner">
+			<div class="banner">
+				<div class="mt-2">
+					<img class="image" src="https://hum.unne.edu.ar/hum_inicio/imagenes/hum_logo.png" width="185" height="76">
+				</div>
+				<div class="mt-2 mb-3">
+					<img class="image" src="https://hum.unne.edu.ar/hum_inicio/imagenes/logo_60_2.png" width="293" height="43">
+				</div>
+			</div>
+		</div>
+        <hr>
+        <div class="h2">
+            <h2><strong>Generar reportes</strong></h2>
+        </div>
+        <hr>
+		<br>
+		{% block body %}
+
+		{% endblock %}
+	</body>
+</html>

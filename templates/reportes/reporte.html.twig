@@ -1,114 +1,122 @@
-{% extends 'base.html.twig' %}
- {% block title %}Reporte pagos{% endblock %}
+{% extends 'baseReportes.html.twig' %}
+{% block title %}Reporte pagos
+{% endblock %}
 
-    {% block stylesheets %}
-    {{parent()}}
-        {{ encore_entry_link_tags('app') }}
-   
-    {% endblock %}
+{% block stylesheets %}
+	{{parent()}}
+	{{ encore_entry_link_tags('app') }}
+
+{% endblock %}
 
 {% block body %}
-<div class="w-90 mt-3">
-  <p></p>
-  <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="collapse" data-bs-target="#demo"> Realizar búsquedas</button> 
-  
-  <div id="demo" class="collapse">
-    <div >
-      <div class="col">
-        {{ form_start(buscar) }}
-        {{ form_row(buscar.dni, {'label': 'DNI'}) }}
-      </div>
-      <div>
-        {{ form_row(buscar.startDate, {'label': 'Fecha de inicio'}) }}
-        {{ form_row(buscar.endDate, {'label': 'Fecha de fin'}) }}
-        {{ form_widget(buscar._token) }}
-        {{ form_end(buscar) }}
+	<div class="w-90 mt-3">
+		<button type="button" class="btn btn-primary btn-sm" data-bs-toggle="collapse" data-bs-target="#demo">
+			Filtrar / Buscar
+        </button>
+		<div id="demo" class="collapse bg-light rounded-3 mt-3">
+			<div>
+				<div class="col">
+					{{ form_start(buscar) }}
+					{{ form_row(buscar.dni, {'label': 'DNI'}) }}
+				</div>
+				<div>
+					{{ form_row(buscar.startDate, {'label': 'Fecha de inicio'}) }}
+					{{ form_row(buscar.endDate, {'label': 'Fecha de fin'}) }}
+					{{ form_widget(buscar._token) }}
+					{{ form_end(buscar) }}
+                    
+                    {#a class="btn btn-light btn" href={{ path('lista_pago') }}>limpiar</a>#}
+				</div>
 
-        {#a class="btn btn-light btn" href={{ path('lista_pago') }}>limpiar</a>#}
-      </div>
-      
+			</div>
+		</div>
+		<div class="w-90">
+			<div class="row">
+				<div class="col-md-5 offset-md-10">
+
+					<button id="excel" type="button" class="btn btn-outline-secondary  btn-sm" alt="Exportar a Excel">
+						<span class="far fa-file-excel"></span>
+						Excel
+					</button>
+					<button id="imprimir" class="btn btn-outline-secondary  btn-sm" alt="Imprimir">
+						<span class="far fa-file-pdf"></span>
+						Imprimir
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	{# tabla #}
+	<div class="w-90 card" >
+		<table class="table responsive sm">
+			<thead class="table-light">
+				<tr>
+					<th>Pago</th>
+					<th>Estudiante</th>
+					<th>Curso</th>
+					<th>Monto Total</th>
+					<th>Monto Cuota</th>
+					<th>Números Ticket</th>
+					<th>Ticket</th>
+					<th>Fecha</th>
+					<th>Observaciones</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for pago in pagos %}
+					{% for detalle in pago.pagoDetalles %}
+						<tr>
+							<td>{{ pago.id }}</td>
+							<td>{{ pago.user.dni }}:
+								{{ pago.user.apellido }}</td>
+							<td>{{ pago.curso.id }}:
+								{{ pago.curso.nombre }}</td>
+							<td>{{ pago.monto }}</td>
+							<td>{{ detalle.montoCuotas }}</td>
+							<td>{{ detalle.numeroTicket }}</td>
+							<td>
+								{% if detalle.imageName is not null %}
+									<a href="{{ asset('archivos/comprobantes/' ~ detalle.imageName) }}" target="_blank">Ver archivo</a>
+								{% else %}
+									No se ha cargado ningún archivo.
+								{% endif %}
+							</td>
+							<td>{{ pago.createdAt |date('d-m-Y')}}</td>
+							<td>{{ detalle.observacion ?: 'N/A'}}</td>
+						</tr>
+					{% endfor %}
+				{% endfor %}
+			</tbody>
+		</table>
+	</div>
+    <div class="w-90 mt-3">
+        <a type="button" class="btn btn-light btn-sm" href="{{ path('admin') }}">
+            Volver
+        </a>
     </div>
-  </div>
-  <div class="w-90">
-    <div class="row">
-             <div class="col-md-5 offset-md-10">
-        
-               <button id="excel"  type="button" class="btn btn-outline-secondary  btn-sm" alt="Exportar a Excel">
-                    <span class="far fa-file-excel"></span> Excel
-                </button>
-               <button id="imprimir"  class="btn btn-outline-secondary  btn-sm"  alt="Imprimir">
-                    <span class="far fa-file-pdf"></span> Imprimir
-                </button>
-         </div>
-    </div>
-</div>
-</div>
-    
-{# tabla #}
-<div class="w-90">
-           <table class="table responsive sm">
-              <thead class="table-light">
-                <tr>
-                    <th>Pago</th>
-                    <th>Estudiante</th>
-                    <th>Curso</th>
-                    <th>Monto Total</th>
-                    <th>Monto Cuota</th>
-                    <th>Números Ticket</th>
-                    <th>Ticket</th>
-                    <th>Fecha</th>
-                    <th>Observaciones</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for pago in pagos %}
-                    {% for detalle in pago.pagoDetalles %}
-                        <tr>
-                            <td>{{ pago.id }}</td>
-                            <td>{{ pago.user.dni }}: {{ pago.user.apellido }}</td>
-                            <td>{{ pago.curso.id }}: {{ pago.curso.nombre }}</td>
-                            <td>{{ pago.monto }}</td>
-                            <td>{{ detalle.montoCuotas }}</td>
-                            <td>{{ detalle.numeroTicket }}</td>
-                            <td>{% if detalle.imageName is not null %}
-                        <a href="{{ asset('archivos/comprobantes/' ~ detalle.imageName) }}" target="_blank">Ver archivo</a>
-                    {% else %}
-                        No se ha cargado ningún archivo.
-                    {% endif %}</td>
-                            <td>{{ pago.createdAt |date('d-m-Y')}}</td>
-                            <td>{{ detalle.observacion ?: 'N/A'}}</td>
-                        </tr>
-                    {% endfor %}
-                {% endfor %}
-            </tbody>
-        </table>
-        
- 
-</div>
-
-
- {% set path_excel = 'lista_pago' %}
+	{% set path_excel = 'lista_pago' %}
 {% endblock %}
 
 
 {% block javascripts %}
-{{ parent() }}
+	{{ parent() }}
 
-<script>
-    $(document).ready(function(){
-        $('#imprimir').on('click', function(e){
-            e.preventDefault();
-            window.print();
-        });
+	<script>
+		$(document).ready(function () {
+            $('#imprimir').on('click', function (e) {
+                e.preventDefault();
+                window.print();
+            });
 
-        $('#excel').on('click', function(e) {
-            e.preventDefault();
-            var form = $("form[name='buscar_fecha']"); // Cambiar a "buscar" si ese es el nombre correcto del formulario
-            var actionOriginal = form.attr('action');
-            form.attr('action', actionOriginal + '.xlsx');
-            form.submit();
-            form.attr('action', actionOriginal); // Restablecer la acción original del formulario
-        });
-    });
-</script>
+            $('#excel').on('click', function (e) {
+                e.preventDefault();
+                var form = $("form[name='buscar_fecha']"); // Cambiar a "buscar" si ese es el nombre correcto del formulario
+                var actionOriginal = form.attr('action');
+                form.attr('action', actionOriginal + '.xlsx');
+                form.submit();
+                form.attr('action', actionOriginal); // Restablecer la acción original del formulario
+            });
+            });
+	</script>
 {% endblock %}
