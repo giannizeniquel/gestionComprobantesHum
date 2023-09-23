@@ -196,29 +196,25 @@ class PagoCrudController extends AbstractCrudController
     }
 
 
-    /**
+       /**
      * @Route("/lista-pago.{_format}", name="lista_pago", defaults={"_format"="html"}, requirements={"_format"="html|xlsx"})
      * @throws \Exception
      */
     public function indexAllPagos(Request $request, PagoRepository $pagoRepository): Response
-    {
+    { 
         $buscarFiltroForm = $this->createForm(BuscarFechaType::class, null, [
             'action' => $this->generateUrl('lista_pago'),
         ]);
         $buscarFiltroForm->handleRequest($request);
 
-        // Verificar si el formulario fue enviado y es válido antes de obtener los datos del filtro
         if ($buscarFiltroForm->isSubmitted() && $buscarFiltroForm->isValid()) {
             $filtro = $buscarFiltroForm->getData();
 
-            // Asegurarse de que $filtro no sea nulo
-            if ($filtro !== null) {
+                if ($filtro !== null) {
                 $pagos = $pagoRepository
-                    ->findAllPagosPorDniFecha(
-                        $filtro['dni'],
-                        $filtro['startDate'],
-                        $filtro['endDate']
-                    );
+                    ->findAllPagosPorDniFecha($filtro['dni'], 
+                                            $filtro['startDate'], 
+                                            $filtro['endDate']);      
             } else {
                 // Si $filtro es nulo, puedes manejarlo de acuerdo a tus necesidades.
                 // Por ejemplo, puedes establecer $datos en un valor por defecto.
@@ -229,42 +225,37 @@ class PagoCrudController extends AbstractCrudController
             $pagos = $pagoRepository->findAllPagos();
             // O cualquier otro valor por defecto que desees
         }
-        if ($request->getRequestFormat() == 'xlsx') {
-            // if ($pagos === null) {
-            //     // Manejar el caso en que $pagos sea nulo, por ejemplo, definiendo un valor predeterminado.
-            //     $pagos = []; // O cualquier otro valor predeterminado
-            // }
 
+        if ($request->getRequestFormat() == 'xlsx') {
             $datosExcel = array(
                 'encabezado' => array(
-                    'titulo' => 'Reporte pagos',
-                    // 'filtro' => array(
-                    //     'dni' => isset($dni['dni']) ? $dni['dni'] : 'ValorPredeterminado',
-                    //     'Fecha Desde' => ($filtro['startDate'] !== null) ? $filtro['startDate']->format('d-M-Y') : 'N/A',
-                    //     'Fecha Hasta' => ($filtro['endDate'] !== null) ? $filtro['endDate']->format('d-M-Y') : 'N/A',
-                    // ),
+                    'titulo' => 'REPORTE DE PAGOS',
+                    'filtro' => array(
+                        'DNI' => ($filtro !== null) ? $filtro['dni'] : 'N/A',
+                        'Fecha Desde' => ($filtro !== null && $filtro['startDate'] !== null) ? $filtro['startDate']->format('d-M-Y') : 'N/A',
+                        'Fecha Hasta' => ($filtro !== null && $filtro['endDate'] !== null) ? $filtro['endDate']->format('d-M-Y') : 'N/A',
+                    ),
                 ),
                 'columnas' => array(
+                    'ID',
                     'Pago',
                     'Estudiante',
                     'Curso',
                     'Monto Total',
                     'Monto Cuota',
                     'Números Ticket',
-                    'Ticket',
                     'Fecha',
+                    'CuotaDescripcion',
+                    'Observaciones',
                 ),
-                'Observaciones',
-                'pagos' => $pagos, // Ahora asegurado de que $pagos no es nulo
+                'pagos' => $pagos, 
             );
-            // dd($pagos);
 
             $response = $this->renderExcel($datosExcel);
-            $response->headers->set('Content-Disposition', 'attachment; filename="nombre_del_archivo.xlsx"');
+            $response->headers->set('Content-Disposition', 'attachment; filename="reporte_pagos.xlsx"');
 
             return $response;
         } else {
-
             return $this->render('reportes/reporte.html.twig', [
                 'pagos' => $pagos,
                 'buscar' => $buscarFiltroForm->createView(),
@@ -272,25 +263,23 @@ class PagoCrudController extends AbstractCrudController
         }
     }
 
-
     private function renderExcel($pagos)
     {
-        // Crea un nuevo objeto Spreadsheet 
         $spreadsheet = new Spreadsheet();
 
         // Establecer propiedades
-        $this->ponerPropiedades($spreadsheet, 'Título del libro');
+        $this->ponerPropiedades($spreadsheet, 'Gestión Pagos Estudiantes');
 
-        // // Genera el contenido
-        // $this->generarEncabezadoExcel($spreadsheet, $pagos['encabezado']);
+        // Genera el contenido
+        $this->generarEncabezadoExcel($spreadsheet, $pagos['encabezado']);
         $this->generarEncabezadoColumnas($spreadsheet, $pagos['columnas']);
         $this->generarDatos($spreadsheet, $pagos['pagos']);
-        // $this->formatearExcel($spreadsheet, $pagos['encabezado']['titulo']);
 
         $response = $this->generarExcelResponse($spreadsheet);
 
         return $response;
     }
+
 
     private function ponerPropiedades($spreadsheet, $titulo)
     {
@@ -304,19 +293,19 @@ class PagoCrudController extends AbstractCrudController
             ->setCategory('');
     }
 
-    private function generarEncabezadoColumnas($spreadsheet, $encabezadoColumnas, $fila = 5)
+    private function generarEncabezadoColumnas($spreadsheet, $encabezadoColumnas, $fila = 3)
     {
         $columna = 0;
         foreach ($encabezadoColumnas as $titulo) {
             $spreadsheet->getActiveSheet()->setCellValueByColumnAndRow($columna++, $fila, $titulo);
         }
-        $rango = 'A' . $fila . ':' . chr(65 + --$columna) . $fila;
+        $rango = 'A'.$fila.':'.chr(65 + --$columna).$fila;
 
         $spreadsheet->getActiveSheet()->getStyle($rango)->applyFromArray($this->estiloTitulo());
         $spreadsheet->getActiveSheet()->getStyle($rango)->applyFromArray([
             'font' => [
                 'bold' => true,
-                'color' => ['rgb' => '00FFFF'],
+                'color' => ['rgb' => '006D6D'],
             ],
             'alignment' => [
                 'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
@@ -330,52 +319,65 @@ class PagoCrudController extends AbstractCrudController
         $styleArray = [
             'font' => [
                 'name' => 'Verdana',
-                'bold' => true,
+             //   'bold' => true,
                 'italic' => false,
                 'strike' => false,
-                //   'size' => 16,
-                // 'color' => ['rgb' => 'FFFFFF'],
+            //   'size' => 16,
+            // 'color' => ['rgb' => 'FFFFFF'],
             ],
-            // 'fill' => [
-            //     'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
-            //     'startColor' => ['argb' => 'FF48D1CC'],
-            // ],
-            // 'borders' => [
-            //     'allBorders' => [
-            //         'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
-            //     ],
-            // ],
-            // 'alignment' => [
-            //     'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
-            //     'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER,
-            //     'textRotation' => 0,
-            //     'wrapText' => true,
-            // ],
         ];
 
         return $styleArray;
     }
 
+    private function generarEncabezadoExcel($spreadsheet, $encabezado)
+    {
+        // Establece el título del encabezado en la celda A1
+        $spreadsheet->getActiveSheet()->setCellValue('A1', $encabezado['titulo']);
+        
+        // Inicializa la columna para los filtros
+        $columna = 0;
+        
+        // Itera sobre los filtros y valores
+        foreach ($encabezado['filtro'] as $filtro => $valor) {
+            // Combina el filtro y el valor, en la fila 3, empezando en la columna actual
+            $spreadsheet->getActiveSheet()->setCellValueByColumnAndRow($columna, 3, $filtro . ': ' . $valor);
+            
+            // Aumenta la columna para el próximo filtro
+            $columna++;
+        }
+    }
+
     private function generarDatos($spreadsheet, $pagos)
-    {  // dd($pagos);
-        $fila = 6;
+    {
+        //dd($pagos);
+        $fila = 4;
         foreach ($pagos as $pago) {
-            $columna = 0;
-
-            // Acceder a las propiedades del objeto Pago
-            $spreadsheet->getActiveSheet()->setCellValueByColumnAndRow($columna++, $fila, $pago->getId());
-            $spreadsheet->getActiveSheet()->setCellValueByColumnAndRow($columna++, $fila, $pago->getUser());
-            $spreadsheet->getActiveSheet()->setCellValueByColumnAndRow($columna++, $fila, $pago->getCurso());
-            $spreadsheet->getActiveSheet()->setCellValueByColumnAndRow($columna++, $fila, $pago->getMonto());
+        
             foreach ($pago->getPagoDetalles() as $detalle) {
-                $spreadsheet->getActiveSheet()->setCellValueByColumnAndRow($columna++, $fila, $detalle->getNumeroTicket());
-                $spreadsheet->getActiveSheet()->setCellValueByColumnAndRow($columna++, $fila, $detalle->getFechaTicket());
-                $spreadsheet->getActiveSheet()->setCellValueByColumnAndRow($columna++, $fila, $detalle->getMontoCuotas());
+                $spreadsheet->getActiveSheet()->setCellValueByColumnAndRow(1, $fila, $pago->getId());
+                $spreadsheet->getActiveSheet()->setCellValueByColumnAndRow(2, $fila, $pago->getUser()->getDni());
+                $spreadsheet->getActiveSheet()->setCellValueByColumnAndRow(3, $fila, $pago->getCurso()->getNombre());
+                $spreadsheet->getActiveSheet()->setCellValueByColumnAndRow(4, $fila, $pago->getMonto());
+                
+                // Llena las celdas con los datos del detalle de pago actual
+                $montoDetalle = $detalle->getMontoTicket();
+                $numeroTicket = $detalle->getNumeroTicket();
+                $fechaTicket = $detalle->getFechaTicket();
+                $observaciones = $detalle->getObservacion();
+
+                // Llena las celdas con los datos de Detalle de Pago
+                $spreadsheet->getActiveSheet()->setCellValueByColumnAndRow(5, $fila, $montoDetalle);
+                $spreadsheet->getActiveSheet()->setCellValueByColumnAndRow(6, $fila, $numeroTicket);
+                $spreadsheet->getActiveSheet()->setCellValueByColumnAndRow(7, $fila, $fechaTicket);
+                foreach ($detalle->getCuotas() as $cuota) {
+                    $descripcion = $cuota->getNumeroCuota();
+                       $spreadsheet->getActiveSheet()->setCellValueByColumnAndRow(8, $fila, $descripcion);
+                  }
+                $spreadsheet->getActiveSheet()->setCellValueByColumnAndRow(9, $fila, $observaciones);
+
+                ++$fila;
             }
-
-            $spreadsheet->getActiveSheet()->setCellValueByColumnAndRow($columna++, $fila, $pago->getUpdatedAt());
-
-            ++$fila;
         }
     }
 
