@@ -60,7 +60,7 @@ class UserCrudController extends AbstractCrudController
             }else {
                 yield FormField::addPanel('Datos Personales');
             }
-            yield IdField::new('id')->hideOnForm();
+            yield IdField::new('id', 'ID Usuario')->hideOnForm();
             yield TextField::new('apellido');
             yield TextField::new('nombre');
             yield TextField::new('dni');
