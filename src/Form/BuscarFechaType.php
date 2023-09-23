@@ -56,7 +56,7 @@ class BuscarFechaType extends AbstractType
 
             ->add('submit', SubmitType::class, [
                 'label' => 'Buscar', // Cambia el texto del botón si es necesario
-                'attr' => ['class' => 'btn btn-light'], // Agrega clases CSS si es necesario
+                'attr' => ['class' => 'btn btn-light', 'style' => 'font-size: 13px; padding: 5px 10px;'], 
             ]);
     }
 

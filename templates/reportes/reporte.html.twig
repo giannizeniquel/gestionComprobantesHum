@@ -9,23 +9,22 @@
 {% endblock %}
 
 {% block body %}
-	<div class="w-90 mt-3">
-		<button type="button" class="btn btn-primary btn-sm" data-bs-toggle="collapse" data-bs-target="#demo">
-			Filtrar / Buscar
-        </button>
+	<div class="w-90">
+	<button type="button" class="btn btn-sm" style="background-color: #5368D5; color: white;" data-bs-toggle="collapse" data-bs-target="#demo">
+    Filtrar / Buscar
+</button>
 		<div id="demo" class="collapse bg-light rounded-3 mt-3">
 			<div>
 				<div class="col">
 					{{ form_start(buscar) }}
-					{{ form_row(buscar.dni, {'label': 'DNI'}) }}
+					{{ form_row(buscar.dni, {'label': 'DNI','attr': {'style': 'font-size: 12px;'}}) }}
 				</div>
 				<div>
-					{{ form_row(buscar.startDate, {'label': 'Fecha de inicio'}) }}
-					{{ form_row(buscar.endDate, {'label': 'Fecha de fin'}) }}
+					{{ form_row(buscar.startDate, {'label': 'Fecha de inicio','attr': {'style': 'font-size: 12px;'}}) }}
+					{{ form_row(buscar.endDate, {'label': 'Fecha de fin','attr': {'style': 'font-size: 12px;'}}) }}
 					{{ form_widget(buscar._token) }}
 					{{ form_end(buscar) }}
-                    
-                    {#a class="btn btn-light btn" href={{ path('lista_pago') }}>limpiar</a>#}
+
 				</div>
 
 			</div>
@@ -91,7 +90,7 @@
 		</table>
 	</div>
     <div class="w-90 mt-3">
-        <a type="button" class="btn btn-light btn-sm" href="{{ path('admin') }}">
+        <a type="button" class="btn btn-light btn-sm" style="background-color: #6174D1; color: white;" href="{{ path('admin') }}">
             Volver
         </a>
     </div>

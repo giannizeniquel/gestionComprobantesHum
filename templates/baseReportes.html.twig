@@ -65,24 +65,55 @@
                 text-align: center;
                 font-family: sans-serif;
             }
+
+			.w-40 {
+                width: 40%;
+                margin-left: 70px;
+                float: left; /* Alinea el elemento a la izquierda */
+            }
+      
+            #imprimir, #excel {
+            margin-bottom: 20px; 
+            }
+      
+            .container {
+                width: 90%;
+                margin: 0 auto; 
+            }
+
+            .table {
+            margin-bottom: 0; /* Elimina el margen inferior */
+            }
+
+            .table th,
+            .table td {
+            padding: 0.5rem; /* Reduce el espaciado dentro de las celdas */
+            }
+
+            body {
+            font-size: 13px; 
+            }
+
+            .small-input {
+            font-size: 12px; 
+            }
 		</style>
 		<div id="container-banner">
 			<div class="banner">
 				<div class="mt-2">
-					<img class="image" src="https://hum.unne.edu.ar/hum_inicio/imagenes/hum_logo.png" width="185" height="76">
+					<img class="image" src="https://hum.unne.edu.ar/hum_inicio/imagenes/hum_logo.png" width="185" height="70">
 				</div>
 				<div class="mt-2 mb-3">
-					<img class="image" src="https://hum.unne.edu.ar/hum_inicio/imagenes/logo_60_2.png" width="293" height="43">
+					<img class="image" src="https://hum.unne.edu.ar/hum_inicio/imagenes/logo_60_2.png" width="293" height="40">
 				</div>
 			</div>
 		</div>
-        <hr>
-        <div class="h2">
-            <h2><strong>Generar reportes</strong></h2>
+   
+		<div class="h2" style="height: 60px; background-color: #f8fafc; margin-top: 0px; margin-bottom: 10px; padding-top: 10px; padding-bottom: 10px;">
+         <strong>Generar reportes</strong>
         </div>
-        <hr>
-		<br>
-		{% block body %}
+		
+    	{% block body %}
 
 		{% endblock %}
 	</body>
