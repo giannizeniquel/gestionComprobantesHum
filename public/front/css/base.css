@@ -1,0 +1,58 @@
+/* start gif loader styles */
+/* por ahora usamos libreria en vez de estructura de loader personalizado */
+.loading-background {
+    width: 50%;
+    height: 50%;
+    position: absolute;
+    z-index: 9999;
+}
+
+.loading{
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    position: fixed;
+    /* Ponemos el valor de left, bottom, right y top en 0 */
+    left: 0;
+    bottom: 0; 
+    right: 0; 
+    top: 0; 
+    margin: auto; /* Centramos vertical y horizontalmente */
+}
+
+.loading img {
+    border-radius: 50%;
+    width: 80px;
+    height: 80px;
+}
+/* end  */
+
+/* start home styles */
+#container {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    margin: 0 auto;
+    max-width: 28rem;
+    width: 94%;
+}
+
+#container-banner {
+    justify-content: space-around;
+}
+
+.banner {
+    background-color: #188191 !important;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+}
+/* end */
+
+footer {
+    position: absolute;
+    bottom: 0;
+    height: 5%;
+    width: 85%;
+}

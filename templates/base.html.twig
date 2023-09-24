@@ -1,15 +1,32 @@
 {% extends '@EasyAdmin/page/content.html.twig' %}
 
+{% block head_stylesheets %}
+	{{parent()}}
+	<link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.css" />
+	<link rel="stylesheet" href="{{ asset('front/css/base.css') }}">
+{% endblock head_stylesheets %}
+
+{% block head_javascript %}
+	{{parent()}}
+	<script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.js"></script>
+	<script src="https://cdn.jsdelivr.net/jquery.queryloader2/3.2.2/jquery.queryloader2.min.js"></script>
+	<script src="{{asset('front/js/base.js')}}" type="text/javascript"></script>
+	
+{% endblock head_javascript %}
+
+{# TODO probar loader con gif en vez de libreria queryloader2 o ver si puedo insertar gif en libreria #}
+{# {% block content %}
+	<div class="loading-background">
+		<div class="loading">
+			<img src="{{ asset('GCP_blanco2.gif') }}" alt="loading" />
+		</div>
+	</div>
+	{{parent()}}
+{% endblock content %} #}
+
 {% block content_footer_wrapper %}
     {% block content_footer %}
-        <style>
-            footer {
-                position: absolute;
-                bottom: 0;
-                height: 5%;
-                width: 85%;
-            }
-        </style>
 		<footer class="d-flex flex-wrap justify-content-between align-items-center border-top">
 			<p class="col-md-4 mb-0 text-muted">© 2021 Company, Inc</p>
 			<a href="/" class="col-md-4 d-flex align-items-center justify-content-center mb-3 mb-md-0 me-md-auto link-dark text-decoration-none">
