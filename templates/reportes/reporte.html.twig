@@ -63,7 +63,7 @@
 				</tr>
 			</thead>
 			<tbody>
-				{% for pago in pagos %}
+				{% for pago in pagination %}
 					{% for detalle in pago.pagoDetalles %}
 						<tr>
 							<td>{{ pago.id }}</td>
@@ -88,13 +88,26 @@
 				{% endfor %}
 			</tbody>
 		</table>
+
 	</div>
-    <div class="w-90 mt-3">
-        <a type="button" class="btn btn-light btn-sm" style="background-color: #6174D1; color: white;" href="{{ path('admin') }}">
-            Volver
-        </a>
-    </div>
+  <div class="w-90 mt-3">
+      <div class="d-flex justify-content-between align-items-center">
+          <a href="{{ path('admin') }}" class="btn btn-light btn-sm" style="background-color: #6174D1; color: white;">
+              Volver
+          </a>
+
+          <ul class="pagination justify-content-end">
+              {{ knp_pagination_render(pagination) }}
+          </ul>
+      </div>
+  </div>
+
+  </div>
+
+  
 	{% set path_excel = 'lista_pago' %}
+
+
 {% endblock %}
 
 

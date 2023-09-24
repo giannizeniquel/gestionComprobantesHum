@@ -29,10 +29,10 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\FormField;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Knp\Component\Pager\PaginatorInterface;
 
 class PagoCrudController extends AbstractCrudController
 {
-    const TRANSLATION_DOMAIN = 'admin';
     private $adminUrlGenerator;
     public function __construct(AdminUrlGenerator $adminUrlGenerator)
     {
@@ -197,11 +197,11 @@ class PagoCrudController extends AbstractCrudController
     }
 
 
-       /**
+    /**
      * @Route("/lista-pago.{_format}", name="lista_pago", defaults={"_format"="html"}, requirements={"_format"="html|xlsx"})
      * @throws \Exception
      */
-    public function indexAllPagos(Request $request, PagoRepository $pagoRepository): Response
+    public function indexAllPagos(Request $request, PagoRepository $pagoRepository,PaginatorInterface $paginator): Response
     { 
         $buscarFiltroForm = $this->createForm(BuscarFechaType::class, null, [
             'action' => $this->generateUrl('lista_pago'),
@@ -210,12 +210,17 @@ class PagoCrudController extends AbstractCrudController
 
         if ($buscarFiltroForm->isSubmitted() && $buscarFiltroForm->isValid()) {
             $filtro = $buscarFiltroForm->getData();
-
+ 
                 if ($filtro !== null) {
                 $pagos = $pagoRepository
                     ->findAllPagosPorDniFecha($filtro['dni'], 
                                             $filtro['startDate'], 
                                             $filtro['endDate']);      
+
+            $pagination = $paginator->paginate(
+            $pagos,
+            $request->query->getInt('page', 1), 8 );
+
             } else {
                 // Si $filtro es nulo, puedes manejarlo de acuerdo a tus necesidades.
                 // Por ejemplo, puedes establecer $datos en un valor por defecto.
@@ -225,6 +230,11 @@ class PagoCrudController extends AbstractCrudController
             // Si el formulario no fue enviado o no es válido, también puedes manejarlo según tus necesidades.
             $pagos = $pagoRepository->findAllPagos();
             // O cualquier otro valor por defecto que desees
+
+            $pagination = $paginator->paginate(
+                $pagos,
+                $request->query->getInt('page', 1), 
+                8 );
         }
 
         if ($request->getRequestFormat() == 'xlsx') {
@@ -258,9 +268,9 @@ class PagoCrudController extends AbstractCrudController
             return $response;
         } else {
             return $this->render('reportes/reporte.html.twig', [
-                'pagos' => $pagos,
+               // 'pagos' => $pagos,
                 'buscar' => $buscarFiltroForm->createView(),
-                'ea' => $request->query->all()
+                'pagination' => $pagination,
             ]);
         }
     }
