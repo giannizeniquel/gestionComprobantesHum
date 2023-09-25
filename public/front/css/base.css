@@ -1,8 +1,9 @@
 /* start gif loader styles */
 /* por ahora usamos libreria en vez de estructura de loader personalizado */
 .loading-background {
-    width: 50%;
-    height: 50%;
+    background-color: #fff;
+    width: 100%;
+    height: 100%;
     position: absolute;
     z-index: 9999;
 }
