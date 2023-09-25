@@ -28,9 +28,9 @@ imgLoading.style.height = '80px';
 
 loading.appendChild(imgLoading);
 loadingBackground.appendChild(loading);
+document.head.after(loadingBackground);
 
 window.addEventListener('DOMContentLoaded', function() {
-      document.body.before(loadingBackground);
       $(".loading-background").fadeOut(1000);
 });
 
