@@ -3,7 +3,9 @@
 namespace App\EventSubscriber;
 
 use App\Entity\Pago;
+use App\Entity\PagoDetalle;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
+use EasyCorp\Bundle\EasyAdminBundle\Event\AfterEntityDeletedEvent;
 use EasyCorp\Bundle\EasyAdminBundle\Event\AfterEntityPersistedEvent;
 use EasyCorp\Bundle\EasyAdminBundle\Event\AfterEntityUpdatedEvent;
 use EasyCorp\Bundle\EasyAdminBundle\Event\BeforeEntityPersistedEvent;
@@ -38,6 +40,8 @@ class PagoSubscriber implements EventSubscriberInterface
             BeforeEntityUpdatedEvent::class => 'onBeforeEntityUpdatedEvent',
             AfterEntityPersistedEvent::class => 'onAfterEntityPersistedEvent',
             AfterEntityUpdatedEvent::class => 'onAfterEntityUpdatedEvent',
+            AfterEntityDeletedEvent::class => 'onAfterEntityDeletedEvent',
+            
         ];
     }
 
@@ -80,7 +84,7 @@ class PagoSubscriber implements EventSubscriberInterface
     {
         $entity = $event->getEntityInstance();
         if ($entity instanceof Pago) {
-            $url =  $this->adminUrlGenerator->setController('App\\Controller\\Admin\\UserCrudController')->setAction('obtenerPagosUsuario');
+            $url =  $this->adminUrlGenerator->setController('App\\Controller\\Admin\\PagoCrudController')->setAction('detail');
             return (new RedirectResponse($url))->send();
         } else {
             $url =  $this->adminUrlGenerator->setController('App\\Controller\\Admin\\DashboardController')->setAction('index');
@@ -95,6 +99,15 @@ class PagoSubscriber implements EventSubscriberInterface
             $url =  $this->adminUrlGenerator->setController('App\\Controller\\Admin\\PagoCrudController')->setAction('detail');
             return (new RedirectResponse($url))->send();
         } else {
+            $url =  $this->adminUrlGenerator->setController('App\\Controller\\Admin\\DashboardController')->setAction('index');
+            return (new RedirectResponse($url))->send();
+        }
+    }
+
+    public function onAfterEntityDeletedEvent(AfterEntityDeletedEvent $event): Response
+    {
+        $entity = $event->getEntityInstance();
+        if (($entity instanceof Pago)) {
             $url =  $this->adminUrlGenerator->setController('App\\Controller\\Admin\\DashboardController')->setAction('index');
             return (new RedirectResponse($url))->send();
         }
