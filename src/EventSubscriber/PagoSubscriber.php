@@ -84,7 +84,7 @@ class PagoSubscriber implements EventSubscriberInterface
     {
         $entity = $event->getEntityInstance();
         if ($entity instanceof Pago) {
-            $url =  $this->adminUrlGenerator->setController('App\\Controller\\Admin\\PagoCrudController')->setAction('detail');
+            $url =  $this->adminUrlGenerator->setController('App\\Controller\\Admin\\UserCrudController')->setAction('obtenerPagosUsuario');
             return (new RedirectResponse($url))->send();
         } else {
             $url =  $this->adminUrlGenerator->setController('App\\Controller\\Admin\\DashboardController')->setAction('index');
