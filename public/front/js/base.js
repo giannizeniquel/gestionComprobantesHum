@@ -4,9 +4,9 @@ const imgLoading = document.createElement('img');
 const urlProd = window.location.href;
 
 if(urlProd.includes('www.gespagoshum.wiz.com.ar')){
-      imgLoading.src = "../gestionComprobantesHum/public/GCP_morado2.gif";
+      imgLoading.src = "../gestionComprobantesHum/public/GCP_morado3.gif";
 }else{
-      imgLoading.src = "../../public/GCP_morado2.gif";
+      imgLoading.src = "../../public/GCP_morado3.gif";
 }
 
 loadingBackground.classList = 'loading-background';
