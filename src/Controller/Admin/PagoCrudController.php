@@ -118,7 +118,9 @@ class PagoCrudController extends AbstractCrudController
                 return $actions
                     ->add(Crud::PAGE_INDEX, Action::DETAIL)
                     ->setPermission(Action::INDEX, 'ROLE_ADMIN')
-                    ->setPermission(Action::EDIT, 'ROLE_SUPER_ADMIN');
+                    ->setPermission(Action::EDIT, 'ROLE_SUPER_ADMIN')
+                    ->setPermission(Action::NEW, 'ROLE_SUPER_ADMIN')
+                    ->setPermission(Action::DELETE, 'ROLE_SUPER_ADMIN');
             } else {
                 return $actions
                     ->add(Crud::PAGE_INDEX, Action::DETAIL)
