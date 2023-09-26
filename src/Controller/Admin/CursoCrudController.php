@@ -9,6 +9,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Assets;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Filters;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
@@ -40,7 +41,7 @@ class CursoCrudController extends AbstractCrudController
             AssociationField::new('carrera', 'Oferta'),
 
             TextField::new('nombre'),
-            TextField::new('corte', 'Cohorte'),
+            TextField::new('cohorte'),
             TextField::new('descripcion', 'Descripción'),
             TextField::new('observacion', 'Observación'),
             BooleanField::new('activo'),
@@ -69,5 +70,16 @@ class CursoCrudController extends AbstractCrudController
         return $assets
             ->addHtmlContentToHead('<script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>')
             ->addJsFile('/gestionComprobantesHum/public/front/js/base.js');
+    }
+
+    public function configureFilters(Filters $filters): Filters
+    {
+        return $filters
+            ->add('id')
+            ->add('tipo')
+            ->add('carrera')
+            ->add('nombre')
+            ->add('cohorte')
+        ;
     }
 }

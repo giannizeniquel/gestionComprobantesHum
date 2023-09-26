@@ -87,7 +87,7 @@ class Curso
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $corte;
+    private $cohorte;
 
     /**
      * @ORM\ManyToOne(targetEntity=Carrera::class, inversedBy="cursos")
@@ -315,14 +315,14 @@ class Curso
         return $this;
     }
 
-    public function getCorte(): ?string
+    public function getCohorte(): ?string
     {
-        return $this->corte;
+        return $this->cohorte;
     }
 
-    public function setCorte(?string $corte): self
+    public function setCohorte(?string $cohorte): self
     {
-        $this->corte = $corte;
+        $this->cohorte = $cohorte;
 
         return $this;
     }
