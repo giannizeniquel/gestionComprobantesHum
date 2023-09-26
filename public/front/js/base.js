@@ -1,7 +1,7 @@
 const loadingBackground = document.createElement('div');
 const loading = document.createElement('div');
 const imgLoading = document.createElement('img');
-imgLoading.src = "../../public/GCP_blanco2.gif";
+imgLoading.src = "../../public/GCP_morado2.gif";
 
 loadingBackground.classList = 'loading-background';
 loadingBackground.style.backgroundColor = '#fff';
