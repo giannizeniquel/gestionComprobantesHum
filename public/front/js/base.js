@@ -1,7 +1,13 @@
 const loadingBackground = document.createElement('div');
 const loading = document.createElement('div');
 const imgLoading = document.createElement('img');
-imgLoading.src = "../../public/GCP_morado2.gif";
+const urlProd = window.location.href;
+
+if(urlProd.includes('www.gespagoshum.wiz.com.ar')){
+      imgLoading.src = "../gestionComprobantesHum/public/GCP_morado2.gif";
+}else{
+      imgLoading.src = "../../public/GCP_morado2.gif";
+}
 
 loadingBackground.classList = 'loading-background';
 loadingBackground.style.backgroundColor = '#fff';
