@@ -22,6 +22,7 @@ class TipoCursoCrudController extends AbstractCrudController
     public function configureCrud(Crud $crud): Crud
     {
         return $crud
+            ->setEntityPermission('ROLE_ADMIN')
             ->setEntityLabelInSingular('Propuesta')
             ->setEntityLabelInPlural('Propuestas');
     }

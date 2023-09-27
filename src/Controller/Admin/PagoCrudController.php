@@ -42,6 +42,14 @@ class PagoCrudController extends AbstractCrudController
     {
         return Pago::class;
     }
+    public function configureCrud(Crud $crud): Crud
+    {
+        return $crud
+            // the labels used to refer to this entity in titles, buttons, etc.
+            ->setEntityLabelInSingular('Pago')
+            ->setEntityLabelInPlural('Pagos')
+            ->setHelp('detail', 'Para eliminar un pago primero debe ingresar a MODIFICAR y eliminar sus detalles.');
+    }
 
     public function configureFields(string $pageName): iterable
     {

@@ -29,40 +29,46 @@ class CursoCrudController extends AbstractCrudController
     {
         return $crud
             // the labels used to refer to this entity in titles, buttons, etc.
+            ->setEntityPermission('ROLE_ADMIN')
             ->setEntityLabelInSingular('Curso')
             ->setEntityLabelInPlural('Cursos');
     }
 
     public function configureFields(string $pageName): iterable
     {
-        return [
-            IdField::new('id')->hideOnForm(),
-            AssociationField::new('tipo', 'Propuesta'),
-            AssociationField::new('carrera', 'Oferta'),
+        
+        yield IdField::new('id')->hideOnForm();
+        yield AssociationField::new('tipo', 'Propuesta');
+        yield AssociationField::new('carrera', 'Oferta');
 
-            TextField::new('nombre'),
-            TextField::new('cohorte'),
-            TextField::new('descripcion', 'Descripción'),
-            TextField::new('observacion', 'Observación'),
-            BooleanField::new('activo'),
-            IntegerField::new('cantidadCuotas'),
-            //los users se van a asociar a los cursos a traves de la carga por lotes de users
-            //dejamos activa la relacion en formularios desde user, para cubrir excepciones
-            AssociationField::new('users', 'Alumnos inscriptos')->hideOnForm(),
-            CollectionField::new('cuotas', 'Cuotas')
-                ->allowDelete()
-                ->setEntryIsComplex(true)
-                ->setEntryType(CuotaType::class)
-                ->setFormTypeOptions([
-                    'by_reference' => false,
-                ]),
-        ];
+        yield TextField::new('nombre');
+        yield TextField::new('cohorte');
+        yield TextField::new('descripcion', 'Descripción');
+        yield TextField::new('observacion', 'Observación');
+        yield BooleanField::new('activo');
+        yield IntegerField::new('cantidadCuotas');
+        //los users se van a asociar a los cursos a traves de la carga por lotes de users
+        //dejamos activa la relacion en formularios desde user, para cubrir excepciones
+        yield AssociationField::new('users', 'Alumnos inscriptos')->hideOnForm();
+        yield CollectionField::new('cuotas', 'Cuotas')
+            ->allowDelete()
+            ->setEntryIsComplex(true)
+            ->setEntryType(CuotaType::class)
+            ->setFormTypeOptions([
+                'by_reference' => false,
+            ]);
+        
     }
 
     public function configureActions(Actions $actions): Actions
     {
         return $actions
-            ->add(Crud::PAGE_INDEX, Action::DETAIL);
+            ->add(Crud::PAGE_INDEX, Action::DETAIL)
+            ->setPermission(Action::INDEX, 'ROLE_ADMIN')
+            ->setPermission(Action::EDIT, 'ROLE_ADMIN')
+            ->setPermission(Action::NEW, 'ROLE_ADMIN')
+            ->setPermission(Action::DELETE, 'ROLE_ADMIN');
+            //->setPermission('detail', 'ROLE_ADMIN');
     }
     
     public function configureAssets(Assets $assets): Assets
