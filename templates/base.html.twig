@@ -16,30 +16,30 @@
 
 {% block content_footer_wrapper %}
     {% block content_footer %}
-		<footer class="d-flex flex-wrap justify-content-between align-items-center border-top">
-			<p class="col-md-4 mb-0 text-muted">© 2021 Company, Inc</p>
-			<a href="/" class="col-md-4 d-flex align-items-center justify-content-center mb-3 mb-md-0 me-md-auto link-dark text-decoration-none">
-				<svg class="bi me-2" width="40" height="32">
-					<use xlink:href="#bootstrap"></use>
-				</svg>
-			</a>
-			<ul class="nav col-md-4 justify-content-center">
-				<li class="nav-item">
-					<a href="#" class="nav-link px-2 text-muted">Home</a>
-				</li>
-				<li class="nav-item">
-					<a href="#" class="nav-link px-2 text-muted">Features</a>
-				</li>
-				<li class="nav-item">
-					<a href="#" class="nav-link px-2 text-muted">Pricing</a>
-				</li>
-				<li class="nav-item">
-					<a href="#" class="nav-link px-2 text-muted">FAQs</a>
-				</li>
-				<li class="nav-item">
-					<a href="#" class="nav-link px-2 text-muted">About</a>
-				</li>
-			</ul>
+		<footer class="d-flex flex-wrap justify-content-between align-items-center border-top footer-escritorio">
+			<p class="col-md-4 mb-0 text-muted">© 202 GCP - Gestión Comprobantes de Pagos.</p>
+			<p class="col-md-4 mb-0 text-muted">Contacto: desarrollo.gcp.2023@gmail.com</p>
 		</footer>
     {% endblock %}
 {% endblock %}
+
+{% block body_javascript %}
+{{ parent() }}
+	<script>
+		let urlBase = window.location.href;
+		$(document).ready( function () {
+			//asi detectamos si se ejecuta en un disposivo mobile
+			if(navigator.userAgent.match(/Android/i) || navigator.userAgent.match(/webOS/i) || 
+				navigator.userAgent.match(/iPhone/i) || navigator.userAgent.match(/iPad/i) || 
+				navigator.userAgent.match(/iPod/i) || navigator.userAgent.match(/BlackBerry/i) ||
+				navigator.userAgent.match(/Windows Phone/i)
+			){
+				$("footer").removeClass("footer-escritorio");
+				$("footer").addClass("footer-mobile");
+				if(urlBase.includes('routeName=change_password') || urlBase.includes('routeName=xlsx') ){
+					$("footer").css('position', 'absolute');
+				}
+			}
+		});
+	</script>
+{% endblock body_javascript %}

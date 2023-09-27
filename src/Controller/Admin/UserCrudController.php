@@ -56,7 +56,7 @@ class UserCrudController extends AbstractCrudController
         if($user){
             if (!in_array('ROLE_ADMIN', $user->getRoles())) {
                 yield FormField::addPanel('Datos Personales')
-                    ->setHelp('Si necesita modificar estos datos ponerse en contacto con un administrador.');
+                    ->setHelp('Si necesita modificar estos datos contactarse con un administrador.');
             }else {
                 yield FormField::addPanel('Datos Personales');
             }
