@@ -2,6 +2,11 @@
 {% extends 'baseNoEA.html.twig' %}
 
 {% block title %}Restablecer password{% endblock %}
+{% block subTitle %}
+  
+    <strong>Restablecer contraseña</strong>
+{% endblock %}
+
 
 {% block body %}
 
@@ -15,18 +20,18 @@
             {% for flash_error in app.flashes('reset_password_error') %}
                 <div class="alert alert-danger" role="alert">{{ flash_error }}</div>
             {% endfor %}
-            <h1 class="display-6">Restablecer password</h1>
+            <h1 class="display-6"></h1>
 
             {{ form_start(requestForm) }}
             {{ form_row(requestForm.email) }}
                 <div>
-                    <p> 
-                    Ingrese su dirección de correo electrónico 
-                    y le enviaremos un enlace para restablecer su contraseña.
+                    <p class="lead"> 
+                    Ingresa tu dirección de correo electrónico 
+                    y te enviaremos un enlace para restablecer tu contraseña.
                     </p>
                 </div>
 
-            <button class="btn btn-primary margin= 2px 2px">Send password reset email</button>
+            <button class="btn btn-primary margin= 2px 2px" style="background-color: #6174D1; color: white;">Send password reset email</button>
             {{ form_end(requestForm) }}
         </div>
 {% endblock %}

@@ -1,6 +1,11 @@
-{% extends 'base.html.twig' %}
+{% extends 'baseNoEA.html.twig' %}
 
 {% block title %}Restablecer password {% endblock %}
+{% block subTitle %}
+  
+    <strong>Checkea tu email</strong>
+{% endblock %}
+
 
 {% block body %}
  <style>
@@ -11,10 +16,11 @@
         </style>
 <div class="container">
 
-    <p>
-      Si existe una cuenta que coincide con su correo electrónico, se acaba de enviar un correo electrónico que contiene un enlace que puede utilizar para restablecer su contraseña.
+    <p class="lead">
+      Si existe una cuenta que coincida con tu correo electrónico, se te acaba de enviar un correo electrónico que contiene
+       un enlace para que puedas restablecer tu contraseña.
         Este enlace caducará en <strong>{{ resetToken.expirationMessageKey|trans(resetToken.expirationMessageData, 'ResetPasswordBundle') }}</strong>.
     </p>
-    <p>Si no recibe un correo electrónico, revise su carpeta de correo no deseado o <a href="{{ path('app_forgot_password_request') }}">intente otra vez</a>.</p>
+    <p class="lead">Si no recibiste un correo electrónico, revisa tu carpeta de correo no deseado o <a href="{{ path('app_forgot_password_request') }}">intenta otra vez</a>.</p>
 </div>
 {% endblock %}
