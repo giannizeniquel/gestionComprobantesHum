@@ -30,7 +30,7 @@ class LoginController extends AbstractController
     return $this->render('@EasyAdmin/page/login.html.twig', [
       'last_username' => $lastUsername,
       'error'         => $error,
-      'page_title' => 'Iniciar Sesion',
+      'page_title' => 'Iniciar Sesión - GCP',
       'csrf_token_intention' => 'authenticate',
       'target_path' => 'admin',
       'username_label' => 'Email',

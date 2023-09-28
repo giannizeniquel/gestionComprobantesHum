@@ -24,6 +24,7 @@ class CarreraCrudController extends AbstractCrudController
     public function configureCrud(Crud $crud): Crud
     {
         return $crud
+            ->setEntityPermission('ROLE_ADMIN')
             ->setEntityLabelInSingular('Oferta')
             ->setEntityLabelInPlural('Ofertas');
     }

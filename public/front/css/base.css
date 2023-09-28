@@ -1,3 +1,7 @@
+
+html, body {
+    height: 100%;
+}
 /* start gif loader styles */
 /* por ahora usamos libreria en vez de estructura de loader personalizado */
 .loading-background {
@@ -51,9 +55,17 @@
 }
 /* end */
 
-footer {
+.footer-escritorio {
     position: absolute;
     bottom: 0;
     height: 5%;
     width: 85%;
+}
+
+.footer-mobile {
+    width: 100%;
+    position: relative;
+    bottom: 0;
+    left : 0;
+    justify-content: center !important;
 }

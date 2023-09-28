@@ -42,6 +42,14 @@ class PagoCrudController extends AbstractCrudController
     {
         return Pago::class;
     }
+    public function configureCrud(Crud $crud): Crud
+    {
+        return $crud
+            // the labels used to refer to this entity in titles, buttons, etc.
+            ->setEntityLabelInSingular('Pago')
+            ->setEntityLabelInPlural('Pagos')
+            ->setHelp('detail', 'Para eliminar un pago primero debe ingresar a MODIFICAR y eliminar sus detalles.');
+    }
 
     public function configureFields(string $pageName): iterable
     {
@@ -214,16 +222,9 @@ class PagoCrudController extends AbstractCrudController
         if ($buscarFiltroForm->isSubmitted() && $buscarFiltroForm->isValid()) {
             $filtro = $buscarFiltroForm->getData();
  
-                if ($filtro !== null) {
-                $pagos = $pagoRepository
-                    ->findAllPagosPorDniFecha($filtro['dni'], 
-                                            $filtro['startDate'], 
-                                            $filtro['endDate']);      
-
-            $pagination = $paginator->paginate(
-            $pagos,
-            $request->query->getInt('page', 1), 8 );
-
+            if ($filtro !== null) {
+                $pagos = $pagoRepository->findAllPagosPorDniFecha($filtro['dni'], $filtro['startDate'], $filtro['endDate']);      
+                $pagination = $paginator->paginate($pagos, $request->query->getInt('page', 1), 8 );
             } else {
                 // Si $filtro es nulo, puedes manejarlo de acuerdo a tus necesidades.
                 // Por ejemplo, puedes establecer $datos en un valor por defecto.
@@ -234,10 +235,7 @@ class PagoCrudController extends AbstractCrudController
             $pagos = $pagoRepository->findAllPagos();
             // O cualquier otro valor por defecto que desees
 
-            $pagination = $paginator->paginate(
-                $pagos,
-                $request->query->getInt('page', 1), 
-                8 );
+            $pagination = $paginator->paginate($pagos, $request->query->getInt('page', 1), 8 );
         }
 
         if ($request->getRequestFormat() == 'xlsx') {
