@@ -34,6 +34,11 @@ class TipoCurso
      */
     private $cursos;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Carrera::class, inversedBy="tipoCurso")
+     */
+    private $carrera;
+
     public function __construct()
     {
         $this->cursos = new ArrayCollection();
@@ -99,6 +104,18 @@ class TipoCurso
                 $curso->setTipo(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getCarrera(): ?Carrera
+    {
+        return $this->carrera;
+    }
+
+    public function setCarrera(?Carrera $carrera): self
+    {
+        $this->carrera = $carrera;
 
         return $this;
     }

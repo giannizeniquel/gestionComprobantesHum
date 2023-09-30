@@ -33,6 +33,8 @@ class TipoCursoCrudController extends AbstractCrudController
             IdField::new('id')->hideOnForm(),
             TextField::new('nombre'),
             TextField::new('descripcion', 'Descripción'),
+            AssociationField::new('carrera'),
+
             AssociationField::new('cursos')
 
             // para formularios embebidos

@@ -34,9 +34,15 @@ class Carrera
      */
     private $cursos;
 
+    /**
+     * @ORM\OneToMany(targetEntity=TipoCurso::class, mappedBy="carrera")
+     */
+    private $tipoCurso;
+
     public function __construct()
     {
         $this->cursos = new ArrayCollection();
+        $this->tipoCurso = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -101,5 +107,35 @@ class Carrera
     public function __toString()
     {
         return $this->nombre;
+    }
+
+    /**
+     * @return Collection<int, TipoCurso>
+     */
+    public function getTipoCurso(): Collection
+    {
+        return $this->tipoCurso;
+    }
+
+    public function addTipoCurso(TipoCurso $tipoCurso): self
+    {
+        if (!$this->tipoCurso->contains($tipoCurso)) {
+            $this->tipoCurso[] = $tipoCurso;
+            $tipoCurso->setCarrera($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTipoCurso(TipoCurso $tipoCurso): self
+    {
+        if ($this->tipoCurso->removeElement($tipoCurso)) {
+            // set the owning side to null (unless already changed)
+            if ($tipoCurso->getCarrera() === $this) {
+                $tipoCurso->setCarrera(null);
+            }
+        }
+
+        return $this;
     }
 }
