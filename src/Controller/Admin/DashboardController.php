@@ -13,6 +13,7 @@ use App\Entity\Curso;
 use App\Entity\Pago;
 use App\Entity\User;
 use App\Entity\Carrera;
+use App\Entity\Reclamo;
 use App\Entity\TipoCurso;
 
 class DashboardController extends AbstractDashboardController
@@ -125,6 +126,8 @@ class DashboardController extends AbstractDashboardController
                 yield MenuItem::linktoRoute('Reporte general', 'fas fa-file-excel', 'lista_pago');
 
                 //  yield MenuItem::linkToCrud('Pagos Detalles', 'fa fa-shapes', PagoDetalle::class);
+                yield MenuItem::section('Mensajes');
+                yield MenuItem::linkToCrud('Iniciar Reclamo', 'fa fa-tag', Reclamo::class);
 
                 yield MenuItem::section('Seguridad');
 
@@ -140,6 +143,9 @@ class DashboardController extends AbstractDashboardController
                     ->setEntityId($user->getId());
                 yield MenuItem::linktoRoute('Mis Cursos', 'fa fa-chalkboard', 'misCursos');
                 yield MenuItem::linktoRoute('Mis Pagos', 'fa fa-file-text-o', 'misPagos');
+
+                yield MenuItem::section('Mensajes');
+                yield MenuItem::linkToCrud('Iniciar Reclamo', 'fa fa-tag', Reclamo::class);
 
                 yield MenuItem::section('Seguridad');
                 yield MenuItem::linktoRoute('Cambiar contraseña', 'fas fa-key', 'change_password');

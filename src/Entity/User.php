@@ -79,10 +79,22 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $pagos;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Reclamo::class, mappedBy="user", orphanRemoval=true)
+     */
+    private $reclamos;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Mensaje::class, mappedBy="user", cascade={"persist"})
+     */
+    private $mensajes;
+
     public function __construct()
     {
         $this->cursos = new ArrayCollection();
         $this->pagos = new ArrayCollection();
+        $this->reclamos = new ArrayCollection();
+        $this->mensajes = new ArrayCollection();
     }
 
     public function __toString()
@@ -314,5 +326,65 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function getFullName()
     {
         return $this->getNombre() . ' ' . $this->getApellido();
+    }
+
+    /**
+     * @return Collection<int, Reclamo>
+     */
+    public function getReclamos(): Collection
+    {
+        return $this->reclamos;
+    }
+
+    public function addReclamo(Reclamo $reclamo): self
+    {
+        if (!$this->reclamos->contains($reclamo)) {
+            $this->reclamos[] = $reclamo;
+            $reclamo->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeReclamo(Reclamo $reclamo): self
+    {
+        if ($this->reclamos->removeElement($reclamo)) {
+            // set the owning side to null (unless already changed)
+            if ($reclamo->getUser() === $this) {
+                $reclamo->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Mensaje>
+     */
+    public function getMensajes(): Collection
+    {
+        return $this->mensajes;
+    }
+
+    public function addMensaje(Mensaje $mensaje): self
+    {
+        if (!$this->mensajes->contains($mensaje)) {
+            $this->mensajes[] = $mensaje;
+            $mensaje->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMensaje(Mensaje $mensaje): self
+    {
+        if ($this->mensajes->removeElement($mensaje)) {
+            // set the owning side to null (unless already changed)
+            if ($mensaje->getUser() === $this) {
+                $mensaje->setUser(null);
+            }
+        }
+
+        return $this;
     }
 }

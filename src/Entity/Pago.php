@@ -59,10 +59,21 @@ class Pago
      */
     private $updated_at;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Reclamo::class, mappedBy="pago", cascade={"persist"})
+     */
+    private $reclamos;
+
     public function __construct()
     {
         $this->pagoDetalles = new ArrayCollection();
         $this->created_at = new \DateTimeImmutable();
+        $this->reclamos = new ArrayCollection();
+    }
+
+    public function __toString()
+    {
+        return strval($this->id);
     }
 
     public function getId(): ?int
@@ -205,5 +216,35 @@ class Pago
             ];
         }
         return $masDetalles;
+    }
+
+    /**
+     * @return Collection<int, Reclamo>
+     */
+    public function getReclamos(): Collection
+    {
+        return $this->reclamos;
+    }
+
+    public function addReclamo(Reclamo $reclamo): self
+    {
+        if (!$this->reclamos->contains($reclamo)) {
+            $this->reclamos[] = $reclamo;
+            $reclamo->setPago($this);
+        }
+
+        return $this;
+    }
+
+    public function removeReclamo(Reclamo $reclamo): self
+    {
+        if ($this->reclamos->removeElement($reclamo)) {
+            // set the owning side to null (unless already changed)
+            if ($reclamo->getPago() === $this) {
+                $reclamo->setPago(null);
+            }
+        }
+
+        return $this;
     }
 }

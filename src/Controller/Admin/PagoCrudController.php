@@ -91,6 +91,7 @@ class PagoCrudController extends AbstractCrudController
             yield CollectionField::new('getPagoMasDetallesObj', '')
                 ->setTemplatePath('admin/actions/my_custom_action.html.twig');
         }
+        yield AssociationField::new('reclamos', 'Reclamos')->hideOnForm();
     }
 
     public function obtenerIdCurso(AdminContext $context, Request $request, PagoRepository $pagoRepository)

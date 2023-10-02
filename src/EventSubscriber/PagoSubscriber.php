@@ -2,8 +2,10 @@
 
 namespace App\EventSubscriber;
 
+use App\Entity\Mensaje;
 use App\Entity\Pago;
 use App\Entity\PagoDetalle;
+use App\Entity\Reclamo;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Event\AfterEntityDeletedEvent;
 use EasyCorp\Bundle\EasyAdminBundle\Event\AfterEntityPersistedEvent;
@@ -61,6 +63,16 @@ class PagoSubscriber implements EventSubscriberInterface
             $entity->setUser($this->security->getUser());
             $entity->setMonto($montoTotalCuotas);
         }
+
+        if ($entity instanceof Reclamo) {
+            $mensajes = $entity->getMensajes();
+            $entity->setUser($this->security->getUser());
+            foreach ($mensajes as $mensaje) {
+                if (is_null($mensaje->getUser())) {
+                    $mensaje->setUser($this->security->getUser());
+                }
+            }
+        }
     }
 
     public function onBeforeEntityUpdatedEvent(BeforeEntityUpdatedEvent $event): void
@@ -77,6 +89,16 @@ class PagoSubscriber implements EventSubscriberInterface
             }
             $entity->setUser($this->security->getUser());
             $entity->setMonto($montoTotalCuotas);
+        }
+
+        if ($entity instanceof Reclamo) {
+            $mensajes = $entity->getMensajes();
+            $entity->setUser($this->security->getUser());
+            foreach ($mensajes as $mensaje) {
+                if (is_null($mensaje->getUser())) {
+                    $mensaje->setUser($this->security->getUser());
+                }
+            }
         }
     }
 
@@ -106,10 +128,10 @@ class PagoSubscriber implements EventSubscriberInterface
 
     public function onAfterEntityDeletedEvent(AfterEntityDeletedEvent $event): Response
     {
-        $entity = $event->getEntityInstance();
-        if (($entity instanceof Pago)) {
+        // $entity = $event->getEntityInstance();
+        // if (($entity instanceof Pago)) {
             $url =  $this->adminUrlGenerator->setController('App\\Controller\\Admin\\DashboardController')->setAction('index');
             return (new RedirectResponse($url))->send();
-        }
+        //}
     }
 }
