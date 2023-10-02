@@ -82,6 +82,7 @@ class CursoCrudController extends AbstractCrudController
     {
         return $assets
             ->addHtmlContentToHead('<script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>')
+            ->addJsFile('/gestionComprobantesHum/public/front/js/base.js')
             ->addJsFile('/gestionComprobantesHum/public/front/js/tipoCurso.js');
 
     }
