@@ -25,8 +25,8 @@ class CarreraCrudController extends AbstractCrudController
     {
         return $crud
             ->setEntityPermission('ROLE_ADMIN')
-            ->setEntityLabelInSingular('Oferta')
-            ->setEntityLabelInPlural('Ofertas');
+            ->setEntityLabelInSingular('Propuesta')
+            ->setEntityLabelInPlural('Propuestas');
     }
 
     public function configureFields(string $pageName): iterable

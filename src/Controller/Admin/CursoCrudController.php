@@ -16,6 +16,12 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\CollectionField;
+use Symfony\Component\Routing\Annotation\Route;
+use App\Repository\TipoCursoRepository;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
+
 
 class CursoCrudController extends AbstractCrudController
 
@@ -38,10 +44,11 @@ class CursoCrudController extends AbstractCrudController
     {
         
         yield IdField::new('id')->hideOnForm();
-        yield AssociationField::new('tipo', 'Propuesta');
-        yield AssociationField::new('carrera', 'Oferta');
-
         yield TextField::new('nombre');
+        yield AssociationField::new('carrera', 'Propuesta');
+        yield AssociationField::new('tipo', 'Oferta')->renderAsNativeWidget();
+      
+
         yield TextField::new('cohorte');
         yield TextField::new('descripcion', 'Descripción');
         yield TextField::new('observacion', 'Observación');
@@ -74,8 +81,9 @@ class CursoCrudController extends AbstractCrudController
     public function configureAssets(Assets $assets): Assets
     {
         return $assets
-            ->addHtmlContentToHead('<script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>')
-            ->addJsFile('/gestionComprobantesHum/public/front/js/base.js');
+            ->addHtmlContentToHead('<script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>')
+            ->addJsFile('/gestionComprobantesHum/public/front/js/tipoCurso.js');
+
     }
 
     public function configureFilters(Filters $filters): Filters
@@ -88,4 +96,27 @@ class CursoCrudController extends AbstractCrudController
             ->add('cohorte')
         ;
     }
+
+    /**
+     * @Route("obtener_carrera", name="obtener_carrera",  methods={"POST"})
+     */
+    public function findTiposByCarreraAjax(Request $request, TipoCursoRepository $tipoCursoRepository): JsonResponse
+    {
+        //$carreraId='1';
+        //GET
+       // $carreraId = $request->query->get('carreraId');
+        //POST
+        $carreraId = $request->request->get('carreraId');
+        $tipos = $tipoCursoRepository->findByTipoCursoAjax($carreraId);
+       
+        // Formatea los datos para la respuesta JSON
+        $data = [];
+        foreach ($tipos as $tipo) {
+            $data[$tipo->getId()] = $tipo->getId();
+        }
+
+        return $this->json($data);
+    }
+
+
 }

@@ -39,6 +39,20 @@ class TipoCursoRepository extends ServiceEntityRepository
         }
     }
 
+    // Obtener los tipos de curso, para cada carreraId
+    /**
+     * @return TipoCurso[] Returns an array of TipoCurso objects
+     */
+    public function findByTipoCursoAjax($carreraId): array
+    {
+        return $this->createQueryBuilder('t')
+            ->andWhere('t.carrera = :carreraId') 
+            ->setParameter('carreraId', $carreraId) 
+            ->orderBy('t.id', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
     //    /**
     //     * @return TipoCurso[] Returns an array of TipoCurso objects
     //     */

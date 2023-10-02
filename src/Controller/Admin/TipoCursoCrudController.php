@@ -23,8 +23,8 @@ class TipoCursoCrudController extends AbstractCrudController
     {
         return $crud
             ->setEntityPermission('ROLE_ADMIN')
-            ->setEntityLabelInSingular('Propuesta')
-            ->setEntityLabelInPlural('Propuestas');
+            ->setEntityLabelInSingular('Oferta')
+            ->setEntityLabelInPlural('Ofertas');
     }
 
     public function configureFields(string $pageName): iterable
@@ -33,7 +33,7 @@ class TipoCursoCrudController extends AbstractCrudController
             IdField::new('id')->hideOnForm(),
             TextField::new('nombre'),
             TextField::new('descripcion', 'Descripción'),
-            AssociationField::new('carrera'),
+            AssociationField::new('carrera','Propuesta'),
 
             AssociationField::new('cursos')
 
