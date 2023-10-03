@@ -28,8 +28,8 @@ class CargaExcelController extends AbstractDashboardController
         $form = $this->createForm(CargaExcelType::class);
         $form->handleRequest($request);
 
-
         if ($form->isSubmitted() && $form->isValid()) {
+           
             // Obtener el archivo subido
             $file = $form['file']->getData();
             // dd($file);
@@ -49,13 +49,9 @@ class CargaExcelController extends AbstractDashboardController
             $spreadsheet = IOFactory::load($fileFolder . $filePathName);
             $row = $spreadsheet->getActiveSheet()->removeRow(1);
             $sheetData = $spreadsheet->getActiveSheet()->toArray(null, true, true, true);
-
-            $entityManager = $this->getDoctrine()->getManager();
-
             $batchSize = 50; // Cantidad de registros por lote
             $entityManager = $this->getDoctrine()->getManager();
             $batchCount = 0;
-
 
             foreach ($sheetData as $row) {
                 $email = $row['A'];
@@ -64,9 +60,8 @@ class CargaExcelController extends AbstractDashboardController
                 $dni = $row['D'];
                 $password = $row['E'];
                 $cursoId = $row['F'];
-
                 $userExists = $userRepository->findOneBy(['email' => $email]);
-
+               
                 if (!$userExists) {
                     $user = new User();
                     $user->setEmail($email);
@@ -87,7 +82,12 @@ class CargaExcelController extends AbstractDashboardController
                         $entityManager->flush();
                         $entityManager->clear();
                     }
-                }
+                    
+                    }else{
+                            $this->addFlash('warning', 'Los usuarios que ya se encuentran en la base de datos 
+                            tendrán que asignarse a los cursos 
+                            de forma individual => '.$email.' - dni: '.$dni);
+                          }
             }
 
             // Asegurarse de que los registros finales se persistan
@@ -98,6 +98,7 @@ class CargaExcelController extends AbstractDashboardController
 
             $entityManager->flush();
             $this->addFlash('success', 'Usuarios registrados y cursos asignados');
+         
             return $this->redirectToRoute('admin');
 
             //return $this->json('Usuarios registrados y cursos asignados', 200);
