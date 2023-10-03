@@ -126,8 +126,8 @@ class DashboardController extends AbstractDashboardController
                 yield MenuItem::linktoRoute('Reporte general', 'fas fa-file-excel', 'lista_pago');
 
                 //  yield MenuItem::linkToCrud('Pagos Detalles', 'fa fa-shapes', PagoDetalle::class);
-                yield MenuItem::section('Mensajes');
-                yield MenuItem::linkToCrud('Iniciar Reclamo', 'fa fa-tag', Reclamo::class);
+                //yield MenuItem::section('Mensajes');
+                //yield MenuItem::linkToCrud('Iniciar Reclamo', 'fa fa-tag', Reclamo::class);
 
                 yield MenuItem::section('Seguridad');
 
