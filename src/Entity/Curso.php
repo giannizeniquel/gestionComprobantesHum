@@ -85,7 +85,7 @@ class Curso
     private $cuotas;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @ORM\Column(type="string", length=255)
      */
     private $cohorte;
 
