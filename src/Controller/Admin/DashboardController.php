@@ -108,7 +108,6 @@ class DashboardController extends AbstractDashboardController
         
         if($user){
             yield MenuItem::linkToDashboard('Inicio', 'fa fa-home');
-            
             if (in_array('ROLE_ADMIN', $user->getRoles()) || in_array('ROLE_SUPER_ADMIN', $user->getRoles())) {
                 yield MenuItem::linkToCrud('Usuarios', 'fa fa-users', User::class);
                 yield MenuItem::linktoRoute('Cargar usuarios', 'fas fa-upload', 'xlsx');
@@ -156,6 +155,7 @@ class DashboardController extends AbstractDashboardController
                 yield MenuItem::linkToUrl('Humanidades', 'fas fa-university', 'https://hum.unne.edu.ar/')->setLinkTarget('_blank');
             }
         } else {
+            yield MenuItem::linkToUrl('Login', 'fas fa-sign-in-alt', 'https://www.gespagoshum.wiz.com.ar/login');
             return $this->redirectToRoute('app_login');
         }
     }
