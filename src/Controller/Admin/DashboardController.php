@@ -35,13 +35,12 @@ class DashboardController extends AbstractDashboardController
 
         // you can also render some template to display a proper Dashboard
         // (tip: it's easier if your template extends from @EasyAdmin/page/content.html.twig)
-
-        if ($this->getUser()) {
-            return $this->render('home/home.html.twig');
+         
+        if ($this->getUser() && $this->getUser()->isVerified()==false) {
+           return $this->redirectToRoute('change_password');
         } else {
-            return $this->redirectToRoute('app_login');
+            return $this->render('home/home.html.twig');
         }
-
         //return parent::index();
     }
 

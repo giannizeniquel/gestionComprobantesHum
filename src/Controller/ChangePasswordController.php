@@ -35,7 +35,7 @@ class ChangePasswordController extends AbstractDashboardController
                     // Cambiar la contraseña del usuario
                     $newEncodedPassword = $userPasswordHasher->encodePassword($user, $formData['newPassword']);
                     $user->setPassword($newEncodedPassword);
-
+                    $user->setIsVerified(true);
                     $entityManager = $this->getDoctrine()->getManager();
                     $entityManager->flush();
 
