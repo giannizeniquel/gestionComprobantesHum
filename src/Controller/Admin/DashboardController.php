@@ -105,8 +105,10 @@ class DashboardController extends AbstractDashboardController
     public function configureMenuItems(): iterable
     {
         $user = $this->getUser();
-        yield MenuItem::linkToDashboard('Inicio', 'fa fa-home');
+        
         if($user){
+            yield MenuItem::linkToDashboard('Inicio', 'fa fa-home');
+            
             if (in_array('ROLE_ADMIN', $user->getRoles()) || in_array('ROLE_SUPER_ADMIN', $user->getRoles())) {
                 yield MenuItem::linkToCrud('Usuarios', 'fa fa-users', User::class);
                 yield MenuItem::linktoRoute('Cargar usuarios', 'fas fa-upload', 'xlsx');
