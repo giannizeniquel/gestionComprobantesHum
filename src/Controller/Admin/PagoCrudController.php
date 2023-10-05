@@ -215,6 +215,7 @@ class PagoCrudController extends AbstractCrudController
      */
     public function indexAllPagos(Request $request, PagoRepository $pagoRepository,PaginatorInterface $paginator): Response
     { 
+        $user = $this->getUser();
         $buscarFiltroForm = $this->createForm(BuscarFechaType::class, null, [
             'action' => $this->generateUrl('lista_pago'),
         ]);
