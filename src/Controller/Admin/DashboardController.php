@@ -126,8 +126,9 @@ class DashboardController extends AbstractDashboardController
                 yield MenuItem::linktoRoute('Reporte general', 'fas fa-file-excel', 'lista_pago');
 
                 //  yield MenuItem::linkToCrud('Pagos Detalles', 'fa fa-shapes', PagoDetalle::class);
-                //yield MenuItem::section('Mensajes');
-                //yield MenuItem::linkToCrud('Iniciar Reclamo', 'fa fa-tag', Reclamo::class);
+                yield MenuItem::section('Mensajes');
+                yield MenuItem::linkToCrud('Iniciar Reclamo', 'fa fa-tag', Reclamo::class);
+                yield MenuItem::linktoRoute('Mensajes', 'fa fa-commenting-o', 'app_websocket');
 
                 yield MenuItem::section('Seguridad');
 
@@ -144,8 +145,9 @@ class DashboardController extends AbstractDashboardController
                 yield MenuItem::linktoRoute('Mis Cursos', 'fa fa-chalkboard', 'misCursos');
                 yield MenuItem::linktoRoute('Mis Pagos', 'fa fa-file-text-o', 'misPagos');
 
-                //yield MenuItem::section('Mensajes');
-                //yield MenuItem::linkToCrud('Iniciar Reclamo', 'fa fa-tag', Reclamo::class);
+                yield MenuItem::section('Mensajes');
+                yield MenuItem::linkToCrud('Iniciar Reclamo', 'fa fa-tag', Reclamo::class);
+                yield MenuItem::linktoRoute('Mensajes', 'fa fa-commenting-o', 'app_websocket');
 
                 yield MenuItem::section('Seguridad');
                 yield MenuItem::linktoRoute('Cambiar contraseña', 'fas fa-key', 'change_password');

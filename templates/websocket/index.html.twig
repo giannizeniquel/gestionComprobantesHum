@@ -1,0 +1,124 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello WebsocketController!{% endblock %}
+
+{# {% block main %}
+<style>
+    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
+    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+</style>
+
+<div class="example-wrapper">
+    <h1>Hello {{ controller_name }}! ✅</h1>
+
+    This friendly message is coming from:
+    <ul>
+        <li>Your controller at <code><a href="{{ 'C:/xampp/htdocs/gestionComprobantesHum/src/Controller/WebsocketController.php'|file_link(0) }}">src/Controller/WebsocketController.php</a></code></li>
+        <li>Your template at <code><a href="{{ 'C:/xampp/htdocs/gestionComprobantesHum/templates/websocket/index.html.twig'|file_link(0) }}">templates/websocket/index.html.twig</a></code></li>
+    </ul>
+</div>
+{% endblock %} #}
+
+{% block main %}
+    <style>
+        body {
+            font-family: arial;
+        }
+    
+        .form-group {
+            margin-bottom: 10px;
+        }
+    
+        input {
+            border: solid lightgrey 1px;
+            padding: 8px;
+        }
+    
+        label {
+            display: inline-block;
+            min-width: 150px;
+        }
+    
+        #chat {
+            height: 400px;
+            width: 600px;
+            border: solid lightgrey 1px;
+            overflow: auto;
+            margin-bottom: 20px;
+        }
+    
+        button {
+            padding: 6px 12px;
+        }
+    
+        .message {
+            padding: 10px 5px;
+            margin-bottom: 10px;
+            border-bottom: solid lightgrey 1px;
+        }
+    </style>
+    <strong>
+        <label for="info">composer require cboden/ratchet (la libreria que necesitamos)</label>
+        <br>
+        <label for="info">php bin/console run:websocket-server (ejecutar en otra instancia de consola en caso de que no inice solo el server)</label>
+        <br>
+        <br>
+        <label for="info">Para probar hay que iniciar sesion en una ventana de incognito con otro usuario y comenzar a enviarse mensajes.</label>
+        <br>
+        <label for="info">Los mensajes todavia no se persisten, si actualizamos la ventana se pierden, es solo front</label>
+        <br>
+        <label for="info">pero ya esta establecida la conexion a travez de un servidor websocket entre distintas sesiones</label>
+        <br>
+        <label for="info">y la comunicacion es al instante.</label>
+    </strong>
+    <br>
+    <div id="chat">
+    
+    </div>
+    <div>
+        <div class="form-group">
+            <label for="name">Nombre:</label> <input type="text" id="name">
+        </div>
+        <div class="form-group">
+            <label for="message">Mensaje:</label> <input type="text" id="message">
+        </div>
+        <button type="button" id="sendBtn">Enviar</button>
+    </div>
+
+    <script type="text/javascript">
+        const socket = new WebSocket("ws://localhost:3001");
+ 
+        socket.addEventListener("open", function() {
+            console.log("CONNECTED");
+        });
+ 
+        function addMessage(name, message) {
+            const messageHTML = "<div class='message'><strong>" + name + ":</strong> " + message + "</div>";
+            document.getElementById("chat").innerHTML += messageHTML
+        }
+        
+        socket.addEventListener("message", function(e) {
+            console.log(e.data);
+            try
+            {
+                const message = JSON.parse(e.data);
+                addMessage(message.name, message.message);
+            }
+            catch(e)
+            {
+                console.log(e.data);
+            }
+        });
+    
+    
+        document.getElementById("sendBtn").addEventListener("click", function() {
+    
+            const message = {
+                name: document.getElementById("name").value,
+                message: document.getElementById("message").value
+            };
+            socket.send(JSON.stringify(message));
+            addMessage(message.name, message.message);
+        });
+    </script>
+{% endblock %}
