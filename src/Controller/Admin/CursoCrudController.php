@@ -53,11 +53,11 @@ class CursoCrudController extends AbstractCrudController
         yield TextField::new('descripcion', 'Descripción');
         yield TextField::new('observacion', 'Observación');
         yield BooleanField::new('activo');
-        yield IntegerField::new('cantidadCuotas');
+        yield IntegerField::new('cantidadCuotas', 'Cantidad de obligaciones');
         //los users se van a asociar a los cursos a traves de la carga por lotes de users
         //dejamos activa la relacion en formularios desde user, para cubrir excepciones
         yield AssociationField::new('users', 'Alumnos inscriptos')->hideOnForm();
-        yield CollectionField::new('cuotas', 'Cuotas')
+        yield CollectionField::new('cuotas', 'Agregar obligacion')
             ->allowDelete()
             ->setEntryIsComplex(true)
             ->setEntryType(CuotaType::class)
