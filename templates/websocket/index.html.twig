@@ -56,37 +56,42 @@
             margin-bottom: 10px;
             border-bottom: solid lightgrey 1px;
         }
+        #mensajes{
+            margin-bottom: 3%;
+        }
     </style>
-    <strong>
-        <label for="info">composer require cboden/ratchet (la libreria que necesitamos)</label>
-        <br>
-        <label for="info">php bin/console run:websocket-server (ejecutar en otra instancia de consola en caso de que no inice solo el server)</label>
-        <br>
-        <br>
-        <label for="info">Para probar hay que iniciar sesion en una ventana de incognito con otro usuario y comenzar a enviarse mensajes.</label>
-        <br>
-        <label for="info">Los mensajes todavia no se persisten, si actualizamos la ventana se pierden, es solo front</label>
-        <br>
-        <label for="info">pero ya esta establecida la conexion a travez de un servidor websocket entre distintas sesiones</label>
-        <br>
-        <label for="info">y la comunicacion es al instante.</label>
-    </strong>
-    <br>
-    <div id="chat">
+    <div id="mensajes">
     
-    </div>
-    <div>
-        <div class="form-group">
-            <label for="name">Nombre:</label> <input type="text" id="name">
+        <strong>
+            <label for="info">composer require cboden/ratchet (la libreria que necesitamos)</label>
+            <br>
+            <label for="info">php bin/console run:websocket-server (ejecutar en otra instancia de consola en caso de que no inice solo el server)</label>
+            <br>
+            <br>
+            <label for="info">Para probar hay que iniciar sesion en una ventana de incognito con otro usuario y comenzar a enviarse mensajes.</label>
+            <br>
+            <label for="info">Los mensajes todavia no se persisten, si actualizamos la ventana se pierden, es solo front</label>
+            <br>
+            <label for="info">pero ya esta establecida la conexion a travez de un servidor websocket entre distintas sesiones</label>
+            <br>
+            <label for="info">y la comunicacion es al instante.</label>
+        </strong>
+        <br>
+        <div id="chat">
+        
         </div>
-        <div class="form-group">
-            <label for="message">Mensaje:</label> <input type="text" id="message">
+        <div>
+            <div class="form-group">
+                <label for="name">Nombre:</label> <input type="text" id="name">
+            </div>
+            <div class="form-group">
+                <label for="message">Mensaje:</label> <input type="text" id="message">
+            </div>
+            <button type="button" id="sendBtn">Enviar</button>
         </div>
-        <button type="button" id="sendBtn">Enviar</button>
     </div>
-
     <script type="text/javascript">
-        const socket = new WebSocket("ws://localhost:3001");
+        const socket = new WebSocket("ws://localhost:8080");
  
         socket.addEventListener("open", function() {
             console.log("CONNECTED");
