@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\User;
 use App\Entity\Curso;
 use App\Entity\Pago;
+use App\Entity\Reclamo;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
@@ -135,5 +136,22 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         $query = $qb->getQuery();
 
         return $query->getResult();
+    }
+
+    /**
+     * @return Reclamo[] Returns an array of User objects
+     */
+    public function findByMisReclamos($userId): array
+    {
+        $qb = $this->getEntityManager()->createQueryBuilder();
+        $qb->select('r')
+            ->from('App:Reclamo', 'r')
+            ->join('r.user', 'u')
+            ->where('u.id = :userId')
+            ->setParameter('userId', $userId);
+
+        $query = $qb->getQuery();
+        
+        return $query->execute();
     }
 }

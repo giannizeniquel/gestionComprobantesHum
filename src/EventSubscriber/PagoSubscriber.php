@@ -93,12 +93,13 @@ class PagoSubscriber implements EventSubscriberInterface
 
         if ($entity instanceof Reclamo) {
             $mensajes = $entity->getMensajes();
-            $entity->setUser($this->security->getUser());
+            $userReclamo = $entity->getUser();
             foreach ($mensajes as $mensaje) {
                 if (is_null($mensaje->getUser())) {
                     $mensaje->setUser($this->security->getUser());
                 }
             }
+            $entity->setUser($userReclamo);
         }
     }
 

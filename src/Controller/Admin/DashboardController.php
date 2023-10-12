@@ -127,7 +127,7 @@ class DashboardController extends AbstractDashboardController
 
                 //  yield MenuItem::linkToCrud('Pagos Detalles', 'fa fa-shapes', PagoDetalle::class);
                 yield MenuItem::section('Mensajes');
-                yield MenuItem::linkToCrud('Iniciar Reclamo', 'fa fa-tag', Reclamo::class);
+                yield MenuItem::linkToCrud('Reclamos', 'fa fa-tag', Reclamo::class);
                 yield MenuItem::linktoRoute('Mensajes', 'fa fa-commenting-o', 'app_websocket');
 
                 yield MenuItem::section('Seguridad');
@@ -144,9 +144,9 @@ class DashboardController extends AbstractDashboardController
                     ->setEntityId($user->getId());
                 yield MenuItem::linktoRoute('Mis Cursos', 'fa fa-chalkboard', 'misCursos');
                 yield MenuItem::linktoRoute('Mis Pagos', 'fa fa-file-text-o', 'misPagos');
+                yield MenuItem::linktoRoute('Mis Reclamos', 'fa fa-tag', 'misReclamos');
 
                 yield MenuItem::section('Mensajes');
-                yield MenuItem::linkToCrud('Iniciar Reclamo', 'fa fa-tag', Reclamo::class);
                 yield MenuItem::linktoRoute('Mensajes', 'fa fa-commenting-o', 'app_websocket');
 
                 yield MenuItem::section('Seguridad');

@@ -133,4 +133,16 @@ class UserCrudController extends AbstractCrudController
 
         return $this->render('user/userPagos.html.twig', ['pagos' => $pagos]);
     }
+
+    /**
+     * @Route("/admin/misReclamos", name="misReclamos")
+     */
+    public function obtenerReclamosUsuario(UserRepository $userRepository): Response
+    {
+        $userId = $this->getUser()->getId();
+        $reclamos = $userRepository
+            ->findByMisReclamos($userId);
+
+        return $this->render('user/userReclamos.html.twig', ['reclamos' => $reclamos]);
+    }
 }

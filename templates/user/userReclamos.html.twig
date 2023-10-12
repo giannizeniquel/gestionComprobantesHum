@@ -1,0 +1,115 @@
+{# {% extends '@EasyAdmin/page/content.html.twig' %} #}
+{% extends 'base.html.twig' %}
+
+{% block content_title %}Mis Reclamos{% endblock %}
+{% block page_actions %}
+    {# <a class="btn btn-primary" href="...">Accion</a> #}
+{% endblock %}
+
+{% block main %}
+
+
+    {# las class son de la libreria de DataTable: https://datatables.net/manual/ #}
+    <table id="tablaReclamos" class="nowrap hover row-border order-column">
+        <thead>
+            <tr>
+                <td><strong>ID Reclamo</strong></td>
+                <td><strong>ID Pago</strong></td>
+                <td><strong>Estado</strong></td>
+                <td><strong>Mensajes</strong></td>
+                <td></td>
+            </tr>
+        </thead>
+        <tbody>
+            {% for reclamo in reclamos %}
+                {% 
+                    set url_show_reclamo = ea_url()
+                        .setController('App\\Controller\\Admin\\ReclamoCrudController')
+                        .setAction('detail')
+                        .setEntityId(reclamo.id)
+                %}
+                {% 
+                    set url_edit_reclamo = ea_url()
+                        .setController('App\\Controller\\Admin\\ReclamoCrudController')
+                        .setAction('obtenerIdPago')
+                        .set('idReclamo', reclamo.id)
+                        .set('idPago', reclamo.pago.id)
+                        .set('accionEditar', 'editar')
+                %}
+                {# {% 
+                    set url_new_reclamo = ea_url()
+                        .setController('App\\Controller\\Admin\\ReclamoCrudController')
+                        .setAction('obtenerIdPago')
+                        .set('idPago', pago.id)
+                %} #}
+                <tr>
+                    <td class="idReclamo">{{reclamo.id}}</td>
+                    <td class="idPago">{{reclamo.pago.id}}</td>
+                    <td class="estado">
+                        {% if reclamo.estado == 1 %}
+                            <span class="fw-bold text-success">Abierto</span>
+                        {% else %}
+                            <span class="fw-bold text-black-50">Cerrado</span>
+                        {% endif %}
+                    </td>
+                    <td class="mensajes">{{reclamo.mensajes|length}}</td>
+                    <td class="botones">
+                        {% if reclamo.estado == 1 %}
+                            <a class="btn btn-success" href={{url_show_reclamo}} >Ver</a>
+                            <a class="btn btn-primary" href={{url_edit_reclamo}}>Responder</a>
+                        {% else %}
+                            <a class="btn btn-success" href={{url_show_reclamo}} >Ver</a>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
+
+{% block body_javascript %}
+    {{ parent() }}
+    <script>
+        $(document).ready( function () {
+            //preparo la vista para mobile sin dataTable
+            if(navigator.userAgent.match(/Android/i) || navigator.userAgent.match(/webOS/i) || 
+                navigator.userAgent.match(/iPhone/i) || navigator.userAgent.match(/iPad/i) || 
+                navigator.userAgent.match(/iPod/i) || navigator.userAgent.match(/BlackBerry/i) ||
+                navigator.userAgent.match(/Windows Phone/i)
+            ){
+                $( "#tablaReclamos" ).removeClass( "nowrap hover row-border order-column" ).addClass( "datagrid" );
+
+                $( ".idReclamo" ).text(function(index, element){
+                    this.innerHTML = "<strong>ID Reclamo: </strong>" + element;
+                });
+                $( ".idPago" ).text(function(index, element){
+                    this.innerHTML = "<strong>ID Pago: </strong>" + element;
+                });
+                $( ".estado" ).text(function(index, element){
+                    this.innerHTML = "<strong>Estado: </strong>" + element;
+                });
+                $( ".mensajes" ).text(function(index, element){
+                    this.innerHTML = "<strong>Mensajes: </strong>" + element;
+                });
+            }else{
+                //si no es mobile utilizo datatable para paginado y otras funciones
+                $('#tablaReclamos').DataTable({
+                    searching: true,
+                    language: {
+                        search: "Buscar: ",
+                        lengthMenu: "Ver _MENU_ registros",
+                        info: "Mostrando _START_ a _END_ de _TOTAL_ registros",
+                        loadingRecords: "Cargando...",
+                        paginate: {
+                            first: "Inicio",
+                            last: "Fin",
+                            next: "Siguiente",
+                            previous: "Anterior"
+                        },
+                    },
+                    scrollY: true,
+                });
+            }
+        });
+    </script>
+{% endblock body_javascript %}

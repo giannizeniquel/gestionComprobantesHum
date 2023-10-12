@@ -35,6 +35,12 @@
                         .set('idCurso', pago.curso.id)
                         .set('accionEditar', 'editar')
                 %}
+                {% 
+                    set url_new_reclamo = ea_url()
+                        .setController('App\\Controller\\Admin\\ReclamoCrudController')
+                        .setAction('obtenerIdPago')
+                        .set('idPago', pago.id)
+                %}
                 <tr>
                     <td class="idPago">{{pago.id}}</td>
                     <td class="curso">{{pago.curso}}</td>
@@ -43,6 +49,7 @@
                     <td class="botones">
                         <a class="btn btn-success" href={{url_show_pago}} >Ver</a>
                         <a class="btn btn-primary" href={{url_edit_pago}}>Editar</a>
+                        <a class="btn btn-info" href={{url_new_reclamo}}>Iniciar Reclamo</a>
                     </td>
                 </tr>
             {% endfor %}
