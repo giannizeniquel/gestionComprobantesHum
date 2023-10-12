@@ -64,14 +64,26 @@ class ReclamoCrudController extends AbstractCrudController
             }
             
             if(Crud::PAGE_EDIT === $pageName){
-                yield CollectionField::new('mensajes', 'Mensajes')
-                    ->allowDelete(false)
-                    ->setEntryIsComplex(true)
-                    ->setEntryType(MensajeType::class)
-                    ->renderExpanded()
-                    ->setFormTypeOptions([
-                        'by_reference' => false,
-                    ]);
+                //si es super_admin dejamos eliminar mensajes
+                if (in_array('ROLE_SUPER_ADMIN', $user->getRoles())){
+                    yield CollectionField::new('mensajes', 'Mensajes')
+                        ->setEntryIsComplex(true)
+                        ->setEntryType(MensajeType::class)
+                        ->renderExpanded()
+                        ->setFormTypeOptions([
+                            'by_reference' => false,
+                        ]);
+                }else{
+                    yield CollectionField::new('mensajes', 'Mensajes')
+                        ->allowDelete(false)
+                        ->setEntryIsComplex(true)
+                        ->setEntryType(MensajeType::class)
+                        ->renderExpanded()
+                        ->setFormTypeOptions([
+                            'by_reference' => false,
+                        ]);
+                }
+                
             }else{
                 yield CollectionField::new('mensajes', 'Mensajes')
                     ->setEntryIsComplex(true)

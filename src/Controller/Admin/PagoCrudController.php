@@ -3,6 +3,7 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Pago;
+use App\Entity\User;
 use App\Form\PagoDetalleType;
 use App\Form\BuscarFechaType;
 use App\Repository\CuotaRepository;
@@ -53,45 +54,49 @@ class PagoCrudController extends AbstractCrudController
 
     public function configureFields(string $pageName): iterable
     {
-        if (Crud::PAGE_NEW === $pageName || Crud::PAGE_EDIT === $pageName) {
-            yield AssociationField::new('curso')
+        $user = $this->getUser();
+
+        if($user){
+            if (Crud::PAGE_NEW === $pageName || Crud::PAGE_EDIT === $pageName) {
+                yield AssociationField::new('curso')
+                    ->setFormTypeOptions([
+                        'query_builder' => function (EntityRepository $er) {
+                            return $er->createQueryBuilder('curso')
+                                ->join('curso.users', 'u')
+                                ->where('u.id = :userId')
+                                ->andWhere('curso.id = :idCurso')
+                                ->setParameter('userId', $this->getUser()->getId())
+                                ->setParameter('idCurso', $this->get('session')->get('idCurso'));
+                        },
+                        'by_reference' => true,
+                    ])
+                    ->renderAsNativeWidget();
+            } else {
+                yield AssociationField::new('curso');
+            }
+            yield IdField::new('id')->hideOnDetail()
+                ->hideOnForm();
+            yield AssociationField::new('user', 'Creador')
+                ->autocomplete()
+                ->hideOnForm();
+            yield NumberField::new('monto', 'Monto Total')
+                ->hideOnForm()
+                ->setHelp('Se calcula de la suma de todas las cuotas');
+            yield TextField::new('observacion', 'Observaciones');
+            yield CollectionField::new('pagoDetalles', 'Detalle')
+                ->hideOnDetail()
+                ->setEntryIsComplex(true)
+                ->setEntryType(PagoDetalleType::class)
                 ->setFormTypeOptions([
-                    'query_builder' => function (EntityRepository $er) {
-                        return $er->createQueryBuilder('curso')
-                            ->join('curso.users', 'u')
-                            ->where('u.id = :userId')
-                            ->andWhere('curso.id = :idCurso')
-                            ->setParameter('userId', $this->getUser()->getId())
-                            ->setParameter('idCurso', $this->get('session')->get('idCurso'));
-                    },
-                    'by_reference' => true,
-                ])
-                ->renderAsNativeWidget();
-        } else {
-            yield AssociationField::new('curso');
+                    'by_reference' => false,
+                ]);
+            if (Crud::PAGE_DETAIL === $pageName) {
+                yield FormField::addPanel('Detalles del Pago');
+                yield CollectionField::new('getPagoMasDetallesObj', '')
+                    ->setTemplatePath('admin/actions/my_custom_action.html.twig');
+            }
+            yield AssociationField::new('reclamos', 'Reclamos')->hideOnForm();
         }
-        yield IdField::new('id')->hideOnDetail()
-            ->hideOnForm();
-        yield AssociationField::new('user', 'Creador')
-            ->autocomplete()
-            ->hideOnForm();
-        yield NumberField::new('monto', 'Monto Total')
-            ->hideOnForm()
-            ->setHelp('Se calcula de la suma de todas las cuotas');
-        yield TextField::new('observacion', 'Observaciones');
-        yield CollectionField::new('pagoDetalles', 'Detalle')
-            ->hideOnDetail()
-            ->setEntryIsComplex(true)
-            ->setEntryType(PagoDetalleType::class)
-            ->setFormTypeOptions([
-                'by_reference' => false,
-            ]);
-        if (Crud::PAGE_DETAIL === $pageName) {
-            yield FormField::addPanel('Detalles del Pago');
-            yield CollectionField::new('getPagoMasDetallesObj', '')
-                ->setTemplatePath('admin/actions/my_custom_action.html.twig');
-        }
-        yield AssociationField::new('reclamos', 'Reclamos')->hideOnForm();
     }
 
     public function obtenerIdCurso(AdminContext $context, Request $request, PagoRepository $pagoRepository)
@@ -136,7 +141,7 @@ class PagoCrudController extends AbstractCrudController
                     ->setPermission(Action::INDEX, 'ROLE_ADMIN');
             }
         }else{
-            return $this->redirectToRoute('app_login');
+            return $actions;
         }
     }
 

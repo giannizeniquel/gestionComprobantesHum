@@ -16,9 +16,10 @@ if(url.includes('crudAction=new') || url.includes('crudAction=edit')) {
                 $(select_pagoCurso[0]).remove(); //elimino el option vacio
             }
             select_pagoCurso.setAttribute('hidden', true);
-            let cursoId = select_pagoCurso.innerText;
+            let cursoNombre = select_pagoCurso.innerText;
+            let cursoId = select_pagoCurso.value;
             let spanIdCurso = document.createElement('span');
-            spanIdCurso.innerText = cursoId;
+            spanIdCurso.innerText = "ID: "+cursoId+" - "+cursoNombre;
             select_pagoCurso.after(spanIdCurso);
         }
 
@@ -27,7 +28,11 @@ if(url.includes('crudAction=new') || url.includes('crudAction=edit')) {
             inputsDetalles = detalles.getElementsByTagName('input');
             selectsCuotasDetalles = detalles.getElementsByTagName('select');
             for (let i = 0; i < selectsCuotasDetalles.length; i++) {
-                $('#'+selectsCuotasDetalles[i].id).select2();
+                $('#'+selectsCuotasDetalles[i].id).select2({
+                    allowClear: true,
+                    width: '100%',
+                    theme: 'classic'
+                });
             }
             for (let i = 0; i < inputsDetalles.length; i++) {
                 if(inputsDetalles[i].type == 'file') {
@@ -36,6 +41,7 @@ if(url.includes('crudAction=new') || url.includes('crudAction=edit')) {
             }
         }
         
+        //funcion al agregar un detalle
         add_detalle.addEventListener('click', function() {
             const idCurso = document.getElementById('Pago_curso').value;
             const formData = new FormData();
@@ -87,19 +93,22 @@ if(url.includes('crudAction=new') || url.includes('crudAction=edit')) {
                             }
                         }
                     }
-  
                     //asigamos la libreria select2 a los inputs de cuotas
                     if(url.includes('crudAction=edit')){
                         //tomo el ultimo select del array, es que se agrega cuando aniadimos un nuevo detalle al pago
                         let ultimoSelect = selectsCuotas[selectsCuotas.length - 1];
                         $('#'+ultimoSelect.id).select2({
                             placeholder: "Seleccione cuota/s",
-                            allowClear: true
+                            allowClear: true,
+                            width: '100%',
+                            theme: 'classic',
                         });
                     }else{
                         $('.select2_cuotas').select2({
                             placeholder: "Seleccione cuota/s",
-                            allowClear: true
+                            allowClear: true,
+                            width: '100%',
+                            theme: 'classic'
                         });
                     }
                 })
@@ -107,6 +116,9 @@ if(url.includes('crudAction=new') || url.includes('crudAction=edit')) {
                     console.log("error: "+error);
                 })
         });
+        if(url.includes('crudAction=edit')){
+            add_detalle.click();
+        }
     });
 }
 

@@ -40,7 +40,7 @@ class Pago
     private $user;
 
     /**
-     * @ORM\OneToMany(targetEntity=PagoDetalle::class, mappedBy="pago", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity=PagoDetalle::class, mappedBy="pago", cascade={"persist", "remove"})
      */
     private $pagoDetalles;
 

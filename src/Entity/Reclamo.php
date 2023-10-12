@@ -41,7 +41,7 @@ class Reclamo
     private $created_at;
 
     /**
-     * @ORM\OneToMany(targetEntity=Mensaje::class, mappedBy="reclamo", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity=Mensaje::class, mappedBy="reclamo", cascade={"persist", "remove"})
      */
     private $mensajes;
 
