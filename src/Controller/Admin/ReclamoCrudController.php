@@ -4,6 +4,7 @@ namespace App\Controller\Admin;
 
 use App\Entity\Reclamo;
 use App\Form\MensajeType;
+use DateTime;
 use Doctrine\ORM\EntityRepository;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
@@ -15,6 +16,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\CollectionField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -62,7 +64,7 @@ class ReclamoCrudController extends AbstractCrudController
             }else{
                 yield BooleanField::new('estado')->setPermission('ROLE_ADMIN');
             }
-            
+            yield DateTimeField::new('created_at', 'Fecha');
             if(Crud::PAGE_EDIT === $pageName){
                 //si es super_admin dejamos eliminar mensajes
                 if (in_array('ROLE_SUPER_ADMIN', $user->getRoles())){
