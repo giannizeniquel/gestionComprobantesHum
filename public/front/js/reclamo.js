@@ -14,6 +14,8 @@ if(url.includes('crudAction=new') || url.includes('crudAction=edit')) {
             }else if (url.includes('crudAction=edit')){
                 for (let i = 0; i < mensajes.length; i++) {
                     mensajes[i].setAttribute('readonly', true);
+                    mensajes[i].style.backgroundColor = "#fff";
+
                 }
             }
             select_reclamoPago.setAttribute('hidden', true);

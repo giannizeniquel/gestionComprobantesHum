@@ -15,6 +15,7 @@
             <tr>
                 <td><strong>ID Reclamo</strong></td>
                 <td><strong>ID Pago</strong></td>
+                <td><strong>Fecha Reclamo</strong></td>
                 <td><strong>Estado</strong></td>
                 <td><strong>Mensajes</strong></td>
                 <td></td>
@@ -45,6 +46,7 @@
                 <tr>
                     <td class="idReclamo">{{reclamo.id}}</td>
                     <td class="idPago">{{reclamo.pago.id}}</td>
+                    <td class="fechaReclamo">{{reclamo.createdAt|date('d-m-Y H:i')}}</td>
                     <td class="estado">
                         {% if reclamo.estado == 1 %}
                             <span class="fw-bold text-success">Abierto</span>
@@ -84,6 +86,9 @@
                 });
                 $( ".idPago" ).text(function(index, element){
                     this.innerHTML = "<strong>ID Pago: </strong>" + element;
+                });
+                $( ".fechaReclamo" ).text(function(index, element){
+                    this.innerHTML = "<strong>Fecha Reclamo: </strong><br>" + element;
                 });
                 $( ".estado" ).text(function(index, element){
                     this.innerHTML = "<strong>Estado: </strong>" + element;

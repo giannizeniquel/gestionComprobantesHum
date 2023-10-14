@@ -40,7 +40,7 @@ class ReclamoCrudController extends AbstractCrudController
         $user = $this->getUser();
         if($user){
             yield IdField::new('id')->hideOnForm();
-            yield AssociationField::new('user')->hideOnForm();
+            yield AssociationField::new('user', 'Usuario')->hideOnForm();
             if ((Crud::PAGE_NEW === $pageName || Crud::PAGE_EDIT === $pageName) && (!in_array('ROLE_ADMIN', $this->getUser()->getRoles()))) {
                 yield AssociationField::new('pago')
                     ->setFormTypeOptions([
@@ -58,13 +58,15 @@ class ReclamoCrudController extends AbstractCrudController
             } else {
                 yield AssociationField::new('pago')->renderAsNativeWidget();
             }
-    
+
+            yield DateTimeField::new('created_at', 'Fecha Reclamo')->hideOnForm();
+
             if ((Crud::PAGE_DETAIL === $pageName)){
                 yield BooleanField::new('estado');
             }else{
                 yield BooleanField::new('estado')->setPermission('ROLE_ADMIN');
             }
-            yield DateTimeField::new('created_at', 'Fecha');
+            
             if(Crud::PAGE_EDIT === $pageName){
                 //si es super_admin dejamos eliminar mensajes
                 if (in_array('ROLE_SUPER_ADMIN', $user->getRoles())){
