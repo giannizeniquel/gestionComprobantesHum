@@ -42,40 +42,50 @@ class CursoCrudController extends AbstractCrudController
 
     public function configureFields(string $pageName): iterable
     {
-        
-        yield IdField::new('id')->hideOnForm();
-        yield TextField::new('nombre');
-        yield AssociationField::new('carrera', 'Propuesta');
-        yield AssociationField::new('tipo', 'Oferta')->renderAsNativeWidget();
-      
+        $user = $this->getUser();
 
-        yield TextField::new('cohorte');
-        yield TextField::new('descripcion', 'Descripción');
-        yield TextField::new('observacion', 'Observación');
-        yield BooleanField::new('activo');
-        yield IntegerField::new('cantidadCuotas');
-        //los users se van a asociar a los cursos a traves de la carga por lotes de users
-        //dejamos activa la relacion en formularios desde user, para cubrir excepciones
-        yield AssociationField::new('users', 'Alumnos inscriptos')->hideOnForm();
-        yield CollectionField::new('cuotas', 'Cuotas')
-            ->allowDelete()
-            ->setEntryIsComplex(true)
-            ->setEntryType(CuotaType::class)
-            ->setFormTypeOptions([
-                'by_reference' => false,
-            ]);
+        if($user){
+        
+            yield IdField::new('id')->hideOnForm();
+            yield TextField::new('nombre');
+            yield AssociationField::new('carrera', 'Propuesta');
+            yield AssociationField::new('tipo', 'Oferta')->renderAsNativeWidget();
+        
+
+            yield TextField::new('cohorte');
+            yield TextField::new('descripcion', 'Descripción');
+            yield TextField::new('observacion', 'Observación');
+            yield BooleanField::new('activo');
+            yield IntegerField::new('cantidadCuotas');
+            //los users se van a asociar a los cursos a traves de la carga por lotes de users
+            //dejamos activa la relacion en formularios desde user, para cubrir excepciones
+            yield AssociationField::new('users', 'Alumnos inscriptos')->hideOnForm();
+            yield CollectionField::new('cuotas', 'Cuotas')
+                ->allowDelete()
+                ->setEntryIsComplex(true)
+                ->setEntryType(CuotaType::class)
+                ->setFormTypeOptions([
+                    'by_reference' => false,
+                ]);
+        }
         
     }
 
     public function configureActions(Actions $actions): Actions
     {
-        return $actions
-            ->add(Crud::PAGE_INDEX, Action::DETAIL)
-            ->setPermission(Action::INDEX, 'ROLE_ADMIN')
-            ->setPermission(Action::EDIT, 'ROLE_ADMIN')
-            ->setPermission(Action::NEW, 'ROLE_ADMIN')
-            ->setPermission(Action::DELETE, 'ROLE_ADMIN');
-            //->setPermission('detail', 'ROLE_ADMIN');
+        $user = $this->getUser();
+
+        if($user){
+            return $actions
+                ->add(Crud::PAGE_INDEX, Action::DETAIL)
+                ->setPermission(Action::INDEX, 'ROLE_ADMIN')
+                ->setPermission(Action::EDIT, 'ROLE_ADMIN')
+                ->setPermission(Action::NEW, 'ROLE_ADMIN')
+                ->setPermission(Action::DELETE, 'ROLE_ADMIN');
+                //->setPermission('detail', 'ROLE_ADMIN');
+        }else{
+            return $actions;
+        }
     }
     
     public function configureAssets(Assets $assets): Assets

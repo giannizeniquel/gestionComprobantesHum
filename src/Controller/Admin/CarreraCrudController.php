@@ -41,8 +41,18 @@ class CarreraCrudController extends AbstractCrudController
     
     public function configureActions(Actions $actions): Actions
     {
-        return $actions
-            ->add(Crud::PAGE_INDEX, Action::DETAIL);
+        $user = $this->getUser();
+
+        if($user){
+            return $actions
+                ->add(Crud::PAGE_INDEX, Action::DETAIL)
+                ->setPermission(Action::INDEX, 'ROLE_ADMIN')
+                ->setPermission(Action::EDIT, 'ROLE_ADMIN')
+                ->setPermission(Action::NEW, 'ROLE_ADMIN')
+                ->setPermission(Action::DELETE, 'ROLE_ADMIN');
+        }else{
+            return $actions;
+        }
     }
 
     public function configureAssets(Assets $assets): Assets

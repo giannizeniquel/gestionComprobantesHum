@@ -72,18 +72,21 @@ class UserCrudController extends AbstractCrudController
             yield FormField::addPanel('Configuraciones de Administrador')->setPermission('ROLE_ADMIN');
             yield ArrayField::new('roles')->setPermission('ROLE_ADMIN'); //TODO: probar con CollectionField y asocia un type con opciones predefinidas
             yield AssociationField::new('cursos', 'Cursos inscriptos')->setPermission('ROLE_ADMIN');
-        }else{
-            return $this->redirectToRoute('app_login');
         }
     }
 
     public function configureActions(Actions $actions): Actions
     {
-        return $actions
-            ->add(Crud::PAGE_INDEX, Action::DETAIL)
-            ->setPermission(Action::NEW, 'ROLE_ADMIN')
-            ->setPermission(Action::DELETE, 'ROLE_ADMIN')
-            ->setPermission(Action::INDEX, 'ROLE_ADMIN');
+        $user = $this->getUser();
+        if($user){
+            return $actions
+                ->add(Crud::PAGE_INDEX, Action::DETAIL)
+                ->setPermission(Action::NEW, 'ROLE_ADMIN')
+                ->setPermission(Action::DELETE, 'ROLE_ADMIN')
+                ->setPermission(Action::INDEX, 'ROLE_ADMIN');
+        }else{
+            return $actions;
+        }
     }
 
     public function configureAssets(Assets $assets): Assets

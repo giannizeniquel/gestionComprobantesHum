@@ -29,13 +29,15 @@ class TipoCursoCrudController extends AbstractCrudController
 
     public function configureFields(string $pageName): iterable
     {
-        return [
-            IdField::new('id')->hideOnForm(),
-            TextField::new('nombre'),
-            TextField::new('descripcion', 'Descripción'),
-            AssociationField::new('carrera','Propuesta'),
+        $user = $this->getUser();
 
-            AssociationField::new('cursos')
+        if($user){
+            yield IdField::new('id')->hideOnForm();
+            yield TextField::new('nombre');
+            yield TextField::new('descripcion', 'Descripción');
+            yield AssociationField::new('carrera','Propuesta');
+
+            yield AssociationField::new('cursos');
 
             // para formularios embebidos
             //
@@ -46,7 +48,7 @@ class TipoCursoCrudController extends AbstractCrudController
             //     ->setFormTypeOptions([
             //         'by_reference' => false,
             //     ])
-        ];
+        }
 
         // if (Crud::PAGE_INDEX === $pageName)
         // {
@@ -59,8 +61,18 @@ class TipoCursoCrudController extends AbstractCrudController
 
     public function configureActions(Actions $actions): Actions
     {
-        return $actions
-            ->add(Crud::PAGE_INDEX, Action::DETAIL);
+        $user = $this->getUser();
+
+        if($user){
+            return $actions
+                ->add(Crud::PAGE_INDEX, Action::DETAIL)
+                ->setPermission(Action::INDEX, 'ROLE_ADMIN')
+                ->setPermission(Action::EDIT, 'ROLE_ADMIN')
+                ->setPermission(Action::NEW, 'ROLE_ADMIN')
+                ->setPermission(Action::DELETE, 'ROLE_ADMIN');
+        }else{
+            return $actions;
+        }
     }
 
     public function configureAssets(Assets $assets): Assets
