@@ -14,7 +14,10 @@ class CuotaType extends AbstractType
         $builder
             ->add('monto')
             ->add('descripcion')
-            ->add('numeroCuota');
+           // ->add('numeroCuota');
+            ->add('numeroCuota', null, [
+                'label' => 'Numero',
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

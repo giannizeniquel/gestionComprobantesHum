@@ -71,7 +71,7 @@ class Cuota
 
     public function __toString()
     {
-        return "Cuota " . $this->numeroCuota . " (" . $this->descripcion . ")";
+        return  $this->descripcion ;
     }
 
     public function getId(): ?int

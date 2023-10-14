@@ -26,7 +26,7 @@ class PagoDetalleType extends AbstractType
         $builder
             ->add('cuotas', EntityType::class, [
                 'class' => Cuota::class,
-                'label' => 'Cuota/s',
+                'label' => 'Obligación/es',
                 'multiple' => true,
                 'query_builder' => function (CuotaRepository $cr) use ($idCurso) {
                     return $cr->findByCuotasDeCurso($idCurso);

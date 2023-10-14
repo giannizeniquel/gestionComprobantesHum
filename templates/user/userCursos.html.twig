@@ -19,8 +19,8 @@
             <tr>
                 <td><strong>ID Curso</strong></td>
                 <td><strong>Nombre</strong></td>
-                <td><strong>Cuotas Totales</strong></td>
-                <td><strong>Cuotas Declaradas</strong></td>
+                <td><strong>Total Obligaciones</strong></td>
+                <td><strong>Total Declaradas</strong></td>
                 <td></td>
             </tr>
         </thead>
@@ -51,7 +51,7 @@
                         {% if cantCuotasPagadas < curso.cantidadCuotas|number_format %}
                             <a class="btn btn-primary" href={{ url_new_pagoCurso }} >Denunciar Comprobante</a>
                         {% else %}
-                            <span class="fw-bold text-success">Cuotas canceladas</span>
+                            <span class="fw-bold text-success">Cancelado</span>
                         {% endif %}
                         
                     </td>
