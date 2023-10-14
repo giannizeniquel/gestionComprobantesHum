@@ -19,6 +19,7 @@
             <tr>
                 <td><strong>ID Curso</strong></td>
                 <td><strong>Nombre</strong></td>
+                <td><strong>Cohorte</strong></td>
                 <td><strong>Total Obligaciones</strong></td>
                 <td><strong>Total Declaradas</strong></td>
                 <td></td>
@@ -35,6 +36,7 @@
                 <tr>
                     <td class="idCurso">{{ curso.id }}</td>
                     <td class="nombre">{{ curso.nombre }}</td>
+                    <td class="cohorte">{{ curso.cohorte }}</td>
                     <td class="totalCuotas">{{ curso.cantidadCuotas }}</td>
                     {# calculo cantidad de cuotas pagadas #}
                     {% set cantCuotasPagadas = 0 %}
@@ -78,6 +80,9 @@
                 });
                 $( ".nombre" ).text(function(index, element){
                     this.innerHTML = "<strong>Curso: </strong>" + element;
+                });
+                $( ".cohorte" ).text(function(index, element){
+                    this.innerHTML = "<strong>Cohorte: </strong>" + element;
                 });
                 $( ".totalCuotas" ).text(function(index, element){
                     this.innerHTML = "<strong>Cuotas Totales: </strong>" + element;
