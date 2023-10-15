@@ -221,66 +221,71 @@ class PagoCrudController extends AbstractCrudController
     public function indexAllPagos(Request $request, PagoRepository $pagoRepository,PaginatorInterface $paginator): Response
     { 
         $user = $this->getUser();
-        $buscarFiltroForm = $this->createForm(BuscarFechaType::class, null, [
-            'action' => $this->generateUrl('lista_pago'),
-        ]);
-        $buscarFiltroForm->handleRequest($request);
-
-        if ($buscarFiltroForm->isSubmitted() && $buscarFiltroForm->isValid()) {
-            $filtro = $buscarFiltroForm->getData();
- 
-            if ($filtro !== null) {
-                $pagos = $pagoRepository->findAllPagosPorDniFecha($filtro['dni'], $filtro['startDate'], $filtro['endDate']);      
-                $pagination = $paginator->paginate($pagos, $request->query->getInt('page', 1), 8 );
-            } else {
-                // Si $filtro es nulo, puedes manejarlo de acuerdo a tus necesidades.
-                // Por ejemplo, puedes establecer $datos en un valor por defecto.
-                $pagos = []; // O cualquier otro valor por defecto que desees
-            }
-        } else {
-            // Si el formulario no fue enviado o no es válido, también puedes manejarlo según tus necesidades.
-            $pagos = $pagoRepository->findAllPagos();
-            // O cualquier otro valor por defecto que desees
-
-            $pagination = $paginator->paginate($pagos, $request->query->getInt('page', 1), 8 );
-        }
-
-        if ($request->getRequestFormat() == 'xlsx') {
-            $datosExcel = array(
-                'encabezado' => array(
-                    'titulo' => 'REPORTE DE PAGOS',
-                    'filtro' => array(
-                        'DNI' => ($filtro !== null) ? $filtro['dni'] : 'N/A',
-                        'Fecha Desde' => ($filtro !== null && $filtro['startDate'] !== null) ? $filtro['startDate']->format('d-M-Y') : 'N/A',
-                        'Fecha Hasta' => ($filtro !== null && $filtro['endDate'] !== null) ? $filtro['endDate']->format('d-M-Y') : 'N/A',
-                    ),
-                ),
-                'columnas' => array(
-                    'ID',
-                    'Pago',
-                    'Estudiante',
-                    'Curso',
-                    'Monto Total',
-                    'Monto Cuota',
-                    'Números Ticket',
-                    'Fecha',
-                    'CuotaDescripcion',
-                    'Observaciones',
-                ),
-                'pagos' => $pagos, 
-            );
-
-            $response = $this->renderExcel($datosExcel);
-            $response->headers->set('Content-Disposition', 'attachment; filename="reporte_pagos.xlsx"');
-
-            return $response;
-        } else {
-            return $this->render('reportes/reporte.html.twig', [
-               // 'pagos' => $pagos,
-                'buscar' => $buscarFiltroForm->createView(),
-                'pagination' => $pagination,
+        if($user){
+            $buscarFiltroForm = $this->createForm(BuscarFechaType::class, null, [
+                'action' => $this->generateUrl('lista_pago'),
             ]);
+            $buscarFiltroForm->handleRequest($request);
+
+            if ($buscarFiltroForm->isSubmitted() && $buscarFiltroForm->isValid()) {
+                $filtro = $buscarFiltroForm->getData();
+    
+                if ($filtro !== null) {
+                    $pagos = $pagoRepository->findAllPagosPorDniFecha($filtro['dni'], $filtro['startDate'], $filtro['endDate']);      
+                    $pagination = $paginator->paginate($pagos, $request->query->getInt('page', 1), 8 );
+                } else {
+                    // Si $filtro es nulo, puedes manejarlo de acuerdo a tus necesidades.
+                    // Por ejemplo, puedes establecer $datos en un valor por defecto.
+                    $pagos = []; // O cualquier otro valor por defecto que desees
+                }
+            } else {
+                // Si el formulario no fue enviado o no es válido, también puedes manejarlo según tus necesidades.
+                $pagos = $pagoRepository->findAllPagos();
+                // O cualquier otro valor por defecto que desees
+
+                $pagination = $paginator->paginate($pagos, $request->query->getInt('page', 1), 8 );
+            }
+
+            if ($request->getRequestFormat() == 'xlsx') {
+                $datosExcel = array(
+                    'encabezado' => array(
+                        'titulo' => 'REPORTE DE PAGOS',
+                        'filtro' => array(
+                            'DNI' => ($filtro !== null) ? $filtro['dni'] : 'N/A',
+                            'Fecha Desde' => ($filtro !== null && $filtro['startDate'] !== null) ? $filtro['startDate']->format('d-M-Y') : 'N/A',
+                            'Fecha Hasta' => ($filtro !== null && $filtro['endDate'] !== null) ? $filtro['endDate']->format('d-M-Y') : 'N/A',
+                        ),
+                    ),
+                    'columnas' => array(
+                        'ID',
+                        'Pago',
+                        'Estudiante',
+                        'Curso',
+                        'Monto Total',
+                        'Monto Cuota',
+                        'Números Ticket',
+                        'Fecha',
+                        'CuotaDescripcion',
+                        'Observaciones',
+                    ),
+                    'pagos' => $pagos, 
+                );
+
+                $response = $this->renderExcel($datosExcel);
+                $response->headers->set('Content-Disposition', 'attachment; filename="reporte_pagos.xlsx"');
+
+                return $response;
+            } else {
+                return $this->render('reportes/reporte.html.twig', [
+                // 'pagos' => $pagos,
+                    'buscar' => $buscarFiltroForm->createView(),
+                    'pagination' => $pagination,
+                ]);
+            }
+        }else {
+            return $this->redirectToRoute('app_login');
         }
+        
     }
 
     private function renderExcel($pagos)

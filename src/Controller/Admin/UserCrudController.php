@@ -115,14 +115,19 @@ class UserCrudController extends AbstractCrudController
      * @Route("/admin/misCursos", name="misCursos")
      */ public function obtenerCursosUsuario(UserRepository $userRepository, EntityManagerInterface $entityManager): Response
     {
-        $userId = $this->getUser()->getId();
-        $cursos = $userRepository
-            ->findByMisCursos($userId);
+        $user = $this->getUser();
+        if ($user) {
+            $userId = $user->getId();
+            $cursos = $userRepository
+                ->findByMisCursos($userId);
 
-        return $this->render('user/userCursos.html.twig', [
-            'cursos' => $cursos,
-            'userId' => $userId
-        ]);
+            return $this->render('user/userCursos.html.twig', [
+                'cursos' => $cursos,
+                'userId' => $userId
+            ]);
+        }else {
+            return $this->redirectToRoute('app_login');
+        }
     }
 
     /**
@@ -130,11 +135,17 @@ class UserCrudController extends AbstractCrudController
      */
     public function obtenerPagosUsuario(UserRepository $userRepository): Response
     {
-        $userId = $this->getUser()->getId();
-        $pagos = $userRepository
-            ->findByMisPagos($userId);
+        $user = $this->getUser();
+        if ($user) {
+            $userId = $user->getId();
+            $pagos = $userRepository
+                ->findByMisPagos($userId);
 
-        return $this->render('user/userPagos.html.twig', ['pagos' => $pagos]);
+            return $this->render('user/userPagos.html.twig', ['pagos' => $pagos]);
+        }else {
+            return $this->redirectToRoute('app_login');
+        }
+        
     }
 
     /**
@@ -142,10 +153,16 @@ class UserCrudController extends AbstractCrudController
      */
     public function obtenerReclamosUsuario(UserRepository $userRepository): Response
     {
-        $userId = $this->getUser()->getId();
-        $reclamos = $userRepository
+        $user = $this->getUser();
+        if ($user) {
+            $userId = $user->getId();
+            $reclamos = $userRepository
             ->findByMisReclamos($userId);
 
-        return $this->render('user/userReclamos.html.twig', ['reclamos' => $reclamos]);
+            return $this->render('user/userReclamos.html.twig', ['reclamos' => $reclamos]);
+        }else {
+            return $this->redirectToRoute('app_login');
+        }
+        
     }
 }
