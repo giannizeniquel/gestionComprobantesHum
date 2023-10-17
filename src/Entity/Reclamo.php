@@ -45,6 +45,16 @@ class Reclamo
      */
     private $mensajes;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $leido;
+
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $fechaLeido;
+
     public function __construct()
     {
         $this->created_at = new \DateTimeImmutable();
@@ -135,6 +145,30 @@ class Reclamo
                 $mensaje->setReclamo(null);
             }
         }
+
+        return $this;
+    }
+
+    public function isLeido(): ?bool
+    {
+        return $this->leido;
+    }
+
+    public function setLeido(bool $leido): self
+    {
+        $this->leido = $leido;
+
+        return $this;
+    }
+
+    public function getFechaLeido(): ?\DateTimeInterface
+    {
+        return $this->fechaLeido;
+    }
+
+    public function setFechaLeido(?\DateTimeInterface $fechaLeido): self
+    {
+        $this->fechaLeido = $fechaLeido;
 
         return $this;
     }
