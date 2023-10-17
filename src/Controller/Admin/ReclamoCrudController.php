@@ -109,7 +109,8 @@ class ReclamoCrudController extends AbstractCrudController
                                     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
                                     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>')
             ->addJsFile('/gestionComprobantesHum/public/front/js/base.js')
-            ->addJsFile('/gestionComprobantesHum/public/front/js/reclamo.js');
+            ->addJsFile('/gestionComprobantesHum/public/front/js/reclamo.js')
+            ->addHtmlContentToBody('<script src="/gestionComprobantesHum/public/front/js/notificaciones.js" type="text/javascript"></script>');
     }
 
     public function configureActions(Actions $actions): Actions
