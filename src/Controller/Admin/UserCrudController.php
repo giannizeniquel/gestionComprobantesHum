@@ -78,8 +78,16 @@ class UserCrudController extends AbstractCrudController
     public function configureActions(Actions $actions): Actions
     {
         $user = $this->getUser();
+        $impersonate = Action::new('impersonate', 'Suplantar')
+        //changed from linkToRoute to linkToUrl. note that linkToUrl has only one parameter.
+        //"admin/.. can be adjusted to another URL"
+        ->linkToUrl(function (User $entity) {
+            return 'admin/?_switch_user='.$entity->getEmail();
+        });
         if($user){
+            $actions = parent::configureActions($actions);
             return $actions
+                ->add(Crud::PAGE_INDEX, $impersonate)
                 ->add(Crud::PAGE_INDEX, Action::DETAIL)
                 ->setPermission(Action::NEW, 'ROLE_ADMIN')
                 ->setPermission(Action::DELETE, 'ROLE_ADMIN')
