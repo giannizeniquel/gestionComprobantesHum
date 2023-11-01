@@ -126,9 +126,9 @@ class DashboardController extends AbstractDashboardController
                 yield MenuItem::linktoRoute('Reporte general', 'fas fa-file-excel', 'lista_pago');
 
                 // yield MenuItem::linkToCrud('Pagos Detalles', 'fa fa-shapes', PagoDetalle::class);
-                yield MenuItem::section('Mensajes');
-                yield MenuItem::linkToCrud('Reclamos', 'fas fa-ticket-alt', Reclamo::class);
-                yield MenuItem::linktoRoute('Mensajes', 'fa fa-commenting-o', 'app_websocket');
+                // yield MenuItem::section('Mensajes');
+                // yield MenuItem::linkToCrud('Reclamos', 'fas fa-ticket-alt', Reclamo::class);
+                // yield MenuItem::linktoRoute('Mensajes', 'fa fa-commenting-o', 'app_websocket');
 
                 yield MenuItem::section('Seguridad');
 
@@ -144,10 +144,10 @@ class DashboardController extends AbstractDashboardController
                     ->setEntityId($user->getId());
                 yield MenuItem::linktoRoute('Mis Cursos', 'fa fa-chalkboard', 'misCursos');
                 yield MenuItem::linktoRoute('Mis Pagos', 'fa fa-file-text-o', 'misPagos');
-                yield MenuItem::linktoRoute('Mis Reclamos', 'fas fa-ticket-alt', 'misReclamos');
+                // yield MenuItem::linktoRoute('Mis Reclamos', 'fas fa-ticket-alt', 'misReclamos');
 
-                yield MenuItem::section('Mensajes');
-                yield MenuItem::linktoRoute('Mensajes', 'fa fa-commenting-o', 'app_websocket');
+                // yield MenuItem::section('Mensajes');
+                // yield MenuItem::linktoRoute('Mensajes', 'fa fa-commenting-o', 'app_websocket');
 
                 yield MenuItem::section('Seguridad');
                 yield MenuItem::linktoRoute('Cambiar contraseña', 'fas fa-key', 'change_password');
