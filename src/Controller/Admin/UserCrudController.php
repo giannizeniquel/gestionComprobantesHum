@@ -90,7 +90,8 @@ class UserCrudController extends AbstractCrudController
                 ->add(Crud::PAGE_INDEX, Action::DETAIL)
                 ->setPermission(Action::NEW, 'ROLE_ADMIN')
                 ->setPermission(Action::DELETE, 'ROLE_ADMIN')
-                ->setPermission(Action::INDEX, 'ROLE_ADMIN');
+                ->setPermission(Action::INDEX, 'ROLE_ADMIN')
+                ->setPermission($impersonate, 'ROLE_SUPER_ADMIN');
         }else{
             return $actions;
         }
