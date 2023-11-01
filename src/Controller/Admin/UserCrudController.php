@@ -79,11 +79,10 @@ class UserCrudController extends AbstractCrudController
     {
         $user = $this->getUser();
         $impersonate = Action::new('impersonate', 'Suplantar')
-        //changed from linkToRoute to linkToUrl. note that linkToUrl has only one parameter.
-        //"admin/.. can be adjusted to another URL"
-        ->linkToUrl(function (User $entity) {
-            return 'admin/?_switch_user='.$entity->getEmail();
-        });
+            ->linkToUrl(function (User $entity) {
+                    return 'admin/?_switch_user='.$entity->getEmail();
+                });
+                
         if($user){
             $actions = parent::configureActions($actions);
             return $actions
